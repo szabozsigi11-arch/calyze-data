@@ -22,6 +22,10 @@ jobs:
       - run: uv run ruff format --check .
       - name: Tesztek (naptár, időzónák, forráslánc, tár, végponttól végpontig)
         run: uv run pytest
+      - name: A munkafolyamatok YAML-je értelmezhető
+        # Egy elgépelt kettőspont némán elrontja a munkafolyamatot: a futás
+        # „invalid workflow file”-lal áll le, jobok és napló nélkül.
+        run: uv run --with pyyaml python -c "import glob,yaml;[yaml.safe_load(open(f)) for f in glob.glob('.github/workflows/*.yml')];print('ok')"
 
   secrets:
     runs-on: ubuntu-latest
