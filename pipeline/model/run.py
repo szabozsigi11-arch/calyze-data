@@ -37,7 +37,14 @@ from pipeline.features.run import (
 )
 from pipeline.ingest.partitions import ACTIONS_PATH
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
-from pipeline.model.backtest import arena_records, library_versions, run_backtest, summarise
+from pipeline.model.backtest import (
+    arena_records,
+    calibration_table,
+    daily_table,
+    library_versions,
+    run_backtest,
+    summarise,
+)
 from pipeline.model.baselines import add_sector_return, fit_baselines
 from pipeline.model.config import CALIBRATION_SESSIONS, HORIZONS, MODEL_FAMILY, MODEL_VERSION, SEED
 from pipeline.model.dataset import add_targets, feature_columns, trainable
@@ -46,7 +53,8 @@ from pipeline.model.predictor import fit_horizon
 log = logging_setup.get_logger(__name__)
 
 ARENA_PATH = "arena/backtest.parquet"
-SCORED_PATH = "arena/backtest_scored.parquet"
+CALIBRATION_PATH = "arena/backtest_calibration.parquet"
+DAILY_PATH = "arena/backtest_daily.parquet"
 MODEL_PREFIX = f"models/{MODEL_FAMILY}/{MODEL_VERSION}"
 
 
@@ -79,7 +87,10 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
         raise RuntimeError("A backtest egyetlen foldot sem tudott lefuttatni.")
     records = arena_records(scored, live=False)
     _write_table(storage, ARENA_PATH, records)
-    _write_table(storage, SCORED_PATH, scored)
+    # A pontozott sorok teljes táblája milliós nagyságrendű (és a tár fájlméret-
+    # korlátját is átlépné): csak a két összesítést tároljuk, a felület ezekből dolgozik.
+    _write_table(storage, CALIBRATION_PATH, calibration_table(scored))
+    _write_table(storage, DAILY_PATH, daily_table(scored))
     summary = {**summarise(records), "libraries": library_versions(), "rows_scored": len(scored)}
     # A publikus naplóba csak ez az összesített, modellszintű összefoglaló kerül
     # (papíronkénti becslés és árfolyam soha): ez a saját modellünkről szóló

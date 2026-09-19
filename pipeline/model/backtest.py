@@ -191,6 +191,39 @@ def arena_records(scored: pd.DataFrame, live: bool = False) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def calibration_table(scored: pd.DataFrame, width: float = 0.05) -> pd.DataFrame:
+    """Kalibrációs tábla: „amikor 60–70%-ot mondtunk, hányszor lett igazunk”.
+
+    A pontozott sorok teljes táblája több millió soros, és nincs rá szükség:
+    a felület ebből a sávonkénti összesítésből rajzol.
+    """
+    out = scored.assign(bin=(scored["prob_up"] / width).astype(int) * width)
+    grouped = out.groupby(["horizon", "bin"], as_index=False).agg(
+        n=("prob_up", "size"),
+        said=("prob_up", "mean"),
+        happened=("y", lambda v: float((v > 0).mean())),
+    )
+    return grouped
+
+
+def daily_table(scored: pd.DataFrame) -> pd.DataFrame:
+    """Naponkénti összesítés: a hőtérképhez és a kumulált görbékhez."""
+    rows = scored.assign(
+        model_hit=hit(scored["prob_up"].to_numpy(), scored["y"].to_numpy()),
+        model_brier=brier(scored["prob_up"].to_numpy(), scored["y"].to_numpy()),
+        covered=covered(
+            scored["band_low"].to_numpy(), scored["band_high"].to_numpy(), scored["y"].to_numpy()
+        ),
+    )
+    for baseline_id in BASELINE_IDS:
+        rows[f"hit__{baseline_id}"] = hit(rows[f"prob_up__{baseline_id}"].to_numpy(), rows["y"].to_numpy())
+    columns = ["model_hit", "model_brier", "covered", *[f"hit__{b}" for b in BASELINE_IDS]]
+    grouped = rows.groupby(["horizon", "date"], as_index=False).agg(
+        n=("y", "size"), **{c: (c, "mean") for c in columns}
+    )
+    return grouped
+
+
 def summarise(records: pd.DataFrame) -> dict[str, object]:
     """Rövid összefoglaló a legkeményebb baseline ellen, horizontonként."""
     out: dict[str, object] = {

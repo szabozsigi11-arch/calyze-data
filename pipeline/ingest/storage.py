@@ -88,7 +88,15 @@ class SupabaseStorage:
         self._check(r, f"letöltés ({path})")
         return r.content
 
+    #: A Supabase ingyenes sávján a feltöltés fájlonkénti felső határa.
+    MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+
     def upload(self, bucket: str, path: str, data: bytes, content_type: str) -> None:
+        if len(data) > self.MAX_UPLOAD_BYTES:
+            raise StorageError(
+                f"feltöltés ({path}): {len(data) / 1048576:.0f} MB, a határ "
+                f"{self.MAX_UPLOAD_BYTES // 1048576} MB — bontsd kisebb fájlokra vagy összesíts"
+            )
         r = self.session.post(
             f"{self.base}/object/{bucket}/{path}",
             data=data,
