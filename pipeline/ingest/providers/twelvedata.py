@@ -11,8 +11,8 @@ from __future__ import annotations
 from datetime import date
 
 import pandas as pd
-import requests
 
+from pipeline.http import RequestFailed, get_json
 from pipeline.ingest.providers.base import (
     BaseProvider,
     ProviderBlockedError,
@@ -34,32 +34,34 @@ class TwelveDataProvider(BaseProvider):
         self._key = api_key
 
     def _get(self, ticker: str, start: date, end: date, adjust: str) -> list[dict[str, str]]:
-        response = requests.get(
-            BASE_URL,
-            params={
-                "symbol": ticker,
-                "interval": "1day",
-                "start_date": start.isoformat(),
-                "end_date": end.isoformat(),
-                "adjust": adjust,
-                "outputsize": 5000,
-                "order": "ASC",
-                "apikey": self._key,
-            },
-            timeout=30,
-        )
-        body = (
-            response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
-        )
-        code = int(body.get("code", response.status_code)) if isinstance(body, dict) else response.status_code
+        # A kulcs itt is az URL-ben utazik, ezért a kulcsot nem szivárogtató burkoló.
+        try:
+            status, body = get_json(
+                BASE_URL,
+                {
+                    "symbol": ticker,
+                    "interval": "1day",
+                    "start_date": start.isoformat(),
+                    "end_date": end.isoformat(),
+                    "adjust": adjust,
+                    "outputsize": 5000,
+                    "order": "ASC",
+                    "apikey": self._key,
+                },
+            )
+        except RequestFailed as error:
+            raise ProviderUnavailableError(f"twelvedata: {error}") from None
+        if not isinstance(body, dict):
+            body = {}
+        code = int(body.get("code", status))
         if code in (401, 403):
             raise ProviderBlockedError(f"twelvedata {code} (kulcs vagy tiltás)")
         if code == 429:
             raise ProviderUnavailableError("twelvedata 429 (kvóta)")
         if code == 404 or body.get("status") == "error":
             return []
-        if response.status_code != 200:
-            raise ProviderUnavailableError(f"twelvedata HTTP {response.status_code}")
+        if status != 200:
+            raise ProviderUnavailableError(f"twelvedata HTTP {status}")
         return list(body.get("values", []))
 
     def _fetch_chunk(self, tickers: list[str], start: date, end: date) -> ProviderResult:

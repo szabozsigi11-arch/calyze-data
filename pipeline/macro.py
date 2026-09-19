@@ -16,9 +16,9 @@ from __future__ import annotations
 from datetime import date
 
 import pandas as pd
-import requests
 
 from pipeline.calendar import sessions
+from pipeline.http import get_json
 
 FRED_URL = "https://api.stlouisfed.org/fred/series/observations"
 
@@ -39,21 +39,21 @@ class MacroError(RuntimeError):
 
 
 def fetch_series(series_id: str, api_key: str, start: date, end: date) -> pd.Series:
-    response = requests.get(
+    # A kulcs az URL-ben van, ezért a hívás a kulcsot nem szivárogtató burkolón megy
+    # (`pipeline.http`): a hibaüzenetbe sem az URL, sem a válasz nem kerülhet bele.
+    status, body = get_json(
         FRED_URL,
-        params={
+        {
             "series_id": series_id,
             "api_key": api_key,
             "file_type": "json",
             "observation_start": start.isoformat(),
             "observation_end": end.isoformat(),
         },
-        timeout=30,
     )
-    if response.status_code != 200:
-        # A kulcs az URL-ben van, ezért a választ és az URL-t sem írjuk ki.
-        raise MacroError(f"FRED {series_id}: HTTP {response.status_code}")
-    obs = response.json().get("observations", [])
+    if status != 200 or not isinstance(body, dict):
+        raise MacroError(f"FRED {series_id}: HTTP {status}")
+    obs = body.get("observations", [])
     values = pd.to_numeric(pd.Series([o["value"] for o in obs]), errors="coerce")  # a hiány „.”
     index = pd.to_datetime(pd.Series([o["date"] for o in obs])).dt.date
     return pd.Series(values.to_numpy(), index=index.to_numpy(), name=series_id).dropna()
