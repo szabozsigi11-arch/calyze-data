@@ -1,101 +1,621 @@
-instrument_id,ticker,name,asset_class,sector,exchange_calendar,valid_from,valid_to
-CZ00001,AAPL,Apple Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00002,MSFT,Microsoft Corp.,equity,Information Technology,XNYS,2026-09-19,
-CZ00003,NVDA,NVIDIA Corp.,equity,Information Technology,XNYS,2026-09-19,
-CZ00004,AVGO,Broadcom Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00005,ORCL,Oracle Corp.,equity,Information Technology,XNYS,2026-09-19,
-CZ00006,CRM,Salesforce Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00007,ADBE,Adobe Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00008,AMD,Advanced Micro Devices Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00009,CSCO,Cisco Systems Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00010,QCOM,Qualcomm Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00011,TXN,Texas Instruments Inc.,equity,Information Technology,XNYS,2026-09-19,
-CZ00012,IBM,International Business Machines Corp.,equity,Information Technology,XNYS,2026-09-19,
-CZ00013,INTC,Intel Corp.,equity,Information Technology,XNYS,2026-09-19,
-CZ00014,GOOGL,Alphabet Inc. Class A,equity,Communication Services,XNYS,2026-09-19,
-CZ00015,META,Meta Platforms Inc.,equity,Communication Services,XNYS,2026-09-19,
-CZ00016,NFLX,Netflix Inc.,equity,Communication Services,XNYS,2026-09-19,
-CZ00017,DIS,Walt Disney Co.,equity,Communication Services,XNYS,2026-09-19,
-CZ00018,TMUS,T-Mobile US Inc.,equity,Communication Services,XNYS,2026-09-19,
-CZ00019,VZ,Verizon Communications Inc.,equity,Communication Services,XNYS,2026-09-19,
-CZ00020,CMCSA,Comcast Corp.,equity,Communication Services,XNYS,2026-09-19,
-CZ00021,AMZN,Amazon.com Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00022,TSLA,Tesla Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00023,HD,Home Depot Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00024,MCD,McDonald's Corp.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00025,NKE,Nike Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00026,LOW,Lowe's Companies Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00027,SBUX,Starbucks Corp.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00028,BKNG,Booking Holdings Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00029,TJX,TJX Companies Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,
-CZ00030,WMT,Walmart Inc.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00031,PG,Procter & Gamble Co.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00032,KO,Coca-Cola Co.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00033,PEP,PepsiCo Inc.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00034,COST,Costco Wholesale Corp.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00035,PM,Philip Morris International Inc.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00036,MDLZ,Mondelez International Inc.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00037,CL,Colgate-Palmolive Co.,equity,Consumer Staples,XNYS,2026-09-19,
-CZ00038,LLY,Eli Lilly and Co.,equity,Health Care,XNYS,2026-09-19,
-CZ00039,UNH,UnitedHealth Group Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00040,JNJ,Johnson & Johnson,equity,Health Care,XNYS,2026-09-19,
-CZ00041,ABBV,AbbVie Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00042,MRK,Merck & Co. Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00043,PFE,Pfizer Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00044,TMO,Thermo Fisher Scientific Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00045,ABT,Abbott Laboratories,equity,Health Care,XNYS,2026-09-19,
-CZ00046,AMGN,Amgen Inc.,equity,Health Care,XNYS,2026-09-19,
-CZ00047,DHR,Danaher Corp.,equity,Health Care,XNYS,2026-09-19,
-CZ00048,JPM,JPMorgan Chase & Co.,equity,Financials,XNYS,2026-09-19,
-CZ00049,V,Visa Inc.,equity,Financials,XNYS,2026-09-19,
-CZ00050,MA,Mastercard Inc.,equity,Financials,XNYS,2026-09-19,
-CZ00051,BAC,Bank of America Corp.,equity,Financials,XNYS,2026-09-19,
-CZ00052,WFC,Wells Fargo & Co.,equity,Financials,XNYS,2026-09-19,
-CZ00053,GS,Goldman Sachs Group Inc.,equity,Financials,XNYS,2026-09-19,
-CZ00054,MS,Morgan Stanley,equity,Financials,XNYS,2026-09-19,
-CZ00055,BLK,BlackRock Inc.,equity,Financials,XNYS,2026-09-19,
-CZ00056,AXP,American Express Co.,equity,Financials,XNYS,2026-09-19,
-CZ00057,C,Citigroup Inc.,equity,Financials,XNYS,2026-09-19,
-CZ00058,GE,GE Aerospace,equity,Industrials,XNYS,2026-09-19,
-CZ00059,CAT,Caterpillar Inc.,equity,Industrials,XNYS,2026-09-19,
-CZ00060,RTX,RTX Corp.,equity,Industrials,XNYS,2026-09-19,
-CZ00061,HON,Honeywell International Inc.,equity,Industrials,XNYS,2026-09-19,
-CZ00062,UPS,United Parcel Service Inc.,equity,Industrials,XNYS,2026-09-19,
-CZ00063,BA,Boeing Co.,equity,Industrials,XNYS,2026-09-19,
-CZ00064,DE,Deere & Co.,equity,Industrials,XNYS,2026-09-19,
-CZ00065,LMT,Lockheed Martin Corp.,equity,Industrials,XNYS,2026-09-19,
-CZ00066,UNP,Union Pacific Corp.,equity,Industrials,XNYS,2026-09-19,
-CZ00067,XOM,Exxon Mobil Corp.,equity,Energy,XNYS,2026-09-19,
-CZ00068,CVX,Chevron Corp.,equity,Energy,XNYS,2026-09-19,
-CZ00069,COP,ConocoPhillips,equity,Energy,XNYS,2026-09-19,
-CZ00070,SLB,SLB N.V.,equity,Energy,XNYS,2026-09-19,
-CZ00071,EOG,EOG Resources Inc.,equity,Energy,XNYS,2026-09-19,
-CZ00072,NEE,NextEra Energy Inc.,equity,Utilities,XNYS,2026-09-19,
-CZ00073,DUK,Duke Energy Corp.,equity,Utilities,XNYS,2026-09-19,
-CZ00074,SO,Southern Co.,equity,Utilities,XNYS,2026-09-19,
-CZ00075,PLD,Prologis Inc.,equity,Real Estate,XNYS,2026-09-19,
-CZ00076,AMT,American Tower Corp.,equity,Real Estate,XNYS,2026-09-19,
-CZ00077,EQIX,Equinix Inc.,equity,Real Estate,XNYS,2026-09-19,
-CZ00078,LIN,Linde plc,equity,Materials,XNYS,2026-09-19,
-CZ00079,SHW,Sherwin-Williams Co.,equity,Materials,XNYS,2026-09-19,
-CZ00080,FCX,Freeport-McMoRan Inc.,equity,Materials,XNYS,2026-09-19,
-CZ00081,SPY,SPDR S&P 500 ETF Trust,etf,US large cap,XNYS,2026-09-19,
-CZ00082,QQQ,Invesco QQQ Trust,etf,US large cap growth,XNYS,2026-09-19,
-CZ00083,IWM,iShares Russell 2000 ETF,etf,US small cap,XNYS,2026-09-19,
-CZ00084,DIA,SPDR Dow Jones Industrial Average ETF,etf,US large cap,XNYS,2026-09-19,
-CZ00085,VTI,Vanguard Total Stock Market ETF,etf,US total market,XNYS,2026-09-19,
-CZ00086,EFA,iShares MSCI EAFE ETF,etf,Developed markets ex-US,XNYS,2026-09-19,
-CZ00087,EEM,iShares MSCI Emerging Markets ETF,etf,Emerging markets,XNYS,2026-09-19,
-CZ00088,TLT,iShares 20+ Year Treasury Bond ETF,etf,US long-term Treasuries,XNYS,2026-09-19,
-CZ00089,IEF,iShares 7-10 Year Treasury Bond ETF,etf,US intermediate Treasuries,XNYS,2026-09-19,
-CZ00090,LQD,iShares iBoxx $ Investment Grade Corporate Bond ETF,etf,US investment-grade credit,XNYS,2026-09-19,
-CZ00091,HYG,iShares iBoxx $ High Yield Corporate Bond ETF,etf,US high-yield credit,XNYS,2026-09-19,
-CZ00092,GLD,SPDR Gold Shares,etf,Gold,XNYS,2026-09-19,
-CZ00093,SLV,iShares Silver Trust,etf,Silver,XNYS,2026-09-19,
-CZ00094,USO,United States Oil Fund,etf,Crude oil,XNYS,2026-09-19,
-CZ00095,UUP,Invesco DB US Dollar Index Bullish Fund,etf,US dollar,XNYS,2026-09-19,
-CZ00096,XLK,Technology Select Sector SPDR Fund,etf,Sector: Information Technology,XNYS,2026-09-19,
-CZ00097,XLF,Financial Select Sector SPDR Fund,etf,Sector: Financials,XNYS,2026-09-19,
-CZ00098,XLE,Energy Select Sector SPDR Fund,etf,Sector: Energy,XNYS,2026-09-19,
-CZ00099,XLV,Health Care Select Sector SPDR Fund,etf,Sector: Health Care,XNYS,2026-09-19,
-CZ00100,XLI,Industrial Select Sector SPDR Fund,etf,Sector: Industrials,XNYS,2026-09-19,
+instrument_id,ticker,name,asset_class,sector,exchange_calendar,valid_from,valid_to,segment
+CZ00001,AAPL,Apple Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00002,MSFT,Microsoft Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00003,NVDA,NVIDIA Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00004,AVGO,Broadcom Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00005,ORCL,Oracle Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00006,CRM,Salesforce Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00007,ADBE,Adobe Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00008,AMD,Advanced Micro Devices Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00009,CSCO,Cisco Systems Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00010,QCOM,Qualcomm Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00011,TXN,Texas Instruments Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00012,IBM,International Business Machines Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00013,INTC,Intel Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00014,GOOGL,Alphabet Inc. Class A,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00015,META,Meta Platforms Inc.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00016,NFLX,Netflix Inc.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00017,DIS,Walt Disney Co.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00018,TMUS,T-Mobile US Inc.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00019,VZ,Verizon Communications Inc.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00020,CMCSA,Comcast Corp.,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00021,AMZN,Amazon.com Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00022,TSLA,Tesla Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00023,HD,Home Depot Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00024,MCD,McDonald's Corp.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00025,NKE,Nike Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00026,LOW,Lowe's Companies Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00027,SBUX,Starbucks Corp.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00028,BKNG,Booking Holdings Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00029,TJX,TJX Companies Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00030,WMT,Walmart Inc.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00031,PG,Procter & Gamble Co.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00032,KO,Coca-Cola Co.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00033,PEP,PepsiCo Inc.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00034,COST,Costco Wholesale Corp.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00035,PM,Philip Morris International Inc.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00036,MDLZ,Mondelez International Inc.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00037,CL,Colgate-Palmolive Co.,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00038,LLY,Eli Lilly and Co.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00039,UNH,UnitedHealth Group Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00040,JNJ,Johnson & Johnson,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00041,ABBV,AbbVie Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00042,MRK,Merck & Co. Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00043,PFE,Pfizer Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00044,TMO,Thermo Fisher Scientific Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00045,ABT,Abbott Laboratories,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00046,AMGN,Amgen Inc.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00047,DHR,Danaher Corp.,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00048,JPM,JPMorgan Chase & Co.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00049,V,Visa Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00050,MA,Mastercard Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00051,BAC,Bank of America Corp.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00052,WFC,Wells Fargo & Co.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00053,GS,Goldman Sachs Group Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00054,MS,Morgan Stanley,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00055,BLK,BlackRock Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00056,AXP,American Express Co.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00057,C,Citigroup Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00058,GE,GE Aerospace,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00059,CAT,Caterpillar Inc.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00060,RTX,RTX Corp.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00061,HON,Honeywell International Inc.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00062,UPS,United Parcel Service Inc.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00063,BA,Boeing Co.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00064,DE,Deere & Co.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00065,LMT,Lockheed Martin Corp.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00066,UNP,Union Pacific Corp.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00067,XOM,Exxon Mobil Corp.,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00068,CVX,Chevron Corp.,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00069,COP,ConocoPhillips,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00070,SLB,SLB N.V.,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00071,EOG,EOG Resources Inc.,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00072,NEE,NextEra Energy Inc.,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00073,DUK,Duke Energy Corp.,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00074,SO,Southern Co.,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00075,PLD,Prologis Inc.,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00076,AMT,American Tower Corp.,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00077,EQIX,Equinix Inc.,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00078,LIN,Linde plc,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00079,SHW,Sherwin-Williams Co.,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00080,FCX,Freeport-McMoRan Inc.,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00081,SPY,SPDR S&P 500 ETF Trust,etf,US large cap,XNYS,2026-09-19,,etf
+CZ00082,QQQ,Invesco QQQ Trust,etf,US large cap growth,XNYS,2026-09-19,,etf
+CZ00083,IWM,iShares Russell 2000 ETF,etf,US small cap,XNYS,2026-09-19,,etf
+CZ00084,DIA,SPDR Dow Jones Industrial Average ETF,etf,US large cap,XNYS,2026-09-19,,etf
+CZ00085,VTI,Vanguard Total Stock Market ETF,etf,US total market,XNYS,2026-09-19,,etf
+CZ00086,EFA,iShares MSCI EAFE ETF,etf,Developed markets ex-US,XNYS,2026-09-19,,etf
+CZ00087,EEM,iShares MSCI Emerging Markets ETF,etf,Emerging markets,XNYS,2026-09-19,,etf
+CZ00088,TLT,iShares 20+ Year Treasury Bond ETF,etf,US long-term Treasuries,XNYS,2026-09-19,,etf
+CZ00089,IEF,iShares 7-10 Year Treasury Bond ETF,etf,US intermediate Treasuries,XNYS,2026-09-19,,etf
+CZ00090,LQD,iShares iBoxx $ Investment Grade Corporate Bond ETF,etf,US investment-grade credit,XNYS,2026-09-19,,etf
+CZ00091,HYG,iShares iBoxx $ High Yield Corporate Bond ETF,etf,US high-yield credit,XNYS,2026-09-19,,etf
+CZ00092,GLD,SPDR Gold Shares,etf,Gold,XNYS,2026-09-19,,etf
+CZ00093,SLV,iShares Silver Trust,etf,Silver,XNYS,2026-09-19,,etf
+CZ00094,USO,United States Oil Fund,etf,Crude oil,XNYS,2026-09-19,,etf
+CZ00095,UUP,Invesco DB US Dollar Index Bullish Fund,etf,US dollar,XNYS,2026-09-19,,etf
+CZ00096,XLK,Technology Select Sector SPDR Fund,etf,Sector: Information Technology,XNYS,2026-09-19,,etf
+CZ00097,XLF,Financial Select Sector SPDR Fund,etf,Sector: Financials,XNYS,2026-09-19,,etf
+CZ00098,XLE,Energy Select Sector SPDR Fund,etf,Sector: Energy,XNYS,2026-09-19,,etf
+CZ00099,XLV,Health Care Select Sector SPDR Fund,etf,Sector: Health Care,XNYS,2026-09-19,,etf
+CZ00100,XLI,Industrial Select Sector SPDR Fund,etf,Sector: Industrials,XNYS,2026-09-19,,etf
+CZ00101,A,Agilent Technologies,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00102,ABNB,Airbnb,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00103,ACGL,Arch Capital Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00104,ACN,Accenture,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00105,ADI,Analog Devices,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00106,ADM,Archer Daniels Midland,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00107,ADP,Automatic Data Processing,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00108,ADSK,Autodesk,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00109,AEE,Ameren,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00110,AEP,American Electric Power,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00111,AES,AES Corporation,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00112,AFL,Aflac,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00113,AIG,American International Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00114,AIZ,Assurant,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00115,AJG,Arthur J. Gallagher & Co.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00116,AKAM,Akamai Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00117,ALB,Albemarle Corporation,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00118,ALGN,Align Technology,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00119,ALL,Allstate,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00120,ALLE,Allegion,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00121,AMAT,Applied Materials,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00122,AMCR,Amcor,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00123,AME,Ametek,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00124,AMP,Ameriprise Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00125,ANET,Arista Networks,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00126,AON,Aon plc,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00127,AOS,A. O. Smith,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00128,APA,APA Corporation,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00129,APD,Air Products,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00130,APH,Amphenol,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00131,APO,Apollo Global Management,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00132,APP,AppLovin,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00133,APTV,Aptiv,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00134,ARE,Alexandria Real Estate Equities,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00135,ARES,Ares Management,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00136,ATO,Atmos Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00137,AVY,Avery Dennison,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00138,AWK,American Water Works,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00139,AXON,Axon Enterprise,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00140,AZO,AutoZone,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00141,BALL,Ball Corporation,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00142,BAX,Baxter International,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00143,BBY,Best Buy,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00144,BDX,Becton Dickinson,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00145,BEN,Franklin Resources,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00146,BF.B,Brown–Forman,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00147,BG,Bunge Global,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00148,BIIB,Biogen,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00149,BKR,Baker Hughes,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00150,BLDR,Builders FirstSource,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00151,BMY,Bristol Myers Squibb,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00152,BNY,BNY Mellon,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00153,BR,Broadridge Financial Solutions,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00154,BRK.B,Berkshire Hathaway,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00155,BRO,Brown & Brown,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00156,BSX,Boston Scientific,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00157,BX,Blackstone Inc.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00158,BXP,"BXP, Inc.",equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00159,CAH,Cardinal Health,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00160,CARR,Carrier Global,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00161,CASY,Casey's,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00162,CB,Chubb Limited,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00163,CBOE,Cboe Global Markets,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00164,CBRE,CBRE Group,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00165,CCI,Crown Castle,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00166,CCL,Carnival Corporation,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00167,CDNS,Cadence Design Systems,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00168,CDW,CDW Corporation,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00169,CEG,Constellation Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00170,CF,CF Industries,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00171,CFG,Citizens Financial Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00172,CHD,Church & Dwight,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00173,CHRW,C.H. Robinson,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00174,CHTR,Charter Communications,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00175,CI,Cigna,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00176,CIEN,Ciena,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00177,CINF,Cincinnati Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00178,CLX,Clorox,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00179,CME,CME Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00180,CMG,Chipotle Mexican Grill,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00181,CMI,Cummins,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00182,CMS,CMS Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00183,CNC,Centene Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00184,CNP,CenterPoint Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00185,COF,Capital One,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00186,COHR,Coherent Corp.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00187,COIN,Coinbase,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00188,COO,Cooper Companies (The),equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00189,COR,Cencora,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00190,CPAY,Corpay,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00191,CPRT,Copart,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00192,CPT,Camden Property Trust,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00193,CRH,CRH plc,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00194,CRL,Charles River Laboratories,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00195,CRWD,CrowdStrike,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00196,CSGP,CoStar Group,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00197,CSX,CSX Corporation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00198,CTAS,Cintas,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00199,CTSH,Cognizant,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00200,CTVA,Corteva,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00201,CVNA,Carvana,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00202,CVS,CVS Health,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00203,D,Dominion Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00204,DAL,Delta Air Lines,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00205,DASH,DoorDash,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00206,DD,DuPont,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00207,DDOG,Datadog,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00208,DECK,Deckers Brands,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00209,DELL,Dell Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00210,DG,Dollar General,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00211,DGX,Quest Diagnostics,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00212,DHI,D. R. Horton,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00213,DLR,Digital Realty,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00214,DLTR,Dollar Tree,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00215,DOC,Healthpeak Properties,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00216,DOV,Dover Corporation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00217,DOW,Dow Inc.,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00218,DPZ,Domino's,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00219,DRI,Darden Restaurants,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00220,DTE,DTE Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00221,DVA,DaVita,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00222,DVN,Devon Energy,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00223,DXCM,Dexcom,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00224,EBAY,eBay Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00225,ECHO,EchoStar,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00226,ECL,Ecolab,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00227,ED,Consolidated Edison,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00228,EFX,Equifax,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00229,EG,Everest Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00230,EIX,Edison International,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00231,EL,Estée Lauder Companies (The),equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00232,ELV,Elevance Health,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00233,EME,Emcor,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00234,EMR,Emerson Electric,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00235,EQT,EQT Corporation,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00236,ERIE,Erie Indemnity,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00237,ES,Eversource Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00238,ESS,Essex Property Trust,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00239,ETN,Eaton Corporation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00240,ETR,Entergy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00241,EVRG,Evergy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00242,EW,Edwards Lifesciences,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00243,EXC,Exelon,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00244,EXE,Expand Energy,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00245,EXPD,Expeditors International,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00246,EXPE,Expedia Group,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00247,EXR,Extra Space Storage,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00248,F,Ford Motor Company,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00249,FANG,Diamondback Energy,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00250,FAST,Fastenal,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00251,FDS,FactSet,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00252,FDX,FedEx,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00253,FDXF,FedEx Freight,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00254,FE,FirstEnergy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00255,FERG,Ferguson Enterprises,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00256,FFIV,"F5, Inc.",equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00257,FICO,Fair Isaac,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00258,FIS,Fidelity National Information Services,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00259,FISV,Fiserv,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00260,FITB,Fifth Third Bancorp,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00261,FIX,Comfort Systems USA,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00262,FLEX,Flex Ltd.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00263,FOXA,Fox Corporation (Class A),equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00264,FRT,Federal Realty Investment Trust,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00265,FSLR,First Solar,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00266,FTNT,Fortinet,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00267,FTV,Fortive,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00268,GD,General Dynamics,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00269,GDDY,GoDaddy,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00270,GEHC,GE HealthCare,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00271,GEN,Gen Digital,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00272,GEV,GE Vernova,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00273,GILD,Gilead Sciences,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00274,GIS,General Mills,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00275,GL,Globe Life,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00276,GLW,Corning Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00277,GM,General Motors,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00278,GNRC,Generac,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00279,GPC,Genuine Parts Company,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00280,GPN,Global Payments,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00281,GRMN,Garmin,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00282,GWW,W. W. Grainger,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00283,HAL,Halliburton,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00284,HAS,Hasbro,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00285,HBAN,Huntington Bancshares,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00286,HCA,HCA Healthcare,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00287,HIG,Hartford (The),equity,Financials,XNYS,2026-09-19,,sp500
+CZ00288,HII,Huntington Ingalls Industries,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00289,HLT,Hilton Worldwide,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00290,HONA,Honeywell Aerospace,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00291,HOOD,Robinhood Markets,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00292,HPE,Hewlett Packard Enterprise,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00293,HPQ,HP Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00294,HRL,Hormel Foods,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00295,HSIC,Henry Schein,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00296,HST,Host Hotels & Resorts,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00297,HSY,Hershey Company (The),equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00298,HUBB,Hubbell Incorporated,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00299,HUM,Humana,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00300,HWM,Howmet Aerospace,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00301,IBKR,Interactive Brokers,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00302,ICE,Intercontinental Exchange,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00303,IDXX,Idexx Laboratories,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00304,IEX,IDEX Corporation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00305,IFF,International Flavors & Fragrances,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00306,INCY,Incyte,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00307,INTU,Intuit,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00308,INVH,Invitation Homes,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00309,IP,International Paper,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00310,IQV,IQVIA,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00311,IR,Ingersoll Rand,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00312,IRM,Iron Mountain,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00313,ISRG,Intuitive Surgical,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00314,IT,Gartner,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00315,ITW,Illinois Tool Works,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00316,IVZ,Invesco,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00317,J,Jacobs Solutions,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00318,JBHT,J.B. Hunt,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00319,JBL,Jabil,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00320,JCI,Johnson Controls,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00321,JKHY,Jack Henry & Associates,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00322,KDP,Keurig Dr Pepper,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00323,KEY,KeyCorp,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00324,KEYS,Keysight Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00325,KHC,Kraft Heinz,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00326,KIM,Kimco Realty,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00327,KKR,KKR & Co.,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00328,KLAC,KLA Corporation,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00329,KMB,Kimberly-Clark,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00330,KMI,Kinder Morgan,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00331,KR,Kroger,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00332,KVUE,Kenvue,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00333,L,Loews Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00334,LDOS,Leidos,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00335,LEN,Lennar,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00336,LH,Labcorp,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00337,LHX,L3Harris,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00338,LII,Lennox International,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00339,LITE,Lumentum,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00340,LNT,Alliant Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00341,LRCX,Lam Research,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00342,LULU,Lululemon Athletica,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00343,LUV,Southwest Airlines,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00344,LVS,Las Vegas Sands,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00345,LYB,LyondellBasell,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00346,LYV,Live Nation Entertainment,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00347,MAA,Mid-America Apartment Communities,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00348,MAR,Marriott International,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00349,MAS,Masco,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00350,MCHP,Microchip Technology,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00351,MCK,McKesson Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00352,MCO,Moody's Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00353,MDT,Medtronic,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00354,MET,MetLife,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00355,MGM,MGM Resorts,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00356,MKC,McCormick & Company,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00357,MLM,Martin Marietta Materials,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00358,MMM,3M,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00359,MNST,Monster Beverage,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00360,MO,Altria,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00361,MOS,Mosaic Company (The),equity,Materials,XNYS,2026-09-19,,sp500
+CZ00362,MPC,Marathon Petroleum,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00363,MPWR,Monolithic Power Systems,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00364,MRNA,Moderna,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00365,MRSH,Marsh McLennan,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00366,MRVL,Marvell Technology,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00367,MSCI,MSCI,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00368,MSI,Motorola Solutions,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00369,MTB,M&T Bank,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00370,MTD,Mettler Toledo,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00371,MU,Micron Technology,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00372,NCLH,Norwegian Cruise Line Holdings,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00373,NDAQ,"Nasdaq, Inc.",equity,Financials,XNYS,2026-09-19,,sp500
+CZ00374,NDSN,Nordson Corporation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00375,NEM,Newmont,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00376,NI,NiSource,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00377,NOC,Northrop Grumman,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00378,NOW,ServiceNow,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00379,NRG,NRG Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00380,NSC,Norfolk Southern,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00381,NTAP,NetApp,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00382,NTRS,Northern Trust,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00383,NUE,Nucor,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00384,NVR,"NVR, Inc.",equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00385,NWSA,News Corp (Class A),equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00386,NXPI,NXP Semiconductors,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00387,O,Realty Income,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00388,ODFL,Old Dominion,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00389,OKE,Oneok,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00390,OMC,Omnicom Group,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00391,ON,ON Semiconductor,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00392,ORLY,O'Reilly Automotive,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00393,OTIS,Otis Worldwide,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00394,OXY,Occidental Petroleum,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00395,PANW,Palo Alto Networks,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00396,PAYX,Paychex,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00397,PCAR,Paccar,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00398,PCG,PG&E Corporation,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00399,PEG,Public Service Enterprise Group,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00400,PFG,Principal Financial Group,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00401,PGR,Progressive Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00402,PH,Parker Hannifin,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00403,PHM,PulteGroup,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00404,PKG,Packaging Corporation of America,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00405,PLTR,Palantir Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00406,PNC,PNC Financial Services,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00407,PNR,Pentair,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00408,PNW,Pinnacle West Capital,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00409,PODD,Insulet Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00410,PPG,PPG Industries,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00411,PPL,PPL Corporation,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00412,PRU,Prudential Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00413,PSA,Public Storage,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00414,PSKY,Paramount Skydance Corporation,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00415,PSX,Phillips 66,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00416,PTC,PTC Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00417,PWR,Quanta Services,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00418,PYPL,PayPal,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00419,Q,Qnity Electronics,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00420,RCL,Royal Caribbean Group,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00421,RDDT,Reddit,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00422,REG,Regency Centers,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00423,REGN,Regeneron Pharmaceuticals,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00424,RF,Regions Financial Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00425,RJF,Raymond James Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00426,RL,Ralph Lauren Corporation,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00427,RMD,ResMed|,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00428,ROK,Rockwell Automation,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00429,ROL,"Rollins, Inc.",equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00430,ROP,Roper Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00431,ROST,Ross Stores,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00432,RSG,Republic Services,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00433,RVTY,Revvity,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00434,SBAC,SBA Communications,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00435,SCHW,Charles Schwab Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00436,SJM,J.M. Smucker Company (The),equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00437,SMCI,Supermicro,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00438,SNA,Snap-on,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00439,SNDK,Sandisk,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00440,SNPS,Synopsys,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00441,SOLV,Solventum,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00442,SPG,Simon Property Group,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00443,SPGI,S&P Global,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00444,SRE,Sempra,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00445,STE,Steris,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00446,STLD,Steel Dynamics,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00447,STT,State Street Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00448,STX,Seagate Technology,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00449,STZ,Constellation Brands,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00450,SW,Smurfit Westrock,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00451,SWK,Stanley Black & Decker,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00452,SWKS,Skyworks Solutions,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00453,SYF,Synchrony Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00454,SYK,Stryker Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00455,SYY,Sysco,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00456,T,AT&T,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00457,TAP,Molson Coors Beverage Company,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00458,TDG,TransDigm Group,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00459,TDY,Teledyne Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00460,TECH,Bio-Techne,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00461,TEL,TE Connectivity,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00462,TER,Teradyne,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00463,TFC,Truist Financial,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00464,TGT,Target Corporation,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00465,TKO,TKO Group Holdings,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00466,TPL,Texas Pacific Land Corporation,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00467,TPR,"Tapestry, Inc.",equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00468,TRGP,Targa Resources,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00469,TRMB,Trimble Inc.,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00470,TROW,T. Rowe Price,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00471,TRV,Travelers Companies (The),equity,Financials,XNYS,2026-09-19,,sp500
+CZ00472,TSCO,Tractor Supply,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00473,TSN,Tyson Foods,equity,Consumer Staples,XNYS,2026-09-19,,sp500
+CZ00474,TT,Trane Technologies,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00475,TTD,Trade Desk (The),equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00476,TTWO,Take-Two Interactive,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00477,TXT,Textron,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00478,TYL,Tyler Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00479,UAL,United Airlines Holdings,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00480,UBER,Uber,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00481,UDR,"UDR, Inc.",equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00482,UHS,Universal Health Services,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00483,ULTA,Ulta Beauty,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00484,URI,United Rentals,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00485,USB,U.S. Bancorp,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00486,VEEV,Veeva Systems,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00487,VICI,Vici Properties,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00488,VLO,Valero Energy,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00489,VLTO,Veralto,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00490,VMC,Vulcan Materials Company,equity,Materials,XNYS,2026-09-19,,sp500
+CZ00491,VMRK,Vivmark Residential,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00492,VRSK,Verisk Analytics,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00493,VRSN,Verisign,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00494,VRT,Vertiv,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00495,VRTX,Vertex Pharmaceuticals,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00496,VST,Vistra Corp.,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00497,VTR,Ventas,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00498,VTRS,Viatris,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00499,WAB,Wabtec,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00500,WAT,Waters Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00501,WBD,Warner Bros. Discovery,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00502,WDAY,"Workday, Inc.",equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00503,WDC,Western Digital,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00504,WEC,WEC Energy Group,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00505,WELL,Welltower,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00506,WM,Waste Management,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00507,WMB,Williams Companies,equity,Energy,XNYS,2026-09-19,,sp500
+CZ00508,WRB,W. R. Berkley Corporation,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00509,WSM,"Williams-Sonoma, Inc.",equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00510,WST,West Pharmaceutical Services,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00511,WTW,Willis Towers Watson,equity,Financials,XNYS,2026-09-19,,sp500
+CZ00512,WY,Weyerhaeuser,equity,Real Estate,XNYS,2026-09-19,,sp500
+CZ00513,WYNN,Wynn Resorts,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00514,XEL,Xcel Energy,equity,Utilities,XNYS,2026-09-19,,sp500
+CZ00515,XYL,Xylem Inc.,equity,Industrials,XNYS,2026-09-19,,sp500
+CZ00516,XYZ,"Block, Inc.",equity,Financials,XNYS,2026-09-19,,sp500
+CZ00517,YUM,Yum! Brands,equity,Consumer Discretionary,XNYS,2026-09-19,,sp500
+CZ00518,ZBH,Zimmer Biomet,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00519,ZBRA,Zebra Technologies,equity,Information Technology,XNYS,2026-09-19,,sp500
+CZ00520,ZTS,Zoetis,equity,Health Care,XNYS,2026-09-19,,sp500
+CZ00521,AA,Alcoa,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00522,AAL,American Airlines Group,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00523,AEIS,Advanced Energy,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00524,AMKR,Amkor Technology,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00525,AR,Antero Resources,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00526,ARMK,Aramark,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00527,ATI,ATI Inc.,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00528,AVAV,AeroVironment,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00529,BJ,BJ's Wholesale Club,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00530,BROS,Dutch Bros Inc.,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00531,BTSG,BrightSpring Health Services,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00532,BURL,Burlington Stores,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00533,BWXT,BWX Technologies,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00534,CACI,CACI International,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00535,CART,Maplebear Inc.,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00536,CAVA,Cava Group,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00537,CDE,Coeur Mining,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00538,CELH,Celsius Holdings,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00539,CG,Carlyle Group (The),equity,Financials,XNYS,2026-09-19,,midcap
+CZ00540,CHWY,Chewy,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00541,CLF,Cleveland-Cliffs,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00542,CNH,CNH Industrial,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00543,CRS,Carpenter Technology,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00544,CSL,Carlisle Companies,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00545,CW,Curtiss-Wright,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00546,DINO,HF Sinclair,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00547,DKS,Dick's Sporting Goods,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00548,DOCN,DigitalOcean,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00549,DOCU,Docusign,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00550,DT,Dynatrace,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00551,DUOL,Duolingo,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00552,DY,Dycom Industries,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00553,ELF,e.l.f. Beauty,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00554,ENTG,Entegris,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00555,EVR,Evercore,equity,Financials,XNYS,2026-09-19,,midcap
+CZ00556,FIVE,Five Below,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00557,FN,Fabrinet,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00558,FTI,TechnipFMC,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00559,GWRE,Guidewire Software,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00560,HALO,Halozyme,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00561,HIMS,Hims & Hers Health,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00562,HL,Hecla Mining,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00563,ILMN,"Illumina, Inc.",equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00564,ITT,ITT Inc.,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00565,JAZZ,Jazz Pharmaceuticals,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00566,KNX,Knight-Swift,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00567,KTOS,Kratos Defense & Security Solutions,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00568,LSCC,Lattice Semiconductor,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00569,MEDP,Medpace,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00570,MKSI,MKS Instruments,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00571,MOH,Molina Healthcare,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00572,MP,MP Materials,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00573,MTSI,MACOM Technology Solutions,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00574,MTZ,MasTec,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00575,MUSA,Murphy USA,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00576,NBIX,Neurocrine Biosciences,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00577,NLY,Annaly Capital Management,equity,Financials,XNYS,2026-09-19,,midcap
+CZ00578,NTNX,Nutanix,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00579,NVT,nVent Electric plc,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00580,NXT,Nextpower,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00581,OKTA,"Okta, Inc.",equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00582,ONTO,Onto Innovation,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00583,OVV,Ovintiv,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00584,P,Everpure,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00585,PATH,UiPath,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00586,PBF,PBF Energy,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00587,PFGC,Performance Food Group,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00588,PINS,Pinterest,equity,Communication Services,XNYS,2026-09-19,,midcap
+CZ00589,PR,Permian Resources,equity,Energy,XNYS,2026-09-19,,midcap
+CZ00590,RGEN,Repligen,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00591,RGLD,Royal Gold,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00592,RMBS,Rambus,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00593,ROIV,Roivant Sciences,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00594,ROKU,"Roku, Inc.",equity,Communication Services,XNYS,2026-09-19,,midcap
+CZ00595,RRX,Regal Rexnord,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00596,SAIA,Saia,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00597,SFM,Sprouts Farmers Market,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00598,SGI,Somnigroup International,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00599,SITM,SiTime,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00600,SMTC,Semtech,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00601,SN,SharkNinja,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00602,SNX,TD Synnex,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00603,SOLS,Solstice Advanced Materials,equity,Materials,XNYS,2026-09-19,,midcap
+CZ00604,STRL,Sterling Infrastructure,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00605,SUI,Sun Communities,equity,Real Estate,XNYS,2026-09-19,,midcap
+CZ00606,THC,Tenet Health,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00607,TLN,Talen Energy,equity,Utilities,XNYS,2026-09-19,,midcap
+CZ00608,TOST,"Toast, Inc.",equity,Financials,XNYS,2026-09-19,,midcap
+CZ00609,TRU,TransUnion,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00610,TTMI,TTM Technologies,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00611,TWLO,Twilio,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00612,TXRH,Texas Roadhouse,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00613,USFD,US Foods,equity,Consumer Staples,XNYS,2026-09-19,,midcap
+CZ00614,UTHR,United Therapeutics,equity,Health Care,XNYS,2026-09-19,,midcap
+CZ00615,VIAV,Viavi Solutions,equity,Information Technology,XNYS,2026-09-19,,midcap
+CZ00616,VICR,Vicor Corporation,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00617,WCC,WESCO International,equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00618,WING,Wingstop,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
+CZ00619,WWD,"Woodward, Inc.",equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00620,XPO,"XPO, Inc.",equity,Industrials,XNYS,2026-09-19,,midcap

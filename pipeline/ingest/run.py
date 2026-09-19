@@ -2,8 +2,8 @@
 
 Két mód:
 - `daily`: az utolsó 10 kereskedési nap újra letöltve, összefésülve a friss év
-  fájljával. Ha egy papírnál az ablakban osztalék vagy felosztás volt, annak a
-  teljes múltja újra letöltődik, mert a forrás visszamenőleg igazítja az árakat.
+  fájljával. Ha egy papírnál az ablakban új felosztás volt, annak a teljes
+  múltja újra letöltődik, mert a forrás a záróárat visszamenőleg igazítja.
 - `backfill`: a teljes múlt 2005-től, minden évfájl újraírva (első futás, és
   hetente egyszer a csendes eltérések ellen).
 
@@ -90,15 +90,24 @@ def canonical_actions(result: ChainResult, ids: dict[str, str], fetched_at: date
     return acts.dropna(subset=["instrument_id"]).loc[:, list(ACTION_SCHEMA.names)]
 
 
-def new_event_instruments(actions: pd.DataFrame, storage: Storage) -> list[str]:
-    if actions.empty:
+def new_split_instruments(actions: pd.DataFrame, storage: Storage) -> list[str]:
+    """Azok a papírok, amelyeknél ÚJ felosztás van az ablakban.
+
+    Felosztásnál a forrás a záróárat is visszamenőleg igazítja, ezért a papír
+    teljes múltja újratöltődik. Osztaléknál nem kell: a teljes hozamot a
+    záróárból és az osztaléklistából mi számoljuk (`pipeline.corporate`).
+    A már tárolt eseményt nem dolgozzuk fel újra (különben egy felosztás
+    miatt tíz egymást követő napon töltenénk le ugyanazt a múltat).
+    """
+    splits = actions[actions["split_ratio"] > 0] if not actions.empty else actions
+    if splits.empty:
         return []
     stored = storage.download(RAW_BUCKET, ACTIONS_PATH)
     if stored is None:
-        return sorted(set(actions["instrument_id"]))
+        return sorted(set(splits["instrument_id"]))
     known = from_parquet(stored)
     seen = set(zip(known["instrument_id"], known["date"], strict=True))
-    fresh = [i for i, d in zip(actions["instrument_id"], actions["date"], strict=True) if (i, d) not in seen]
+    fresh = [i for i, d in zip(splits["instrument_id"], splits["date"], strict=True) if (i, d) not in seen]
     return sorted(set(fresh))
 
 
@@ -131,12 +140,7 @@ def run(mode: str, storage: Storage, now: datetime) -> dict[str, object]:
     if mode == "backfill":
         written = write_partitions(storage, fresh)
     else:
-        # Osztalék vagy felosztás az ablakban → a forrás visszamenőleg átírta a
-        # papír korrigált árait, tehát a teljes múltját újra kell tölteni.
-        # Csak az ÚJ esemény számít: ami már a tárolt eseménylistában van, azt
-        # egy korábbi futás már feldolgozta (különben egy osztalék miatt tíz
-        # egymást követő napon töltenénk le ugyanazt a teljes múltat).
-        event_ids = new_event_instruments(actions, storage)
+        event_ids = new_split_instruments(actions, storage)
         if event_ids:
             by_id = {v: k for k, v in ids.items()}
             full = chain.fetch([by_id[i] for i in event_ids], HISTORY_START, last)

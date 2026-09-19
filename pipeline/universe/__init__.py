@@ -14,8 +14,10 @@ from pathlib import Path
 import pandas as pd
 
 UNIVERSE_FILE = Path(__file__).with_name("instruments.csv")
+TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
 ASSET_CLASSES = {"equity", "etf"}
+SEGMENTS = {"sp500", "midcap", "etf"}
 
 
 class UniverseError(ValueError):
@@ -49,6 +51,8 @@ def validate_universe(frame: pd.DataFrame) -> None:
     unknown = set(frame["asset_class"]) - ASSET_CLASSES
     if unknown:
         raise UniverseError(f"ismeretlen eszközosztály: {sorted(unknown)}")
+    if "segment" in frame.columns and set(frame["segment"]) - SEGMENTS:
+        raise UniverseError(f"ismeretlen szegmens: {sorted(set(frame['segment']) - SEGMENTS)}")
 
 
 def active_on(frame: pd.DataFrame, day: date) -> pd.DataFrame:
@@ -56,3 +60,27 @@ def active_on(frame: pd.DataFrame, day: date) -> pd.DataFrame:
     pairs = zip(frame["valid_from"], frame["valid_to"], strict=True)
     mask = [f <= day and (t is None or t >= day) for f, t in pairs]
     return frame[mask]
+
+
+def load_ticker_history(path: Path = TICKER_HISTORY_FILE) -> pd.DataFrame:
+    """A korábbi tickerek (pl. FB → META). Az azonosító nem változik, csak a név."""
+    frame = pd.read_csv(path, dtype=str, keep_default_na=False)
+    frame["valid_from"] = [date.fromisoformat(v) for v in frame["valid_from"]]
+    frame["valid_to"] = [date.fromisoformat(v) if v else None for v in frame["valid_to"]]
+    return frame
+
+
+def ticker_on(instrument_id: str, day: date, universe: pd.DataFrame, history: pd.DataFrame) -> str:
+    """Az a ticker, amelyen az instrumentum az adott napon kereskedett.
+
+    Ha a történetben nincs rá sor, a mai ticker érvényes. A megjelenítés
+    használja (pl. egy 2021-es tézis „FB”-ként látszik, de META-hoz kötődik).
+    """
+    rows = history[history["instrument_id"] == instrument_id]
+    for _, r in rows.iterrows():
+        if r["valid_from"] <= day and (r["valid_to"] is None or day <= r["valid_to"]):
+            return str(r["ticker"])
+    current = universe.loc[universe["instrument_id"] == instrument_id, "ticker"]
+    if current.empty:
+        raise UniverseError(f"ismeretlen instrumentum: {instrument_id}")
+    return str(current.iloc[0])

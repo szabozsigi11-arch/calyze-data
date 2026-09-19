@@ -21,8 +21,11 @@ class YFinanceProvider(BaseProvider):
     reports_actions = True
 
     def _fetch_chunk(self, tickers: list[str], start: date, end: date) -> ProviderResult:
+        # A Yahoo a részvényosztályt kötőjellel írja (BRK.B → BRK-B); mi a
+        # tőzsdei alakot tartjuk, és a választ visszafordítjuk rá.
+        to_yahoo = {t: t.replace(".", "-") for t in tickers}
         raw = yf.download(
-            tickers=tickers,
+            tickers=list(to_yahoo.values()),
             start=start.isoformat(),
             end=(end + timedelta(days=1)).isoformat(),  # a yfinance `end`-je kizáró
             interval="1d",
@@ -34,7 +37,12 @@ class YFinanceProvider(BaseProvider):
         )
         if raw is None or raw.empty:
             raise ProviderUnavailableError(f"üres válasz {len(tickers)} papírra — vélhető korlátozás")
-        return self.to_long(raw, tickers)
+        result = self.to_long(raw, list(to_yahoo.values()))
+        back = {v: k for k, v in to_yahoo.items()}
+        for frame in (result.prices, result.actions):
+            if not frame.empty:
+                frame["ticker"] = frame["ticker"].map(back)
+        return result
 
     @staticmethod
     def to_long(raw: pd.DataFrame, tickers: list[str]) -> ProviderResult:

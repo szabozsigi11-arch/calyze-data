@@ -6,14 +6,29 @@ import pytest
 from pipeline.universe import UniverseError, active_on, load_universe, validate_universe
 
 
-def test_universe_has_100_instruments_with_stable_ids():
+def test_universe_size_and_segments():
     u = load_universe()
-    assert len(u) == 100
-    assert (u["asset_class"] == "equity").sum() == 80
-    assert (u["asset_class"] == "etf").sum() == 20
+    assert len(u) == 620
+    assert u["segment"].value_counts().to_dict() == {"sp500": 500, "midcap": 100, "etf": 20}
     assert u["instrument_id"].is_unique
     # Az azonosítók folytonosak: újat mindig a végére veszünk fel, régit soha nem adunk ki újra.
-    assert list(u["instrument_id"]) == [f"CZ{i:05d}" for i in range(1, 101)]
+    assert list(u["instrument_id"]) == [f"CZ{i:05d}" for i in range(1, len(u) + 1)]
+
+
+def test_first_100_ids_never_change():
+    # A 0. fázisban kiadott azonosítók lenyomata: ha bármelyik ticker-azonosító pár
+    # megváltozna, a már lementett adatok rossz papírhoz kötődnének.
+    import hashlib
+
+    head = load_universe().head(100)
+    digest = hashlib.sha256(",".join(head["instrument_id"] + ":" + head["ticker"]).encode()).hexdigest()
+    assert digest == "a2317dc0eee324d2af5e836f2ce4ff717122f85ec27d44c9971dfdf91310dfa3"
+
+
+def test_share_class_duplicates_are_excluded():
+    tickers = set(load_universe()["ticker"])
+    assert "GOOGL" in tickers
+    assert not {"GOOG", "FOX", "NWS"} & tickers
 
 
 def test_every_gics_sector_is_covered():
@@ -30,7 +45,7 @@ def test_shock_detector_basket_is_in_universe():
 
 def test_active_on_respects_validity_window():
     u = load_universe()
-    assert len(active_on(u, date(2026, 9, 19))) == 100
+    assert len(active_on(u, date(2026, 9, 19))) == 620
     assert len(active_on(u, date(2026, 9, 18))) == 0
 
 

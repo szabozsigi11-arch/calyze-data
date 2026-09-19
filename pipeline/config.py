@@ -27,6 +27,7 @@ class Settings:
     supabase_secret_key: str | None
     tiingo_api_key: str | None
     twelve_data_api_key: str | None
+    fred_api_key: str | None
 
     @property
     def storage_configured(self) -> bool:
@@ -44,4 +45,5 @@ def load_settings() -> Settings:
         supabase_secret_key=_env("SUPABASE_SECRET_KEY"),
         tiingo_api_key=_env("TIINGO_API_KEY"),
         twelve_data_api_key=_env("TWELVE_DATA_API_KEY"),
+        fred_api_key=_env("FRED_API_KEY"),
     )
