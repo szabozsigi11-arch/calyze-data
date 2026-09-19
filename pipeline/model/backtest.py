@@ -179,10 +179,15 @@ def arena_records(scored: pd.DataFrame, live: bool = False) -> pd.DataFrame:
 
     apply_fdr([c for _, c in comparisons])
     for meta, c in comparisons:
+        # A spec/06 8. fejezete a találatszámot is kéri; aránymetrikánál ez a
+        # mért arány és a mintaszám szorzata, Brier-pontszámnál nincs értelme.
+        is_rate = c.metric in {"direction_accuracy", "coverage"}
         rows.append(
             {
                 **meta,
                 **{k: v for k, v in asdict(c).items()},
+                "hits": round(c.value * c.n) if is_rate else None,
+                "baseline_hits": round(c.baseline_value * c.n) if is_rate else None,
                 "n_tests": len(comparisons),
                 "verdict": verdict(c),
                 "observations_needed": observations_needed(c),
