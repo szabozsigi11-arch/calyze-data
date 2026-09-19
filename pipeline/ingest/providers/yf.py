@@ -7,12 +7,18 @@ vesszük, különben a lánc sosem lépne a tartalékra.
 
 from __future__ import annotations
 
+import tempfile
 from datetime import date, timedelta
 
 import pandas as pd
 import yfinance as yf
 
 from pipeline.ingest.providers.base import BaseProvider, ProviderResult, ProviderUnavailableError, RateLimit
+
+# A yfinance időzóna-gyorsítótára párhuzamos letöltésnél ütközik a közös
+# mappán (zajos, de ártalmatlan figyelmeztetés az Actions-naplóban); saját
+# ideiglenes mappát kap.
+yf.set_tz_cache_location(tempfile.mkdtemp(prefix="yf-tz-"))
 
 
 class YFinanceProvider(BaseProvider):
