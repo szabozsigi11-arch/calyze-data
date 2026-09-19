@@ -196,6 +196,29 @@ def arena_records(scored: pd.DataFrame, live: bool = False) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def random_control(scored: pd.DataFrame, seed: int = SEED) -> dict[str, dict[str, float]]:
+    """Mi lenne, ha a modell kimenetét véletlen számokra cserélnénk?
+
+    Ez a próba a Kalibrában buktatta le a modell valódi értékét: ha a
+    véletlen kimenet nem romlik (vagy épp jobb), a modellnek nincs pozitív
+    készsége — és ezt a terméknek ki kell mondania. Egyben adatszivárgás
+    elleni ellenőrzés is: szivárgásnál a modell jóval a véletlen fölött lenne.
+    """
+    rng = np.random.default_rng(seed)
+    out: dict[str, dict[str, float]] = {}
+    for horizon in sorted(scored["horizon"].unique()):
+        part = scored[scored["horizon"] == horizon]
+        y = part["y"].to_numpy(dtype="float64")
+        fake = rng.uniform(0.3, 0.7, len(part))
+        out[str(int(horizon))] = {
+            "model_accuracy": round(float(hit(part["prob_up"].to_numpy(), y).mean()), 4),
+            "random_accuracy": round(float(hit(fake, y).mean()), 4),
+            "model_brier": round(float(brier(part["prob_up"].to_numpy(), y).mean()), 4),
+            "random_brier": round(float(brier(fake, y).mean()), 4),
+        }
+    return out
+
+
 def calibration_table(scored: pd.DataFrame, width: float = 0.05) -> pd.DataFrame:
     """Kalibrációs tábla: „amikor 60–70%-ot mondtunk, hányszor lett igazunk”.
 

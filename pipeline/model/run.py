@@ -42,6 +42,7 @@ from pipeline.model.backtest import (
     calibration_table,
     daily_table,
     library_versions,
+    random_control,
     run_backtest,
     summarise,
 )
@@ -91,7 +92,12 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
     # korlátját is átlépné): csak a két összesítést tároljuk, a felület ezekből dolgozik.
     _write_table(storage, CALIBRATION_PATH, calibration_table(scored))
     _write_table(storage, DAILY_PATH, daily_table(scored))
-    summary = {**summarise(records), "libraries": library_versions(), "rows_scored": len(scored)}
+    summary = {
+        **summarise(records),
+        "random_control": random_control(scored),
+        "libraries": library_versions(),
+        "rows_scored": len(scored),
+    }
     # A publikus naplóba csak ez az összesített, modellszintű összefoglaló kerül
     # (papíronkénti becslés és árfolyam soha): ez a saját modellünkről szóló
     # mérés, nem a forrás adata.
@@ -163,10 +169,13 @@ def task_report(storage: Storage, now: datetime) -> dict[str, object]:
     calibration = _read_table(storage, CALIBRATION_PATH)
     if records is None:
         raise RuntimeError("Nincs mérési rekord — előbb a backtest fusson le.")
+    stored = storage.download(RAW_BUCKET, f"runs/backtest/{last_closed_session(now).isoformat()}.json")
     report: dict[str, object] = {
         "as_of": now.astimezone(UTC).isoformat(timespec="seconds"),
         **summarise(records),
     }
+    if stored is not None:
+        report["random_control"] = json.loads(stored).get("random_control")
     if calibration is not None:
         report["calibration"] = [
             {k: (round(v, 4) if isinstance(v, float) else v) for k, v in row.items()}
