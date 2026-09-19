@@ -35,5 +35,8 @@ jobs:
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           TASK: ${{ inputs.task || 'train' }}
-        # A kimenet (mért értékek) a privát tárba megy; a naplóba csak a futás ténye.
-        run: uv run python -m pipeline.model.run --task "$TASK" > /tmp/result.json && echo "kész: $TASK"
+        # A részletes kimenet (papíronkénti sorok) a privát tárba megy; a
+        # naplóba csak az összesített, modellszintű összefoglaló kerül.
+        run: |
+          uv run python -m pipeline.model.run --task "$TASK" > /tmp/result.json
+          echo "kesz: $TASK"
