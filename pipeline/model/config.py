@@ -45,3 +45,15 @@ NUM_BOOST_ROUND: Final = 400
 
 #: A modell nem jósol olyan papírra, aminek ennél rövidebb a múltja.
 MIN_HISTORY_SESSIONS: Final = 300
+
+
+def train_stride(horizon: int) -> int:
+    """Hányadik kereskedési napot használjuk tanításra ezen a horizonton.
+
+    Átfedő címkéknél két szomszédos nap szinte ugyanazt a jövőt méri (20 napos
+    horizontnál a címke 19/20-a közös), tehát a sűrű mintavétel alig ad új
+    információt, memóriát és időt viszont sokat visz. A ritkítás a horizont
+    ötöde: h=5 → minden nap, h=20 → minden 4., h=60 → minden 12. A mérés
+    ettől nem változik: a TESZT oldalon minden nap benne marad.
+    """
+    return max(1, horizon // 5)

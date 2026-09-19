@@ -26,6 +26,7 @@ from pipeline.model.config import (
     MODEL_FAMILY,
     MODEL_VERSION,
     SEED,
+    train_stride,
 )
 from pipeline.model.dataset import add_targets, feature_columns, trainable
 from pipeline.model.evaluate import (
@@ -59,6 +60,12 @@ def _fold_frames(
     calib_dates = sorted(eligible["date"].unique())[-CALIBRATION_SESSIONS:]
     calibration = eligible[eligible["date"].isin(calib_dates)]
     train = eligible[~eligible["date"].isin(calib_dates)]
+    # Ritkítás a horizont szerint (lásd `train_stride`): a tanítóhalmaz minden
+    # n-edik kereskedési napja. A kalibráció és a teszt teljes marad.
+    stride = train_stride(horizon)
+    if stride > 1:
+        keep = set(sorted(train["date"].unique())[::stride])
+        train = train[train["date"].isin(keep)]
     test = data[(data["date"] >= fold.test_start) & (data["date"] <= fold.test_end)]
     return train, calibration, test
 

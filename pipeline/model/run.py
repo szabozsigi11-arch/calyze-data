@@ -81,6 +81,10 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
     _write_table(storage, ARENA_PATH, records)
     _write_table(storage, SCORED_PATH, scored)
     summary = {**summarise(records), "libraries": library_versions(), "rows_scored": len(scored)}
+    # A publikus naplóba csak ez az összesített, modellszintű összefoglaló kerül
+    # (papíronkénti becslés és árfolyam soha): ez a saját modellünkről szóló
+    # mérés, nem a forrás adata.
+    log.info("backtest_summary", **{k: v for k, v in summary.items() if k != "libraries"})
     storage.upload(
         RAW_BUCKET,
         f"runs/backtest/{last.isoformat()}.json",

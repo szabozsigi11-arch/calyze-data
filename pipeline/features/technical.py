@@ -89,7 +89,11 @@ def compute_technical(prices: pd.DataFrame) -> pd.DataFrame:
         f.insert(0, "instrument_id", instrument_id)
         f.insert(1, "date", g["date"].to_numpy())
         parts.append(f)
-    return pd.concat(parts, ignore_index=True)
+    out = pd.concat(parts, ignore_index=True)
+    # float32: a feature-tábla mérete a felére esik, a modell pontossága nem változik
+    # (a LightGBM amúgy is float32-re konvertál).
+    numeric = out.select_dtypes("float64").columns
+    return out.astype({c: "float32" for c in numeric})
 
 
 def add_cross_sectional(features: pd.DataFrame, universe: pd.DataFrame) -> pd.DataFrame:
