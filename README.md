@@ -26,8 +26,19 @@ raw prices and features live in private storage. Only Calyze's own output
 
 ## Status
 
-Phase 0: the daily price download runs on a schedule. Forecasts and their
-public fingerprints start in Phase 1.
+- **Daily prices** for 620 instruments (S&P 500, 100 liquid mid caps, 20 ETFs)
+  run on a schedule; 2005 to today.
+- **Features and market regime** are recomputed from prices on every run —
+  never stored half-finished, never back-filled. Property tests assert that
+  changing the future cannot change a past feature.
+- **Model and measurement** (LightGBM, calibrated probability, 90% conformal
+  band, four baselines, day-level block bootstrap, FDR) are in place; the
+  purged walk-forward backtest produces the arena records.
+- **Next:** daily live forecasts, saved before anyone sees them, with a public
+  SHA-256 fingerprint per day.
+
+Backtested numbers are not evidence, and this repository says so wherever they
+appear.
 
 ## Licence
 
