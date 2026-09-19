@@ -152,9 +152,49 @@ def task_train(storage: Storage, now: datetime) -> dict[str, object]:
     return meta
 
 
+def task_report(storage: Storage, now: datetime) -> dict[str, object]:
+    """A tárolt mérési összesítések kiírása (gyors, nem számol újra).
+
+    Csak összesített, modellszintű számok: a kalibrációs sávok és a
+    horizontonkénti verdict. Papíronkénti sor és árfolyam nem kerül bele,
+    így a publikus naplóba is kiírható.
+    """
+    records = _read_table(storage, ARENA_PATH)
+    calibration = _read_table(storage, CALIBRATION_PATH)
+    if records is None:
+        raise RuntimeError("Nincs mérési rekord — előbb a backtest fusson le.")
+    report: dict[str, object] = {
+        "as_of": now.astimezone(UTC).isoformat(timespec="seconds"),
+        **summarise(records),
+    }
+    if calibration is not None:
+        report["calibration"] = [
+            {k: (round(v, 4) if isinstance(v, float) else v) for k, v in row.items()}
+            for row in calibration.to_dict("records")
+        ]
+    report["regimes"] = [
+        {
+            "horizon": int(r.horizon),
+            "regime": r.regime,
+            "baseline": r.baseline_id,
+            "model": round(float(r.value), 4),
+            "baseline_value": round(float(r.baseline_value), 4),
+            "delta_pp": round(float(r.delta) * 100, 2),
+            "n": int(r.n),
+            "n_eff": round(float(r.n_eff), 1),
+            "p_fdr": round(float(r.p_value_fdr), 4),
+            "verdict": r.verdict,
+        }
+        for r in records[
+            (records["metric"] == "direction_accuracy") & (records["regime"] != "all")
+        ].itertuples()
+    ]
+    return report
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Calyze tanítás és backtest")
-    parser.add_argument("--task", choices=["train", "backtest"], required=True)
+    parser.add_argument("--task", choices=["train", "backtest", "report"], required=True)
     parser.add_argument("--local", type=Path, help="helyi mappa a privát tár helyett")
     args = parser.parse_args(argv)
 
@@ -169,7 +209,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     now = datetime.now(UTC)
-    result = task_backtest(storage, now) if args.task == "backtest" else task_train(storage, now)
+    tasks = {"backtest": task_backtest, "train": task_train, "report": task_report}
+    result = tasks[args.task](storage, now)
     log.info(f"{args.task}_done", **{k: v for k, v in result.items() if k in {"last_session", "rows_scored"}})
     print(json.dumps(result, indent=2, default=str))
     return 0

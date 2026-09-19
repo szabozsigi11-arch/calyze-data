@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "train = heti tanítás, backtest = teljes walk-forward mérés (órás)"
+        description: "train = heti tanítás, backtest = teljes walk-forward mérés, report = a tárolt mérés kiírása"
         type: choice
-        options: [train, backtest]
+        options: [train, backtest, report]
         default: train
 
 permissions:
@@ -38,5 +38,5 @@ jobs:
         # A részletes kimenet (papíronkénti sorok) a privát tárba megy; a
         # naplóba csak az összesített, modellszintű összefoglaló kerül.
         run: |
-          uv run python -m pipeline.model.run --task "$TASK" > /tmp/result.json
+          uv run python -m pipeline.model.run --task "$TASK" | tee /tmp/result.json
           echo "kesz: $TASK"
