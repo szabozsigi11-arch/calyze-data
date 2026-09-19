@@ -1,0 +1,39 @@
+[project]
+name = "calyze-data"
+version = "0.1.0"
+description = "Calyze mérési pipeline: napi árfolyam, becslés, kiértékelés, publikus lenyomat."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "exchange-calendars>=4.8",
+  "pandas>=2.3",
+  "pyarrow>=21",
+  "requests>=2.32",
+  "structlog>=25.4",
+  "tenacity>=9.1",
+  "yfinance>=1.7",
+]
+
+[dependency-groups]
+dev = [
+  "hypothesis>=6.140",
+  "pytest>=8.4",
+  "ruff>=0.13",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "BLE", "DTZ", "PT", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003"]  # a magyar kommentekben tipográfiai jelek vannak
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "E501"]  # a tesztadat-sorokat nem tördeljük
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

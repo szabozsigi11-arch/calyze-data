@@ -1,0 +1,47 @@
+# Lint, tesztek, titokszkennelés minden push-nál.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - name: Tesztek (naptár, időzónák, forráslánc, tár, végponttól végpontig)
+        run: uv run pytest
+
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: gitleaks telepítése (ellenőrzött ellenőrzőösszeggel)
+        env:
+          VERSION: 8.30.1
+          SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+        run: |
+          curl -sSfL -o gitleaks.tgz "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz"
+          echo "${SHA256}  gitleaks.tgz" | sha256sum -c -
+          tar -xzf gitleaks.tgz gitleaks && sudo mv gitleaks /usr/local/bin/ && rm gitleaks.tgz
+      - run: gitleaks git . --no-banner --redact --verbose
+      - name: Nyers adat nem kerülhet a repóba (spec/05, 1. és 2.4)
+        run: |
+          if git ls-files | grep -E '\.(parquet|csv\.gz|feather)$' | grep -v '^pipeline/universe/'; then
+            echo "Adatfájl a repóban — a nyers árfolyam csak a privát tárban lehet." >&2
+            exit 1
+          fi
