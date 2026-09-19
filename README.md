@@ -28,3 +28,13 @@ raw prices and features live in private storage. Only Calyze's own output
 
 Phase 0: the daily price download runs on a schedule. Forecasts and their
 public fingerprints start in Phase 1.
+
+## Licence
+
+- **Code:** [PolyForm Noncommercial 1.0.0](LICENSE.md). You may read, run and
+  use it to verify the published fingerprints, for any noncommercial purpose.
+  Commercial use needs written permission.
+- **Published data** (daily fingerprints, and later the forecast packages):
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — use it freely,
+  name Calyze as the source. This does not cover raw market data, which is
+  never published here.
