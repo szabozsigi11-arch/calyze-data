@@ -4,10 +4,14 @@ version = "0.1.0"
 description = "Calyze mérési pipeline: napi árfolyam, becslés, kiértékelés, publikus lenyomat."
 requires-python = ">=3.12,<3.13"
 dependencies = [
+  "arch>=8.0.0",
   "exchange-calendars>=4.8",
+  "lightgbm>=4.7.0",
   "pandas>=2.3",
   "pyarrow>=21",
   "requests>=2.32",
+  "scikit-learn>=1.9.1",
+  "statsmodels>=0.15.0",
   "structlog>=25.4",
   "tenacity>=9.1",
   "yfinance>=1.7",

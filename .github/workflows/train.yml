@@ -1,0 +1,39 @@
+# Heti modelltanítás és (kézzel indítva) a teljes purged walk-forward backtest.
+# A napló nyilvános: csak darabszám és metaadat kerül bele, mért érték nem.
+name: Train
+
+on:
+  schedule:
+    # Vasárnap 08:00 UTC: a 06:00-s teljes újratöltés és feature-futás után.
+    - cron: "0 8 * * 0"
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "train = heti tanítás, backtest = teljes walk-forward mérés (órás)"
+        type: choice
+        options: [train, backtest]
+        default: train
+
+permissions:
+  contents: read
+
+concurrency:
+  group: train
+  cancel-in-progress: false
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen --no-dev
+      - name: Tanítás vagy backtest
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          TASK: ${{ inputs.task || 'train' }}
+        # A kimenet (mért értékek) a privát tárba megy; a naplóba csak a futás ténye.
+        run: uv run python -m pipeline.model.run --task "$TASK" > /tmp/result.json && echo "kész: $TASK"
