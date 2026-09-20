@@ -318,7 +318,10 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     arena = _read_table(storage, LIVE_ARENA_PATH)
     arena_records = build_arena(arena if arena is not None else pd.DataFrame())
 
-    universe = active_on(load_universe(), latest_session)
+    # Az univerzum tagsága a MAI napra értendő, nem a becslés sessionjére: a
+    # lista 2026-09-19-én készült, az első becslés viszont az előző napra szól,
+    # és akkor minden papír kiesne a szűrőből.
+    universe = active_on(load_universe(), now.astimezone(UTC).date())
     prices = _load_prices(storage, list(range(max(2005, latest_session.year - 2), latest_session.year + 1)))
     regime = _read_table(storage, REGIME_PATH)
 
