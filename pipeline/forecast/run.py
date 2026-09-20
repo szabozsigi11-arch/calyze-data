@@ -97,6 +97,9 @@ def build_forecasts(
         model = bundle["model"]  # type: ignore[index]
         naive = bundle["baselines"]["naive"]  # type: ignore[index]
         out = model.predict(today)
+        # A magyarázat a csomag része, tehát a napi lenyomat fedi: utólag nem
+        # gyártható le másként, mint ahogy a becslés készült.
+        out["contributions"] = [json.dumps(c, separators=(",", ":")) for c in model.contributions(today)]
         # A horizontot itt állítjuk be, nem a modelltől vesszük: a csomag
         # szerkezete akkor is helyes marad, ha egy modell rosszul tölti ki.
         out["horizon"] = horizon

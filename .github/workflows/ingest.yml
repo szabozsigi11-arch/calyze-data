@@ -61,6 +61,13 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: uv run python -m pipeline.resolve.run
+      - name: Megjelenítési JSON-ok a webappnak
+        # A becslés már mentve és lenyomatolva van; ez csak átfordítja abba a
+        # formába, amit a felület olvas. Nem publikus tárolóba megy.
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.publish.run
       - name: A napi lenyomat commitolása
         # Csak a hash és a darabszámok kerülnek a publikus repóba; maga a
         # becslés-csomag a privát tárban marad (commit–reveal).

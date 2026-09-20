@@ -1,7 +1,7 @@
 from datetime import UTC, date, datetime
 
 import pandas as pd
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from pipeline.ingest.partitions import PRICE_SCHEMA, from_parquet, to_parquet, upsert
@@ -61,6 +61,9 @@ keys = st.lists(
 )
 
 
+# Nincs időkorlát: a pandas-hívások ideje a gép terhelésétől függ, és egy
+# lassabb futás nem jelent hibás viselkedést.
+@settings(deadline=None)
 @given(old=keys, new=keys)
 def test_upsert_never_duplicates_and_keeps_every_fresh_row(old, new):
     old_f, new_f = rows(sorted(set(old))), rows(sorted(set(new)), close=2.0)

@@ -20,6 +20,9 @@ class FakeModel:
     def __init__(self, prob: float, point: float, band: float):
         self.prob, self.point, self.band = prob, point, band
 
+    def contributions(self, frame: pd.DataFrame, top: int = 6) -> list[list[dict[str, float | str]]]:
+        return [[{"feature": "mom_20", "value": 0.01}] for _ in range(len(frame))]
+
     def predict(self, frame: pd.DataFrame) -> pd.DataFrame:
         n = len(frame)
         return pd.DataFrame(

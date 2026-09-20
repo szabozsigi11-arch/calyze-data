@@ -75,6 +75,31 @@ class HorizonModel:
         )
 
 
+    def contributions(self, frame: pd.DataFrame, top: int = 6) -> list[list[dict[str, float | str]]]:
+        """Soronként a becslést leginkább mozgató feature-ök, előjellel.
+
+        A LightGBM `pred_contrib` kimenete SHAP-érték: az egyes feature-ök
+        hozzájárulása a modell kimenetéhez, plusz egy alapérték az utolsó
+        oszlopban. Ez a modell működését írja le, nem a piac okságát — a
+        felületnek ezt ki is kell mondania (spec/03, 2.1, 6. pont).
+        """
+        raw = np.asarray(
+            self.booster.predict(matrix(frame, self.features), pred_contrib=True), dtype="float64"
+        )
+        values = raw[:, :-1]
+        out: list[list[dict[str, float | str]]] = []
+        for row in values:
+            order = np.argsort(np.abs(row))[::-1][:top]
+            out.append(
+                [
+                    {"feature": self.features[i], "value": round(float(row[i]), 6)}
+                    for i in order
+                    if row[i] != 0.0
+                ]
+            )
+        return out
+
+
 def _ecdf(sample: np.ndarray, x: np.ndarray) -> np.ndarray:
     """Empirikus eloszlásfüggvény: a minta hányad része esik x alá."""
     ordered = np.sort(sample)
