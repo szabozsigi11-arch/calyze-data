@@ -10,7 +10,9 @@ import pandas as pd
 from pipeline.model.evaluate import MIN_OBSERVATIONS
 from pipeline.publish.run import (
     HISTORY_SESSIONS,
+    HONESTY_WINDOW,
     build_arena,
+    build_honesty,
     build_index,
     build_instrument,
     build_latest,
@@ -203,3 +205,23 @@ def test_a_becsles_nelkuli_papir_csomagja_is_elkeszul() -> None:
     assert payload["timeline"] == []
     assert payload["regime"] is None
     assert len(payload["candles"]) == 40
+
+
+def test_az_oszinteseg_kapu_kerdesei_rejtik_a_papirt() -> None:
+    """A kérdésben nem lehet benne a papír neve és a dátum (spec/02, F7)."""
+    prices = pd.concat([prices_frame(300), prices_frame(300).assign(instrument_id="CZ00002")])
+    questions = build_honesty(prices, date(2026, 9, 18), count=3)
+    assert len(questions) == 3
+    for q in questions:
+        assert set(q.keys()) == {"id", "series", "horizon", "outcome_up", "outcome_return"}
+        assert len(q["series"]) == HONESTY_WINDOW
+        # A sorozat a legutolsó ponton 100-ra van normálva: a szintből sem
+        # lehet visszakeresni, melyik papírról van szó.
+        assert q["series"][-1] == 100.0
+
+
+def test_ugyanarra_a_napra_ugyanazok_a_kerdesek() -> None:
+    prices = prices_frame(300)
+    first = build_honesty(prices, date(2026, 9, 18), count=3)
+    again = build_honesty(prices, date(2026, 9, 18), count=3)
+    assert first == again

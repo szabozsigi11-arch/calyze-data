@@ -23,6 +23,7 @@ import sys
 from datetime import UTC, date, datetime
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from pipeline import log as logging_setup
@@ -94,6 +95,60 @@ def next_resolutions(forecasts: pd.DataFrame, outcomes: pd.DataFrame) -> dict[st
         targets = [t for t in part["target_session"].dropna().tolist()]
         out[key] = str(min(targets)) if targets else None
     return out
+
+
+#: Az őszinteség-kapu kérdéseinek száma és a mutatott múlt hossza.
+HONESTY_QUESTIONS = 12
+HONESTY_WINDOW = 120
+HONESTY_HORIZON = 20
+
+
+def build_honesty(
+    prices: pd.DataFrame, session: date, count: int = HONESTY_QUESTIONS
+) -> list[dict[str, object]]:
+    """Kérdések rejtett múltbeli chartokból (spec/02, F7).
+
+    A papír neve és a dátum szándékosan hiányzik: ha felismerhető lenne,
+    a kapu nem a magabiztosságot mérné, hanem az emlékezetet. A sorozat
+    100-ra normálva megy ki, így a szintből sem lehet visszakövetkeztetni.
+
+    A választás a session dátumából magolt véletlennel történik: ugyanarra a
+    napra ugyanazok a kérdések, de naponta mások.
+    """
+    if prices.empty:
+        return []
+
+    rng = np.random.default_rng(int(session.strftime("%Y%m%d")))
+    frame = prices.sort_values(["instrument_id", "date"])
+    questions: list[dict[str, object]] = []
+    ids = frame["instrument_id"].dropna().unique()
+    if len(ids) == 0:
+        return []
+
+    attempts = 0
+    while len(questions) < count and attempts < count * 40:
+        attempts += 1
+        instrument = str(ids[rng.integers(0, len(ids))])
+        part = frame[frame["instrument_id"] == instrument].reset_index(drop=True)
+        needed = HONESTY_WINDOW + HONESTY_HORIZON
+        if len(part) < needed + 1:
+            continue
+        cut = int(rng.integers(HONESTY_WINDOW, len(part) - HONESTY_HORIZON))
+        window = part.iloc[cut - HONESTY_WINDOW : cut]["close"].astype("float64").to_numpy()
+        future = float(part.iloc[cut + HONESTY_HORIZON - 1]["close"])
+        last = float(window[-1])
+        if not np.isfinite(last) or last <= 0 or not np.isfinite(future) or np.isnan(window).any():
+            continue
+        questions.append(
+            {
+                "id": f"q{len(questions) + 1}",
+                "series": [round(float(v) / last * 100.0, 3) for v in window],
+                "horizon": HONESTY_HORIZON,
+                "outcome_up": bool(future > last),
+                "outcome_return": round(future / last - 1.0, 6),
+            }
+        )
+    return questions
 
 
 def build_arena(arena: pd.DataFrame) -> list[dict[str, object]]:
@@ -353,6 +408,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
             ),
         ),
         ("arena.json", _dumps(arena_records)),
+        ("honesty.json", _dumps(build_honesty(prices, latest_session))),
         ("instruments.json", _dumps(build_index(universe, today_forecasts, prices))),
     ]
 
