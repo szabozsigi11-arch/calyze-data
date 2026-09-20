@@ -187,3 +187,19 @@ def test_a_napi_osszefoglalo_kiirja_a_kovetkezo_lezarast() -> None:
     assert latest["verdict"] is None, "mérés nélkül nincs verdict"
     assert latest["next_resolution"]["5"] == "2026-09-25"
     assert latest["forecasts_open"] == 3
+
+
+def test_a_becsles_nelkuli_papir_csomagja_is_elkeszul() -> None:
+    """Rövid múltú papírra nincs becslés — ettől még kell a chartja és a fejléce."""
+    payload = build_instrument(
+        meta={"id": "CZ00999", "ticker": "NEWCO", "name": "New Co."},
+        prices=prices_frame(40),
+        forecasts=pd.DataFrame(),
+        history=pd.DataFrame(),
+        outcomes=pd.DataFrame(),
+        session=date(2026, 9, 18),
+    )
+    assert payload["forecasts"] == []
+    assert payload["timeline"] == []
+    assert payload["regime"] is None
+    assert len(payload["candles"]) == 40

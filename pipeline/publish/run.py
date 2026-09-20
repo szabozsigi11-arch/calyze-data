@@ -244,8 +244,11 @@ def build_instrument(
     if close is not None and previous not in (None, 0):
         change = _num(close / float(previous) - 1.0)
 
+    # Van papír, amire nem készül becslés (rövid múlt, friss leválasztás). A
+    # csomagja akkor is elkészül, csak becslés nélkül — a felület ezt kiírja.
     horizons = []
-    for row in forecasts.sort_values("horizon").to_dict("records"):
+    ordered = forecasts.sort_values("horizon") if "horizon" in forecasts else forecasts
+    for row in ordered.to_dict("records"):
         raw = row.get("contributions")
         try:
             contributions = json.loads(raw) if isinstance(raw, str) and raw else []
@@ -269,6 +272,11 @@ def build_instrument(
             }
         )
 
+    timeline_rows = (
+        history.sort_values(["session", "horizon"])
+        if {"session", "horizon"}.issubset(history.columns)
+        else history
+    )
     timeline = [
         {
             "session": str(row["session"]),
@@ -277,7 +285,7 @@ def build_instrument(
             "band_low": _num(row.get("band_low")),
             "band_high": _num(row.get("band_high")),
         }
-        for row in history.sort_values(["session", "horizon"]).to_dict("records")
+        for row in timeline_rows.to_dict("records")
     ]
 
     # A papírra szűrt élő teljesítmény: amíg nincs 30 lezárt megfigyelés,
