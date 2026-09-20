@@ -8,3 +8,6 @@ __pycache__/
 !.env.example
 *.parquet
 .DS_Store
+
+# A generált állapotoldal (a munkafolyamat építi minden futásnál)
+site/

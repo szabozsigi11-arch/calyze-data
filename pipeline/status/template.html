@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calyze — measurement log</title>
+<meta name="description" content="The tamper-evident log of Calyze's daily forecast packages. No market data, only fingerprints.">
+<style>
+  :root {
+    color-scheme: dark;
+    --base: #080A11;
+    --surface: #0D1019;
+    --line: #262D3F;
+    --fg: #EAEDF2;
+    --fg-secondary: #B4BCCC;
+    --fg-muted: #8A94A8;
+    --good: #2DB88A;
+    --warn: #E0A33A;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--base);
+    color: var(--fg);
+    font: 15px/1.6 ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 56rem; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  .eyebrow {
+    font: 500 11px/1.4 var(--mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0.75rem 0 1rem; font-weight: 600; letter-spacing: -0.02em; }
+  p { color: var(--fg-secondary); max-width: 46rem; }
+  .state {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.4rem 0.9rem; margin: 1.5rem 0 0;
+    font: 13px/1 var(--mono); color: var(--fg-secondary);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); }
+  .state[data-state="stale"] .dot, .state[data-state="no-runs"] .dot { background: var(--warn); }
+  .totals { display: flex; flex-wrap: wrap; gap: 2.5rem; margin: 2.5rem 0; }
+  .total b { display: block; font: 600 1.75rem/1.2 var(--mono); letter-spacing: -0.01em; }
+  .total span { font-size: 13px; color: var(--fg-muted); }
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  caption { text-align: left; color: var(--fg-muted); font-size: 13px; padding-bottom: 0.75rem; }
+  th {
+    text-align: left; font: 500 11px/1.4 var(--mono); letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--fg-muted);
+    border-bottom: 1px solid var(--line); padding: 0 0.75rem 0.6rem 0;
+  }
+  td { padding: 0.6rem 0.75rem 0.6rem 0; border-bottom: 1px solid var(--surface); font-size: 14px; }
+  .session, .hash, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .num { text-align: right; }
+  th.num { text-align: right; }
+  .hash { color: var(--fg-secondary); }
+  .dim { color: var(--fg-muted); }
+  footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--fg-muted); font-size: 13px; }
+  a { color: inherit; }
+  @media (max-width: 600px) { .model { display: none; } th:nth-child(4) { display: none; } }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Calyze</p>
+  <h1>Measurement log</h1>
+  <p>
+    Every trading day the pipeline saves its forecasts before anyone can see them,
+    and commits the SHA-256 fingerprint of that day's package to this public
+    repository. The commit timestamp is the proof that nothing was rewritten
+    afterwards. This page lists those fingerprints — no prices, no forecasts.
+  </p>
+
+  <div class="state" data-state="$state"><span class="dot"></span>$sentence</div>
+
+  <div class="totals">
+    <div class="total"><b>$sessions</b><span>sessions recorded</span></div>
+    <div class="total"><b>$forecasts</b><span>forecasts fingerprinted</span></div>
+    <div class="total"><b>$instruments</b><span>instruments in the last run</span></div>
+  </div>
+
+  <table>
+    <caption>One row per trading session. The fingerprint is shortened; the full value is in <code>manifests/</code>.</caption>
+    <thead>
+      <tr><th>Session</th><th class="num">Instruments</th><th class="num">Forecasts</th><th>Model</th><th>SHA-256</th></tr>
+    </thead>
+    <tbody>
+$rows
+    </tbody>
+  </table>
+
+  <footer>
+    <p>
+      Forecast packages stay in private storage until the data licence allows
+      publication; the fingerprints are public from day one. Calyze is a research
+      and measurement tool. It is not investment advice.
+    </p>
+    <p>Generated $generated from <a href="https://github.com/szabozsigi11-arch/calyze-data">calyze-data</a>.</p>
+  </footer>
+</main>
+</body>
+</html>
