@@ -127,7 +127,9 @@ def prices_for_resolve() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 def test_resolution_uses_total_return_and_marks_delisted():
     prices, actions = prices_for_resolve()
-    out = resolve_due(forecasts_for_resolve(), prices, actions, SESSIONS[-1], datetime(2026, 9, 19, tzinfo=UTC))
+    out = resolve_due(
+        forecasts_for_resolve(), prices, actions, SESSIONS[-1], datetime(2026, 9, 19, tzinfo=UTC)
+    )
     assert set(out["forecast_id"]) == {"f1", "f2"}
     normal = out[out["forecast_id"] == "f1"].iloc[0]
     gone = out[out["forecast_id"] == "f2"].iloc[0]
@@ -166,3 +168,29 @@ def test_live_arena_says_too_early_below_thirty_observations():
     assert not arena.empty
     assert set(arena["verdict"]) == {"too_early"}
     assert arena["live"].all()
+
+
+def test_a_saved_forecast_is_never_overwritten(tmp_path, monkeypatch):
+    """A megjelenítés előtt lementett becslés utólag nem módosulhat (spec/06, 1. lépés)."""
+    from datetime import UTC
+
+    from pipeline.config import RAW_BUCKET
+    from pipeline.forecast import run as forecast_run
+    from pipeline.ingest.storage import LocalStorage
+
+    storage = LocalStorage(tmp_path)
+    storage.ensure_private_bucket(RAW_BUCKET)
+    storage.upload(
+        RAW_BUCKET, forecast_run.package_path(TODAY), b"az elso csomag", "application/octet-stream"
+    )
+
+    # Ha mégis megpróbálná újraszámolni, ezen a ponton elhasalna — de nem szabad idáig jutnia.
+    monkeypatch.setattr(
+        forecast_run,
+        "load_models",
+        lambda _storage: (_ for _ in ()).throw(AssertionError("nem szabad újraszámolni")),
+    )
+    result = forecast_run.run(storage, datetime(2026, 9, 19, 23, 0, tzinfo=UTC))
+
+    assert result["status"] == "already_saved"
+    assert storage.download(RAW_BUCKET, forecast_run.package_path(TODAY)) == b"az elso csomag"
