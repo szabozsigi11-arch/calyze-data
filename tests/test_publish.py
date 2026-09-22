@@ -5,12 +5,16 @@ from __future__ import annotations
 import json
 from datetime import date
 
+import numpy as np
 import pandas as pd
 
 from pipeline.model.evaluate import MIN_OBSERVATIONS
 from pipeline.publish.run import (
     HISTORY_SESSIONS,
+    HONESTY_MAX_Z,
+    HONESTY_MIN_Z,
     HONESTY_WINDOW,
+    _uncertainty,
     build_arena,
     build_honesty,
     build_index,
@@ -207,11 +211,34 @@ def test_a_becsles_nelkuli_papir_csomagja_is_elkeszul() -> None:
     assert len(payload["candles"]) == 40
 
 
+def walk_frame(instrument: str, days: int = 600, seed: int = 1) -> pd.DataFrame:
+    """Bolyongó árfolyam. Az egyenes vonalú minta nem jó az őszinteség-kapura:
+    ott a kimenetel nem bizonytalan, és a válogatás jogosan dobja el."""
+    rng = np.random.default_rng(seed)
+    steps = rng.normal(0.0004, 0.015, days)
+    close = 100.0 * np.exp(np.cumsum(steps))
+    dates = pd.bdate_range("2024-01-02", periods=days).date
+    return pd.DataFrame(
+        {
+            "instrument_id": instrument,
+            "date": dates,
+            "open": close,
+            "high": close * 1.01,
+            "low": close * 0.99,
+            "close": close,
+            "volume": 1_000_000,
+        }
+    )
+
+
+def honesty_prices(count: int = 8) -> pd.DataFrame:
+    return pd.concat([walk_frame(f"CZ{i:05d}", seed=i) for i in range(1, count + 1)])
+
+
 def test_az_oszinteseg_kapu_kerdesei_rejtik_a_papirt() -> None:
     """A kérdésben nem lehet benne a papír neve és a dátum (spec/02, F7)."""
-    prices = pd.concat([prices_frame(300), prices_frame(300).assign(instrument_id="CZ00002")])
-    questions = build_honesty(prices, date(2026, 9, 18), count=3)
-    assert len(questions) == 3
+    questions = build_honesty(honesty_prices(), date(2026, 9, 18), count=4)
+    assert len(questions) == 4
     for q in questions:
         assert set(q.keys()) == {"id", "series", "horizon", "outcome_up", "outcome_return"}
         assert len(q["series"]) == HONESTY_WINDOW
@@ -221,7 +248,31 @@ def test_az_oszinteseg_kapu_kerdesei_rejtik_a_papirt() -> None:
 
 
 def test_ugyanarra_a_napra_ugyanazok_a_kerdesek() -> None:
-    prices = prices_frame(300)
-    first = build_honesty(prices, date(2026, 9, 18), count=3)
-    again = build_honesty(prices, date(2026, 9, 18), count=3)
+    prices = honesty_prices()
+    first = build_honesty(prices, date(2026, 9, 18), count=4)
+    again = build_honesty(prices, date(2026, 9, 18), count=4)
     assert first == again
+
+
+def test_a_kerdeskeszlet_kiegyensulyozott() -> None:
+    """Fele emelkedő, fele csökkenő — különben a „mindig felfelé” megnyeri."""
+    questions = build_honesty(honesty_prices(12), date(2026, 9, 18), count=6)
+    assert len(questions) == 6
+    ups = sum(1 for q in questions if q["outcome_up"])
+    assert ups == 3
+
+
+def test_a_trivialis_kerdes_kimarad() -> None:
+    """Egyenletesen emelkedő vonalnál a kimenetel nem bizonytalan: nincs kérdés."""
+    straight = pd.concat([prices_frame(400), prices_frame(400).assign(instrument_id="CZ00002")])
+    assert build_honesty(straight, date(2026, 9, 18), count=4) == []
+
+
+def test_a_kimenetel_a_bizonytalansagi_savba_esik() -> None:
+    """Se zaj, se sokk: a jövőbeli mozgás az ablak saját szórásához mérve."""
+    questions = build_honesty(honesty_prices(12), date(2026, 9, 18), count=6)
+    for q in questions:
+        window = np.array(q["series"], dtype="float64")
+        z = _uncertainty(window, float(q["outcome_return"]))
+        assert z is not None
+        assert HONESTY_MIN_Z <= z <= HONESTY_MAX_Z

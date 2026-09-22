@@ -101,6 +101,10 @@ def next_resolutions(forecasts: pd.DataFrame, outcomes: pd.DataFrame) -> dict[st
 HONESTY_QUESTIONS = 12
 HONESTY_WINDOW = 120
 HONESTY_HORIZON = 20
+# A bizonytalansági sáv határai az ablak saját szórásában mérve: alatta zaj,
+# fölötte sokk. Egyik sem mond semmit a magabiztosságról.
+HONESTY_MIN_Z = 0.25
+HONESTY_MAX_Z = 1.5
 
 
 def build_honesty(
@@ -112,6 +116,21 @@ def build_honesty(
     a kapu nem a magabiztosságot mérné, hanem az emlékezetet. A sorozat
     100-ra normálva megy ki, így a szintből sem lehet visszakövetkeztetni.
 
+    A kivágási pont nem lehet akármelyik nap. Két szűrőn megy át:
+
+    1. **A kimenetel legyen valóban bizonytalan.** A jövőbeli elmozdulást a
+       saját ablak napi szórásához mérjük (`z`). Ami alatta van a
+       `HONESTY_MIN_Z`-nek, az zajról szól — ott a fel/le kérdés érme, de
+       nem azért, mert nehéz, hanem mert nincs mit eltalálni. Ami a
+       `HONESTY_MAX_Z` fölött van, az sokk: azt utólag nézve nyilvánvaló, és
+       a magabiztosságról nem mond semmit.
+    2. **A kérdéskészlet legyen kiegyensúlyozott.** Fele emelkedő, fele
+       csökkenő kimenetel. Enélkül a kapu egy „mindig felfelé" válasszal
+       megnyerhető lenne, és pont az ellenkezőjét tanítaná annak, amiért van.
+
+    Egy papírról legfeljebb egy kérdés kerül be, hogy a készlet ne egyetlen
+    részvény történetét kérdezze vissza ötször.
+
     A választás a session dátumából magolt véletlennel történik: ugyanarra a
     napra ugyanazok a kérdések, de naponta mások.
     """
@@ -120,35 +139,89 @@ def build_honesty(
 
     rng = np.random.default_rng(int(session.strftime("%Y%m%d")))
     frame = prices.sort_values(["instrument_id", "date"])
-    questions: list[dict[str, object]] = []
     ids = frame["instrument_id"].dropna().unique()
     if len(ids) == 0:
         return []
 
-    attempts = 0
-    while len(questions) < count and attempts < count * 40:
-        attempts += 1
-        instrument = str(ids[rng.integers(0, len(ids))])
-        part = frame[frame["instrument_id"] == instrument].reset_index(drop=True)
-        needed = HONESTY_WINDOW + HONESTY_HORIZON
-        if len(part) < needed + 1:
-            continue
-        cut = int(rng.integers(HONESTY_WINDOW, len(part) - HONESTY_HORIZON))
-        window = part.iloc[cut - HONESTY_WINDOW : cut]["close"].astype("float64").to_numpy()
-        future = float(part.iloc[cut + HONESTY_HORIZON - 1]["close"])
-        last = float(window[-1])
-        if not np.isfinite(last) or last <= 0 or not np.isfinite(future) or np.isnan(window).any():
-            continue
-        questions.append(
-            {
-                "id": f"q{len(questions) + 1}",
-                "series": [round(float(v) / last * 100.0, 3) for v in window],
-                "horizon": HONESTY_HORIZON,
-                "outcome_up": bool(future > last),
-                "outcome_return": round(future / last - 1.0, 6),
-            }
-        )
-    return questions
+    # Fele-fele, páratlan kérdésszámnál az emelkedő kap eggyel többet.
+    want = {True: (count + 1) // 2, False: count // 2}
+    picked: dict[bool, list[dict[str, object]]] = {True: [], False: []}
+    used: set[str] = set()
+
+    # Első kör: minden kérdés más papírról. Ha így nem jön össze a készlet
+    # (kicsi univerzum), a második kör megengedi az ismétlést — inkább legyen
+    # kérdés, mint üres kapu.
+    for distinct in (True, False):
+        attempts = 0
+        while sum(len(v) for v in picked.values()) < count and attempts < count * 80:
+            attempts += 1
+            questions_step(rng, ids, frame, picked, want, used, distinct)
+    # Keverés, hogy a fel/le ne váltakozzon felismerhető mintában.
+    questions = picked[True] + picked[False]
+    order = rng.permutation(len(questions))
+    return [{"id": f"q{i + 1}", **questions[int(j)]} for i, j in enumerate(order)]
+
+
+def questions_step(
+    rng: np.random.Generator,
+    ids: np.ndarray,
+    frame: pd.DataFrame,
+    picked: dict[bool, list[dict[str, object]]],
+    want: dict[bool, int],
+    used: set[str],
+    distinct: bool,
+) -> None:
+    """Egy próbálkozás: kiválaszt egy papírt és egy kivágási pontot.
+
+    Ha a kérdés nem felel meg valamelyik feltételnek, nem történik semmi —
+    a hívó újra próbálja.
+    """
+    instrument = str(ids[rng.integers(0, len(ids))])
+    if distinct and instrument in used:
+        return
+    part = frame[frame["instrument_id"] == instrument].reset_index(drop=True)
+    needed = HONESTY_WINDOW + HONESTY_HORIZON
+    if len(part) < needed + 1:
+        return
+    cut = int(rng.integers(HONESTY_WINDOW, len(part) - HONESTY_HORIZON))
+    window = part.iloc[cut - HONESTY_WINDOW : cut]["close"].astype("float64").to_numpy()
+    future = float(part.iloc[cut + HONESTY_HORIZON - 1]["close"])
+    last = float(window[-1])
+    if not np.isfinite(last) or last <= 0 or not np.isfinite(future) or np.isnan(window).any():
+        return
+
+    ret = future / last - 1.0
+    z = _uncertainty(window, ret)
+    if z is None or z < HONESTY_MIN_Z or z > HONESTY_MAX_Z:
+        return
+
+    up = bool(future > last)
+    if len(picked[up]) >= want[up]:
+        return
+
+    used.add(instrument)
+    picked[up].append(
+        {
+            "series": [round(float(v) / last * 100.0, 3) for v in window],
+            "horizon": HONESTY_HORIZON,
+            "outcome_up": up,
+            "outcome_return": round(ret, 6),
+        }
+    )
+
+
+def _uncertainty(window: np.ndarray, forward_return: float) -> float | None:
+    """A jövőbeli elmozdulás az ablak saját szórásában mérve.
+
+    Nem abszolút százalék, mert egy 3%-os mozgás egy csendes ETF-nél nagy,
+    egy ingadozó papírnál semmi. `None`, ha az ablakból nem számolható
+    szórás — akkor a kérdés kimarad.
+    """
+    daily = np.diff(np.log(window))
+    sigma = float(np.std(daily, ddof=1)) if len(daily) > 1 else 0.0
+    if not np.isfinite(sigma) or sigma <= 0:
+        return None
+    return abs(forward_return) / (sigma * math.sqrt(HONESTY_HORIZON))
 
 
 def build_arena(arena: pd.DataFrame) -> list[dict[str, object]]:
