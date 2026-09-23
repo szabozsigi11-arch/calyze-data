@@ -32,7 +32,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline import log as logging_setup
-from pipeline.calendar import last_closed_session, sessions_back
+from pipeline.calendar import last_closed_session, session_lag, sessions_back
 from pipeline.config import RAW_BUCKET, load_settings
 from pipeline.features.run import (
     MACRO_PATH,
@@ -55,6 +55,11 @@ FORECAST_PREFIX = "forecasts"
 NAMESPACE = uuid.UUID("4d1f0d9e-2a3b-5c6d-8e7f-000000000001")
 #: Ennyi év árfolyamát tölti le a napi futás (az EMA-200 és a 252 napos momentum miatt).
 LOOKBACK_YEARS = 3
+
+# Ennyi kihagyott kereskedési napig még becslünk a legfrissebb meglévő adatból.
+# Fölötte a forrás nem „késik", hanem kiesett: olyankor a hallgatás az őszinte
+# válasz, nem egy elavult adatra épített szám.
+MAX_SOURCE_LAG_SESSIONS = 3
 
 
 def forecast_id(instrument_id: str, session: date, horizon: int, version: str) -> str:
@@ -156,14 +161,39 @@ def manifest_entry(
     }
 
 
+def choose_session(available: date, expected: date) -> date:
+    """Melyik napra szóljon a becslés: az ADAT napjára, nem a naptáréra.
+
+    A naptár tudja, mikor volt tőzsdenap; az ingyenes forrás viszont néha
+    egy-egy napot kihagy, vagy késve teszi közzé. Ha a naptárhoz
+    ragaszkodnánk, a futás elszállna, és aznap nem mérnénk semmit — pedig a
+    meglévő adatra lehetne becslést adni.
+
+    Amit nem csinálunk: nem találunk ki árat a hiányzó napra, és nem
+    tüntetjük fel a becslést frissebbnek, mint az adat, amiből készült.
+
+    `MAX_SOURCE_LAG_SESSIONS` fölött viszont megállunk: annyi kihagyás után a
+    forrás nem késik, hanem kiesett, és a hallgatás az őszinte válasz.
+    """
+    lag = session_lag(available, expected)
+    if lag > MAX_SOURCE_LAG_SESSIONS:
+        raise RuntimeError(
+            f"A forrás {lag} kereskedési nappal marad el: a legfrissebb adat {available}, "
+            f"az utolsó zárt nap {expected}. Ennyi kihagyás után nem becslünk."
+        )
+    if lag > 0:
+        log.info("forecast_stale_source", session=str(available), expected=str(expected), lag=lag)
+    return available
+
+
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
-    session = last_closed_session(now)
-    if storage.download(RAW_BUCKET, package_path(session)) is not None:
-        log.info("forecast_already_saved", session=str(session))
-        return {"session": str(session), "status": "already_saved"}
+    expected = last_closed_session(now)
+    if storage.download(RAW_BUCKET, package_path(expected)) is not None:
+        log.info("forecast_already_saved", session=str(expected))
+        return {"session": str(expected), "status": "already_saved"}
 
     universe = active_on(load_universe(), now.astimezone(UTC).date())
-    years = list(range(session.year - LOOKBACK_YEARS + 1, session.year + 1))
+    years = list(range(expected.year - LOOKBACK_YEARS + 1, expected.year + 1))
     prices = _load_prices(storage, years)
     actions = _read_table(storage, ACTIONS_PATH)
     if actions is None:
@@ -176,6 +206,13 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         macro = macro.set_index("date")
 
     features = add_sector_return(build_features(prices, actions, universe, regime, macro))
+
+    session = choose_session(max(features["date"]), expected)
+
+    if storage.download(RAW_BUCKET, package_path(session)) is not None:
+        log.info("forecast_already_saved", session=str(session))
+        return {"session": str(session), "status": "already_saved"}
+
     models = load_models(storage)
     # A horizont végéhez a jövőbeli kereskedési napok is kellenek: a naptárból,
     # nem az árfolyamból (az még nem létezik).

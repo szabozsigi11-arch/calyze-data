@@ -74,7 +74,6 @@ class HorizonModel:
             }
         )
 
-
     def contributions(self, frame: pd.DataFrame, top: int = 6) -> list[list[dict[str, float | str]]]:
         """Soronként a becslést leginkább mozgató feature-ök, előjellel.
 

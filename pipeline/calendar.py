@@ -62,3 +62,14 @@ def sessions_back(end: date, count: int, code: str = "XNYS") -> list[date]:
     if not cal.is_session(end_ts):
         end_ts = cal.date_to_session(end_ts, direction="previous")
     return [ts.date() for ts in cal.sessions_window(end_ts, -count)]
+
+
+def session_lag(available: date, expected: date, code: str = "XNYS") -> int:
+    """Hány kereskedési nappal marad el az adat az elvárt naptól.
+
+    Nulla, ha ugyanaz a nap. A forrás akkor is „elmarad", ha egyetlen napot
+    hagy ki — de egy nap kihagyás nem indok a leállásra, több már igen.
+    """
+    if available >= expected:
+        return 0
+    return max(len(sessions(available, expected, code)) - 1, 0)

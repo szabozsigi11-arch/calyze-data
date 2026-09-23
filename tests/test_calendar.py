@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 import pytest
 
-from pipeline.calendar import is_session, last_closed_session, sessions, sessions_back
+from pipeline.calendar import is_session, last_closed_session, session_lag, sessions, sessions_back
 
 
 def utc(s: str) -> datetime:
@@ -64,3 +64,17 @@ def test_horizon_counts_sessions_not_calendar_days():
 def test_history_reaches_back_before_2006():
     # Az exchange_calendars alapból csak 20 évre visszamenőleg ad napot.
     assert sessions(date(2005, 1, 3), date(2005, 1, 7)) == [date(2005, 1, d) for d in (3, 4, 5, 6, 7)]
+
+
+def test_session_lag_zero_when_data_is_current() -> None:
+    assert session_lag(date(2026, 9, 18), date(2026, 9, 18)) == 0
+
+
+def test_session_lag_counts_trading_days_not_calendar_days() -> None:
+    """Péntek után hétfő: a hétvége nem elmaradás."""
+    assert session_lag(date(2026, 9, 18), date(2026, 9, 21)) == 1
+
+
+def test_session_lag_ignores_data_from_the_future() -> None:
+    """Ha az adat frissebb, mint az elvárt nap, az nem elmaradás."""
+    assert session_lag(date(2026, 9, 22), date(2026, 9, 18)) == 0

@@ -197,3 +197,21 @@ def test_a_saved_forecast_is_never_overwritten(tmp_path, monkeypatch):
 
     assert result["status"] == "already_saved"
     assert storage.download(RAW_BUCKET, forecast_run.package_path(TODAY)) == b"az elso csomag"
+
+
+def test_a_becsles_az_adat_napjara_szol_nem_a_naptareira():
+    """Ha a forrás kihagy egy napot, a meglévő adatra becslünk — de arra a napra."""
+    from pipeline.forecast.run import choose_session
+
+    # 2026-09-21 hétfő az utolsó zárt nap, de az adat pénteken áll meg.
+    assert choose_session(date(2026, 9, 18), date(2026, 9, 21)) == date(2026, 9, 18)
+
+
+def test_tul_nagy_forraskieses_utan_nem_becslunk():
+    """Négy kihagyott nap után a hallgatás az őszinte válasz (spec/06)."""
+    import pytest
+
+    from pipeline.forecast.run import choose_session
+
+    with pytest.raises(RuntimeError, match="marad el"):
+        choose_session(date(2026, 9, 11), date(2026, 9, 18))
