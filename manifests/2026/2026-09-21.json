@@ -1,0 +1,17 @@
+{
+  "session": "2026-09-21",
+  "made_at": "2026-09-23T18:46:52+00:00",
+  "model_family": "lgbm-core",
+  "model_version": "v1",
+  "horizons": [
+    5,
+    20,
+    60
+  ],
+  "instruments": 616,
+  "forecasts": 1848,
+  "sha256": "adc8be434c4907848c3d77bfb501af65fdc16862890462768a9480919b909efb",
+  "bytes": 213296,
+  "package": "private storage until the data licence allows publication",
+  "status": "saved"
+}
