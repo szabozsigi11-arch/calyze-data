@@ -204,7 +204,16 @@ def test_a_becsles_az_adat_napjara_szol_nem_a_naptareira():
     from pipeline.forecast.run import choose_session
 
     # 2026-09-21 hétfő az utolsó zárt nap, de az adat pénteken áll meg.
-    assert choose_session(date(2026, 9, 18), date(2026, 9, 21)) == date(2026, 9, 18)
+    coverage = {date(2026, 9, 17): 620, date(2026, 9, 18): 620}
+    assert choose_session(coverage, date(2026, 9, 21), 620) == date(2026, 9, 18)
+
+
+def test_egy_papir_nem_napi_meres():
+    """A forrás néha egyetlen papírra teszi közzé az aznapi sort. Az nem nap."""
+    from pipeline.forecast.run import choose_session
+
+    coverage = {date(2026, 9, 18): 620, date(2026, 9, 22): 1}
+    assert choose_session(coverage, date(2026, 9, 22), 620) == date(2026, 9, 18)
 
 
 def test_tul_nagy_forraskieses_utan_nem_becslunk():
@@ -214,4 +223,13 @@ def test_tul_nagy_forraskieses_utan_nem_becslunk():
     from pipeline.forecast.run import choose_session
 
     with pytest.raises(RuntimeError, match="marad el"):
-        choose_session(date(2026, 9, 11), date(2026, 9, 18))
+        choose_session({date(2026, 9, 11): 620}, date(2026, 9, 18), 620)
+
+
+def test_ha_egyetlen_napra_sincs_eleg_adat_megallunk():
+    import pytest
+
+    from pipeline.forecast.run import choose_session
+
+    with pytest.raises(RuntimeError, match="Egyetlen napra sincs elég adat"):
+        choose_session({date(2026, 9, 18): 12}, date(2026, 9, 18), 620)

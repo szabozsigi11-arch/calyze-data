@@ -25,6 +25,7 @@ import json
 import pickle
 import sys
 import uuid
+from collections.abc import Mapping
 from datetime import UTC, date, datetime
 from pathlib import Path
 
@@ -60,6 +61,11 @@ LOOKBACK_YEARS = 3
 # Fölötte a forrás nem „késik", hanem kiesett: olyankor a hallgatás az őszinte
 # válasz, nem egy elavult adatra épített szám.
 MAX_SOURCE_LAG_SESSIONS = 3
+
+# Egy nap akkor számít mérhetőnek, ha az univerzum ekkora hányadára van adat.
+# A forrás néha egyetlen papírra már közzéteszi az aznapi sort, a többire még
+# nem; egy ilyen napra „napi mérést" mondani félrevezető lenne.
+MIN_SESSION_COVERAGE = 0.8
 
 
 def forecast_id(instrument_id: str, session: date, horizon: int, version: str) -> str:
@@ -161,7 +167,7 @@ def manifest_entry(
     }
 
 
-def choose_session(available: date, expected: date) -> date:
+def choose_session(coverage: Mapping[date, int], expected: date, universe_size: int) -> date:
     """Melyik napra szóljon a becslés: az ADAT napjára, nem a naptáréra.
 
     A naptár tudja, mikor volt tőzsdenap; az ingyenes forrás viszont néha
@@ -169,20 +175,40 @@ def choose_session(available: date, expected: date) -> date:
     ragaszkodnánk, a futás elszállna, és aznap nem mérnénk semmit — pedig a
     meglévő adatra lehetne becslést adni.
 
+    Nem elég azonban, hogy a nap LÉTEZZEN az adatban: elég papírra kell
+    léteznie. A forrás néha egyetlen papírra már közzéteszi az aznapi sort, a
+    többire még nem; ilyenkor a „legfrissebb nap" egy papírt jelentene 620
+    helyett, és a napi mérés hazugság lenne.
+
     Amit nem csinálunk: nem találunk ki árat a hiányzó napra, és nem
     tüntetjük fel a becslést frissebbnek, mint az adat, amiből készült.
 
-    `MAX_SOURCE_LAG_SESSIONS` fölött viszont megállunk: annyi kihagyás után a
-    forrás nem késik, hanem kiesett, és a hallgatás az őszinte válasz.
+    `MAX_SOURCE_LAG_SESSIONS` fölött megállunk: annyi kihagyás után a forrás
+    nem késik, hanem kiesett, és a hallgatás az őszinte válasz.
     """
+    need = max(int(universe_size * MIN_SESSION_COVERAGE), 1)
+    usable = sorted(day for day, count in coverage.items() if count >= need and day <= expected)
+    if not usable:
+        best = max(coverage.values(), default=0)
+        raise RuntimeError(
+            f"Egyetlen napra sincs elég adat: a legjobb nap {best} papírt fed le, "
+            f"a küszöb {need} ({universe_size} papír {MIN_SESSION_COVERAGE:.0%}-a)."
+        )
+    available = usable[-1]
     lag = session_lag(available, expected)
     if lag > MAX_SOURCE_LAG_SESSIONS:
         raise RuntimeError(
-            f"A forrás {lag} kereskedési nappal marad el: a legfrissebb adat {available}, "
-            f"az utolsó zárt nap {expected}. Ennyi kihagyás után nem becslünk."
+            f"A forrás {lag} kereskedési nappal marad el: a legfrissebb használható nap "
+            f"{available}, az utolsó zárt nap {expected}. Ennyi kihagyás után nem becslünk."
         )
     if lag > 0:
-        log.info("forecast_stale_source", session=str(available), expected=str(expected), lag=lag)
+        log.info(
+            "forecast_stale_source",
+            session=str(available),
+            expected=str(expected),
+            lag=lag,
+            instruments=coverage[available],
+        )
     return available
 
 
@@ -207,7 +233,8 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
 
     features = add_sector_return(build_features(prices, actions, universe, regime, macro))
 
-    session = choose_session(max(features["date"]), expected)
+    coverage = features.groupby("date")["instrument_id"].nunique().to_dict()
+    session = choose_session(coverage, expected, len(universe))
 
     if storage.download(RAW_BUCKET, package_path(session)) is not None:
         log.info("forecast_already_saved", session=str(session))
