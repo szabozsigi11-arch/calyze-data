@@ -27,7 +27,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline import log as logging_setup
-from pipeline.calendar import last_closed_session
+from pipeline.calendar import last_closed_session, session_lag
 from pipeline.config import RAW_BUCKET, load_settings
 from pipeline.features.run import REGIME_PATH, _load_prices, _read_table
 from pipeline.forecast.run import FORECAST_PREFIX
@@ -293,6 +293,10 @@ def build_latest(
     return {
         "session": str(session),
         "generated_at": now.astimezone(UTC).replace(microsecond=0).isoformat(),
+        # Hány kereskedési nappal marad el az adat a mai naptól. Nulla a
+        # rendes eset. Ha nem nulla, a felület kimondja — a felhasználó ne
+        # abból jöjjön rá, hogy a dátum ismerősnek tűnik.
+        "source_lag_sessions": session_lag(session, last_closed_session(now)),
         "regime": regime_label,
         "regime_stress": regime_value,
         "universe": len(universe),

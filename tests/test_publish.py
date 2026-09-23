@@ -276,3 +276,30 @@ def test_a_kimenetel_a_bizonytalansagi_savba_esik() -> None:
         z = _uncertainty(window, float(q["outcome_return"]))
         assert z is not None
         assert HONESTY_MIN_Z <= z <= HONESTY_MAX_Z
+
+
+def test_a_csomag_kiirja_ha_a_forras_lemaradt() -> None:
+    """A felhasználó ne abból jöjjön rá, hogy a dátum ismerősnek tűnik."""
+    universe = pd.DataFrame([{"instrument_id": "CZ00001", "ticker": "AAPL", "name": "Apple Inc."}])
+    common = {
+        "universe": universe,
+        "today_forecasts": forecasts_frame(),
+        "all_forecasts": forecasts_frame(),
+        "outcomes": pd.DataFrame(),
+        "arena_records": [],
+        "regime": None,
+    }
+    # 2026-09-22 kedd este: az utolsó zárt nap a 22-e, az adat a 18-ai péntek.
+    behind = build_latest(
+        session=date(2026, 9, 18),
+        now=pd.Timestamp("2026-09-22T23:00:00+00:00").to_pydatetime(),
+        **common,
+    )
+    assert behind["source_lag_sessions"] == 2
+
+    current = build_latest(
+        session=date(2026, 9, 22),
+        now=pd.Timestamp("2026-09-22T23:00:00+00:00").to_pydatetime(),
+        **common,
+    )
+    assert current["source_lag_sessions"] == 0
