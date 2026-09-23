@@ -174,7 +174,13 @@ def test_live_arena_says_too_early_below_thirty_observations():
 
 
 def test_a_saved_forecast_is_never_overwritten(tmp_path, monkeypatch):
-    """A megjelenítés előtt lementett becslés utólag nem módosulhat (spec/06, 1. lépés)."""
+    """A megjelenítés előtt lementett becslés utólag nem módosulhat (spec/06, 1. lépés).
+
+    A futás a session kiválasztása UTÁN nézi meg, hogy van-e már csomag — a
+    naptár szerinti napra ugyanis lehet, hogy soha nem becslünk. A teszt ezért
+    a kiválasztott napot rögzíti, és onnantól figyeli: a modellhez nem nyúl
+    hozzá, és a meglévő csomag változatlan marad.
+    """
     from datetime import UTC
 
     from pipeline.config import RAW_BUCKET
@@ -187,7 +193,13 @@ def test_a_saved_forecast_is_never_overwritten(tmp_path, monkeypatch):
         RAW_BUCKET, forecast_run.package_path(TODAY), b"az elso csomag", "application/octet-stream"
     )
 
-    # Ha mégis megpróbálná újraszámolni, ezen a ponton elhasalna — de nem szabad idáig jutnia.
+    # A nehéz betöltés helyett a döntést adjuk meg: a futás erre a napra
+    # jutott volna. Innentől a kérdés az, hogy hozzányúl-e a meglévő csomaghoz.
+    monkeypatch.setattr(forecast_run, "_load_prices", lambda *_: _prices_for(TODAY))
+    monkeypatch.setattr(forecast_run, "_read_table", lambda _s, path: _stub_table(path))
+    monkeypatch.setattr(forecast_run, "build_features", lambda *_args, **_kw: _features_for(TODAY))
+    monkeypatch.setattr(forecast_run, "add_sector_return", lambda frame: frame)
+    monkeypatch.setattr(forecast_run, "choose_session", lambda *_args, **_kw: TODAY)
     monkeypatch.setattr(
         forecast_run,
         "load_models",
@@ -197,6 +209,19 @@ def test_a_saved_forecast_is_never_overwritten(tmp_path, monkeypatch):
 
     assert result["status"] == "already_saved"
     assert storage.download(RAW_BUCKET, forecast_run.package_path(TODAY)) == b"az elso csomag"
+
+
+def _prices_for(session):
+    return pd.DataFrame({"instrument_id": ["CZ00001"], "date": [session], "close": [100.0]})
+
+
+def _features_for(session):
+    return pd.DataFrame({"instrument_id": ["CZ00001"], "date": [session], "history_sessions": [500]})
+
+
+def _stub_table(path):
+    """A rezsim-tábla létezik, a többi nem kell ehhez a teszthez."""
+    return pd.DataFrame({"date": [], "regime": []}) if "regime" in str(path) else None
 
 
 def test_a_becsles_az_adat_napjara_szol_nem_a_naptareira():

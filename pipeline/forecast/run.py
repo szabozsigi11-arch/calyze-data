@@ -214,9 +214,10 @@ def choose_session(coverage: Mapping[date, int], expected: date, universe_size: 
 
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
     expected = last_closed_session(now)
-    if storage.download(RAW_BUCKET, package_path(expected)) is not None:
-        log.info("forecast_already_saved", session=str(expected))
-        return {"session": str(expected), "status": "already_saved"}
+    # A „már lementettük?" kérdést csak a session KIVÁLASZTÁSA után lehet
+    # feltenni: a naptár szerinti napra lehet, hogy soha nem is becslünk,
+    # mert nincs rá elég adat. A korai kilépés egy percnyi számítást spórolt
+    # volna, cserébe egy rossz napra nézett volna rá.
 
     universe = active_on(load_universe(), now.astimezone(UTC).date())
     years = list(range(expected.year - LOOKBACK_YEARS + 1, expected.year + 1))
