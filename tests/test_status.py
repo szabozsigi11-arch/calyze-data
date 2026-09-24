@@ -6,14 +6,15 @@ import re
 from datetime import date
 from pathlib import Path
 
-from pipeline.status.build import STALE_AFTER_DAYS, Manifest, freshness, render
+from pipeline.status.build import STALE_AFTER_DAYS, Manifest, freshness, partial, render
 
 
-def manifest(session: str, forecasts: int = 1848) -> Manifest:
+def manifest(session: str, forecasts: int = 1848, instruments: int = 616) -> Manifest:
     return Manifest(
         session=date.fromisoformat(session),
         made_at=f"{session}T06:00:00+00:00",
-        instruments=616,
+        instruments=instruments,
+        universe=620,
         forecasts=forecasts,
         sha256="52882a2529782b0e6254d4ccefdb6e2df6d1aa9b5749864f5e3507bd52e24fda",
         model="lgbm-core v1",
@@ -60,3 +61,15 @@ def test_az_oldal_nem_kozol_arat_sem_becslest() -> None:
 def test_a_jogi_kozles_ott_van() -> None:
     html = render([], date(2026, 9, 20))
     assert "not investment advice" in html
+
+
+def test_a_reszleges_napot_megjeloli() -> None:
+    """A forrás néha az univerzum töredékére ad árat. Nem töröljük, de kiírjuk."""
+    thin = manifest("2026-09-22", forecasts=3, instruments=1)
+    assert partial(thin) is True
+    assert partial(manifest("2026-09-23")) is False
+
+    page = render([thin, manifest("2026-09-23")], date(2026, 9, 24))
+    assert "partial" in page
+    # A jelölés szövegként is ott van, nem csak színnel (spec/04, A7).
+    assert ">partial</span>" in page

@@ -150,9 +150,13 @@ def load_models(storage: Storage) -> dict[int, object]:
 
 
 def manifest_entry(
-    session: date, package: bytes, frame: pd.DataFrame, made_at: datetime
+    session: date, package: bytes, frame: pd.DataFrame, made_at: datetime, universe: int
 ) -> dict[str, object]:
-    """A publikus repóba kerülő kis manifest: lenyomat, méret, darabszámok."""
+    """A publikus repóba kerülő kis manifest: lenyomat, méret, darabszámok.
+
+    Az univerzum mérete is bekerül, hogy a lefedettség utólag is értelmezhető
+    legyen: egy 1 papíros nap önmagában nem árulja el, hogy 620-ból egy volt.
+    """
     return {
         "session": session.isoformat(),
         "made_at": made_at.isoformat(timespec="seconds"),
@@ -160,6 +164,7 @@ def manifest_entry(
         "model_version": MODEL_VERSION,
         "horizons": sorted(int(h) for h in frame["horizon"].unique()),
         "instruments": int(frame["instrument_id"].nunique()),
+        "universe": universe,
         "forecasts": len(frame),
         "sha256": hashlib.sha256(package).hexdigest(),
         "bytes": len(package),
@@ -254,7 +259,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     frame = build_forecasts(features, prices, session, models, future, now.astimezone(UTC))
 
     package = _package_bytes(frame)
-    entry = manifest_entry(session, package, frame, now.astimezone(UTC))
+    entry = manifest_entry(session, package, frame, now.astimezone(UTC), len(universe))
     if dry_run:
         log.info("forecast_dry_run", **entry)
         return {**entry, "status": "dry_run"}

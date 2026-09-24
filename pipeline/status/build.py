@@ -26,12 +26,18 @@ OUT = REPO / "site" / "index.html"
 # kereskedési nap + hétvége belefér; ennél tovább már hiba.
 STALE_AFTER_DAYS = 4
 
+# Ez alatt a lefedettség alatt a nap „részleges": a forrás aznap az univerzum
+# töredékére adott árat. Nem töröljük — amit mértünk, az marad —, de a
+# táblázat megjelöli, különben egy 1 papíros nap ugyanúgy néz ki, mint a többi.
+MIN_SESSION_COVERAGE = 0.8
+
 
 @dataclass(frozen=True)
 class Manifest:
     session: date
     made_at: str
     instruments: int
+    universe: int
     forecasts: int
     sha256: str
     model: str
@@ -47,6 +53,7 @@ def load_manifests() -> list[Manifest]:
                 session=date.fromisoformat(raw["session"]),
                 made_at=raw.get("made_at", ""),
                 instruments=int(raw.get("instruments", 0)),
+                universe=int(raw.get("universe", 0)),
                 forecasts=int(raw.get("forecasts", 0)),
                 sha256=str(raw.get("sha256", "")),
                 model=f"{raw.get('model_family', '?')} {raw.get('model_version', '')}".strip(),
@@ -54,6 +61,13 @@ def load_manifests() -> list[Manifest]:
             )
         )
     return sorted(items, key=lambda m: m.session, reverse=True)
+
+
+def partial(m: Manifest) -> bool:
+    """Részleges-e a nap: a forrás az univerzum töredékére adott csak árat."""
+    if m.universe <= 0:
+        return False
+    return m.instruments < m.universe * MIN_SESSION_COVERAGE
 
 
 def freshness(latest: Manifest | None, today: date) -> tuple[str, str]:
@@ -72,9 +86,14 @@ def render(manifests: list[Manifest], today: date) -> str:
     total_forecasts = sum(m.forecasts for m in manifests)
 
     rows = "\n".join(
-        f"""        <tr>
+        f"""        <tr{' class="partial"' if partial(m) else ""}>
           <td class="session">{escape(m.session.isoformat())}</td>
-          <td class="num">{m.instruments}</td>
+          <td class="num">{m.instruments}{
+            '<span class="flag" title="The source covered only part of the universe '
+            'that day; the estimates are kept as they were made.">partial</span>'
+            if partial(m)
+            else ""
+        }</td>
           <td class="num">{m.forecasts}</td>
           <td class="model">{escape(m.model)}</td>
           <td class="hash" title="{escape(m.sha256)}">{escape(m.sha256[:16])}<span class="dim">…</span></td>

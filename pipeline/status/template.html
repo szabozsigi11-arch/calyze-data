@@ -59,6 +59,13 @@
   th.num { text-align: right; }
   .hash { color: var(--fg-secondary); }
   .dim { color: var(--fg-muted); }
+  /* A jelölés szövegként is kiírja magát: a szín soha nem egyedüli jelentéshordozó. */
+  .flag {
+    margin-left: .5ch; padding: .05rem .4ch; border: 1px solid var(--line);
+    border-radius: 3px; font-size: 10px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--fg-muted); white-space: nowrap;
+  }
+  tr.partial .num:first-of-type { color: var(--fg-muted); }
   footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--fg-muted); font-size: 13px; }
   a { color: inherit; }
   @media (max-width: 600px) { .model { display: none; } th:nth-child(4) { display: none; } }
@@ -84,7 +91,7 @@
   </div>
 
   <table>
-    <caption>One row per trading session. The fingerprint is shortened; the full value is in <code>manifests/</code>.</caption>
+    <caption>One row per trading session. The fingerprint is shortened; the full value is in <code>manifests/</code>. A session marked <span class="flag">partial</span> is one where the data source covered only part of the universe; those estimates are kept exactly as they were made.</caption>
     <thead>
       <tr><th>Session</th><th class="num">Instruments</th><th class="num">Forecasts</th><th>Model</th><th>SHA-256</th></tr>
     </thead>
