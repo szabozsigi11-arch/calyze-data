@@ -57,12 +57,13 @@ class SupabaseStorage:
         duplázódik (1, 2, 4, 8 mp), hogy egy terhelt kiszolgálót ne
         nyomjunk tovább.
         """
-        response = self.session.request(method, url, timeout=self.timeout, **kwargs)  # type: ignore[arg-type]
+        kwargs.setdefault("timeout", self.timeout)
+        response = self.session.request(method, url, **kwargs)  # type: ignore[arg-type]
         for attempt in range(self.RETRIES - 1):
             if response.status_code not in self.RETRY_STATUS:
                 return response
             time.sleep(2**attempt)
-            response = self.session.request(method, url, timeout=self.timeout, **kwargs)  # type: ignore[arg-type]
+            response = self.session.request(method, url, **kwargs)  # type: ignore[arg-type]
         return response
 
     def _check(self, response: requests.Response, what: str) -> None:
@@ -123,7 +124,6 @@ class SupabaseStorage:
             f"{self.base}/object/{bucket}/{path}",
             data=data,
             headers={"Content-Type": content_type, "x-upsert": "true", "cache-control": "no-store"},
-            timeout=self.timeout,
         )
         self._check(r, f"feltöltés ({path})")
 

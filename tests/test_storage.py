@@ -71,7 +71,10 @@ def test_az_atmeneti_hibat_ujraprobalja(monkeypatch) -> None:
             self.content = b"adat"
             self.text = ""
 
-    def fake_request(_method: str, _url: str, **_kwargs: object) -> Response:
+    def fake_request(_method: str, _url: str, **kwargs: object) -> Response:
+        # A timeout egyszer és csak egyszer kerül be — a feltöltés korábban
+        # maga is átadta, és a kérés „multiple values for timeout”-tal halt el.
+        assert "timeout" in kwargs
         calls.append(_url)
         return Response(502 if len(calls) < 3 else 200)
 
