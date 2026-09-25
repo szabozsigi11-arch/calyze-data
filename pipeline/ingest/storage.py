@@ -10,6 +10,7 @@ A helyi változat (`LocalStorage`) próbafuttatáshoz és teszthez való.
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Protocol
 
@@ -38,11 +39,31 @@ class SupabaseStorage:
     `Bearer sb_…` értéket a szerepnek megfelelő belső tokenre cseréli.
     """
 
+    #: Átmeneti szerverhibák, amiket érdemes újrapróbálni. A 4xx nincs köztük:
+    #: azon az újrapróbálás nem segít, csak késlelteti a hibát.
+    RETRY_STATUS = frozenset({429, 500, 502, 503, 504})
+    RETRIES = 4
+
     def __init__(self, url: str, secret_key: str, timeout: float = 60) -> None:
         self.base = f"{url.rstrip('/')}/storage/v1"
         self.session = requests.Session()
         self.session.headers.update({"apikey": secret_key, "Authorization": f"Bearer {secret_key}"})
         self.timeout = timeout
+
+    def _request(self, method: str, url: str, **kwargs: object) -> requests.Response:
+        """Kérés újrapróbálással az átmeneti hibákra.
+
+        Egy négyórás futás nem dőlhet el egyetlen 502-n. A várakozás
+        duplázódik (1, 2, 4, 8 mp), hogy egy terhelt kiszolgálót ne
+        nyomjunk tovább.
+        """
+        response = self.session.request(method, url, timeout=self.timeout, **kwargs)  # type: ignore[arg-type]
+        for attempt in range(self.RETRIES - 1):
+            if response.status_code not in self.RETRY_STATUS:
+                return response
+            time.sleep(2**attempt)
+            response = self.session.request(method, url, timeout=self.timeout, **kwargs)  # type: ignore[arg-type]
+        return response
 
     def _check(self, response: requests.Response, what: str) -> None:
         if response.status_code >= 300:
@@ -82,7 +103,7 @@ class SupabaseStorage:
             )
 
     def download(self, bucket: str, path: str) -> bytes | None:
-        r = self.session.get(f"{self.base}/object/{bucket}/{path}", timeout=self.timeout)
+        r = self._request("GET", f"{self.base}/object/{bucket}/{path}")
         if self._not_found(r):
             return None
         self._check(r, f"letöltés ({path})")
@@ -97,7 +118,8 @@ class SupabaseStorage:
                 f"feltöltés ({path}): {len(data) / 1048576:.0f} MB, a határ "
                 f"{self.MAX_UPLOAD_BYTES // 1048576} MB — bontsd kisebb fájlokra vagy összesíts"
             )
-        r = self.session.post(
+        r = self._request(
+            "POST",
             f"{self.base}/object/{bucket}/{path}",
             data=data,
             headers={"Content-Type": content_type, "x-upsert": "true", "cache-control": "no-store"},

@@ -52,3 +52,53 @@ def test_error_message_never_contains_the_response_body():
     with pytest.raises(StorageError) as err:
         s.ensure_private_bucket("x")
     assert "should-not-leak" not in str(err.value)
+
+
+def test_az_atmeneti_hibat_ujraprobalja(monkeypatch) -> None:
+    """Egy négyórás futás nem dőlhet el egyetlen 502-n."""
+    import time as time_module
+
+    from pipeline.ingest.storage import SupabaseStorage
+
+    storage = SupabaseStorage("https://example.invalid", "sb_secret_x")
+    monkeypatch.setattr(time_module, "sleep", lambda _seconds: None)
+
+    calls: list[str] = []
+
+    class Response:
+        def __init__(self, status: int) -> None:
+            self.status_code = status
+            self.content = b"adat"
+            self.text = ""
+
+    def fake_request(_method: str, _url: str, **_kwargs: object) -> Response:
+        calls.append(_url)
+        return Response(502 if len(calls) < 3 else 200)
+
+    monkeypatch.setattr(storage.session, "request", fake_request)
+    assert storage.download("bucket", "path.parquet") == b"adat"
+    assert len(calls) == 3, "a harmadik próbálkozás sikerült"
+
+
+def test_a_vegleges_hibat_nem_probalja_ujra(monkeypatch) -> None:
+    """A 4xx-en az újrapróbálás nem segít, csak késlelteti a hibát."""
+    from pipeline.ingest.storage import StorageError, SupabaseStorage
+
+    storage = SupabaseStorage("https://example.invalid", "sb_secret_x")
+    calls: list[str] = []
+
+    class Response:
+        status_code = 403
+        content = b""
+        text = ""
+
+    def fake_request(_method: str, _url: str, **_kwargs: object) -> Response:
+        calls.append(_url)
+        return Response()
+
+    monkeypatch.setattr(storage.session, "request", fake_request)
+    try:
+        storage.download("bucket", "path.parquet")
+    except StorageError:
+        pass
+    assert len(calls) == 1
