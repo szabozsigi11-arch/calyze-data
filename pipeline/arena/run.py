@@ -180,7 +180,7 @@ def main() -> None:
         storage = LocalStorage(args.local)
     else:
         settings = load_settings()
-        storage = SupabaseStorage(settings.supabase_url, settings.service_role_key)
+        storage = SupabaseStorage(settings.supabase_url or "", settings.supabase_secret_key or "")
 
     result = run(storage, datetime.now(UTC), dry_run=args.dry_run)
     json.dump(result, sys.stdout, indent=2, default=str)
