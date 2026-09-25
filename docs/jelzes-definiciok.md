@@ -38,6 +38,13 @@ adott papír adott horizontjának feltétel nélküli emelkedési aránya ugyana
 az időszakon. A kérdés nem az, hogy „az RSI-jelzés után emelkedett-e", hanem
 hogy **gyakrabban emelkedett-e, mint egyébként**.
 
+**3b. A baseline iránya.** A naiv baseline irányát papíronként a teljes
+mérési időszak emelkedési aránya adja: ha a papír az időszakon többször
+emelkedett, mint esett, a baseline iránya „fel", különben „le". Ez
+**kedvez** a baseline-nak — mintha ismerné a korszak sodródását —, tehát a
+jelzésnek nehezebb nyernie. Szándékos: ha egy indikátor így is jobb, az nem
+a mérés jóindulata.
+
 **4. Hozam vagy irány.** Az irányt mérjük, nem a hozam nagyságát. Az
 iránytalálat összevethető a baseline-nal; a hozam nem, mert azt egyetlen nagy
 kilengés eldönti.
