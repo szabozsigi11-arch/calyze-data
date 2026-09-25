@@ -174,7 +174,7 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="számol, de nem ír")
     args = parser.parse_args()
 
-    logging_setup.setup()
+    logging_setup.configure()
     storage: Storage
     if args.local is not None:
         storage = LocalStorage(args.local)
