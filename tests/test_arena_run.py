@@ -69,6 +69,8 @@ def test_a_csomag_hordozza_a_tulelesi_torzitast() -> None:
     assert payload["survivorship_bias"] is True
     assert payload["measured_from"] is not None
     assert payload["signals_total"] == len(signals)
+    # A papírok száma az adatból jön, nem a felületbe égetve.
+    assert payload["instruments"] == signals["instrument_id"].nunique()
 
 
 def test_minden_sor_mellett_ott_a_baseline_es_a_mintaszam() -> None:

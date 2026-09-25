@@ -106,6 +106,9 @@ def display_payload(results: pd.DataFrame, signals: pd.DataFrame, now: datetime)
         "measured_from": None if first is None else str(first.date()),
         "measured_to": None if last is None else str(last.date()),
         "signals_total": len(signals),
+        # Ahány papíron legalább egy jelzés szólt. Az adatból jön, hogy a felület
+        # ne égessen be egy számot, ami az univerzum változásakor hazudna.
+        "instruments": int(signals["instrument_id"].nunique()) if not signals.empty else 0,
         # A túlélési torzítás nem lábjegyzet: a csomag maga hordozza, hogy a
         # felület soha ne tudja elhallgatni (`docs/jelzes-definiciok.md`).
         "survivorship_bias": True,
