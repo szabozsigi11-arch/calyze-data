@@ -70,8 +70,15 @@ fordítva. Az érintés felismerhető a `t` napon.
 - `sr_resistance_touch` → short (az ellenállás tart)
 
 **Bontás, amit a spec kér:**
-- **hányadik érintés:** 2., 3., 4. vagy több
+- **hányadik érintés:** 3., 4., 5. vagy több. A szintet alkotó két pivot is
+  érintés, ezért a szint születése utáni első esemény már a harmadik. (Az
+  első változat „2., 3., 4." bontást írt, de abban a 2. mindig üres lett
+  volna — ezt a mérés előtt javítottuk, lásd a git-történetet.)
 - **friss vagy régi szint:** friss, ha az előző érintés 60 napon belül volt
+
+**Egy érintés egyszer számít.** Ha egy érintés napja később pivottá válik
+(5 nappal később felismerhető), az nem egy újabb érintés: ugyanaz a
+találkozás az árral. Két érintés akkor külön, ha legalább 5 nap van köztük.
 
 **Lejárat:** egy szint megszűnik, ha a záróár `1 · ATR`-rel átlépi (a
 támasz alá, az ellenállás fölé zár). Ettől a naptól nem érinthető.
