@@ -258,3 +258,87 @@ def test_ha_egyetlen_napra_sincs_eleg_adat_megallunk():
 
     with pytest.raises(RuntimeError, match="Egyetlen napra sincs elég adat"):
         choose_session({date(2026, 9, 18): 12}, date(2026, 9, 18), 620)
+
+
+def test_a_kamat_nem_johet_a_becsles_utani_naprol():
+    from pipeline.forecast.run import risk_free_rate
+
+    macro = pd.DataFrame(
+        {"yield_3m": [4.10, 4.20, 9.99]},
+        index=pd.to_datetime([date(2026, 9, 23), date(2026, 9, 24), date(2026, 9, 28)]),
+    )
+    assert risk_free_rate(macro, date(2026, 9, 25)) == pytest.approx(0.042)
+    assert risk_free_rate(None, date(2026, 9, 25)) is None
+
+
+def test_a_becsles_az_implikalt_lekeres_teljes_elhalasat_is_tuleli():
+    """A nem hivatalos forrás kiesése nem állíthatja meg a mérést."""
+    from pipeline.forecast.run import attach_implied
+    from pipeline.options.fetch import COLUMNS
+
+    frame = pd.DataFrame({"instrument_id": ["CZ1", "CZ1"], "horizon": [5, 20], "prob_up": [0.52, 0.55]})
+    out = attach_implied(frame, pd.DataFrame(columns=COLUMNS))
+    assert len(out) == 2
+    assert list(out["implied_status"]) == ["fetch_failed", "fetch_failed"]
+    assert out["prob_up"].tolist() == [0.52, 0.55]
+
+
+def test_az_implikalt_csak_ott_kap_pontot_ahol_elerheto_volt():
+    forecasts = forecasts_for_resolve()
+    forecasts["implied_status"] = ["ok", "illiquid"]
+    forecasts["implied_prob"] = [0.45, np.nan]
+    forecasts["implied_band_low"] = [-0.05, np.nan]
+    forecasts["implied_band_high"] = [0.02, np.nan]
+    prices, actions = prices_for_resolve()
+    out = resolve_due(forecasts, prices, actions, SESSIONS[-1], datetime(2026, 9, 19, tzinfo=UTC))
+    ok = out[out["forecast_id"] == "f1"].iloc[0]
+    skipped = out[out["forecast_id"] == "f2"].iloc[0]
+    # 45% emelkedést árazott a piac, és emelkedett: a piaci irány téves volt.
+    assert ok["implied_hit"] == 0.0
+    assert ok["implied_brier"] == pytest.approx((0.45 - 1) ** 2)
+    # A sáv 2%-nál ér véget, a 20 napos emelkedés ennél nagyobb.
+    assert ok["actual_return"] > 0.02
+    assert ok["implied_covered"] == 0.0
+    assert skipped["implied_status"] == "illiquid"
+    assert np.isnan(skipped["implied_hit"])
+
+
+def test_a_regi_csomag_implikalt_mezok_nelkul_is_lezarul():
+    prices, actions = prices_for_resolve()
+    out = resolve_due(
+        forecasts_for_resolve(), prices, actions, SESSIONS[-1], datetime(2026, 9, 19, tzinfo=UTC)
+    )
+    assert out["implied_status"].isna().all()
+    assert out["implied_hit"].isna().all()
+
+
+def test_az_elo_arena_a_piaci_arazast_csak_a_parositott_mintan_meri():
+    n = 40
+    outcomes = pd.DataFrame(
+        {
+            "forecast_id": [f"f{i}" for i in range(n)],
+            "horizon": 20,
+            "regime": "normal",
+            "session": SESSIONS[-n:],
+            "model_family": "lgbm-core",
+            "model_version": "v1",
+            "hit": 1.0,
+            "baseline_hit": 1.0,
+            "brier": 0.2,
+            "baseline_brier": 0.25,
+            "covered": 1.0,
+            # Csak minden második napon volt megbízható lánc.
+            "implied_hit": [0.0 if i % 2 == 0 else np.nan for i in range(n)],
+            "implied_brier": [0.3 if i % 2 == 0 else np.nan for i in range(n)],
+            "implied_covered": [1.0 if i % 2 == 0 else np.nan for i in range(n)],
+        }
+    )
+    arena = live_arena(outcomes)
+    implied = arena[(arena["baseline_id"] == "market_implied") & (arena["regime"] == "all")]
+    assert set(implied["metric"]) == {"direction_accuracy", "brier"}
+    assert (implied["n"] == n // 2).all()
+    band = arena[(arena["subject_id"] == "market_implied") & (arena["regime"] == "all")]
+    assert band["metric"].tolist() == ["coverage"]
+    assert band["baseline_id"].tolist() == ["nominal_90"]
+    # Az implikált összevetések is a többszörös tesztelés családjába tartoznak.
+    assert (arena["n_tests"] == len(arena)).all()

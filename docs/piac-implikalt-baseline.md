@@ -34,8 +34,10 @@ Ezért a **digitális opció** közelítését használjuk (Breeden–Litzenberg
   felezőpontja `K̄ = (K₁ + K₂) / 2` a legközelebb essen a mai záróárhoz,
 - `C` a call **közép-ára**: `(bid + ask) / 2`,
 - `T` az opció lejáratáig hátralévő idő évben (naptári nap / 365),
-- `r` a 3 hónapos amerikai kincstárjegy hozama (FRED `DTB3`) a becslés
-  napján; ha aznapra nincs, az utolsó ismert érték.
+- `r` a 3 hónapos amerikai állampapír-hozam (FRED `DGS3MO`, amit a napi
+  futás már amúgy is letölt) a becslés napján; ha aznapra nincs, az utolsó
+  ismert érték. (Az első változat `DTB3`-at írt; a kettő erre a célra
+  gyakorlatilag azonos, és a mérés előtt a meglévő sorozatra javítottuk.)
 
 A kapott valószínűséget [0,01; 0,99] közé vágjuk. Ha a közelítés ezen kívül
 esik, az rossz árat jelez, és a papír aznap „nem elérhető".

@@ -172,6 +172,52 @@ def manifest_entry(
     }
 
 
+def risk_free_rate(macro: pd.DataFrame | None, session: date) -> float | None:
+    """A 3 hónapos állampapír-hozam a becslés napján vagy előtte (`DGS3MO`).
+
+    A FRED százalékban adja; itt évesített tizedes tört. `None`, ha nincs.
+    """
+    if macro is None or "yield_3m" not in macro:
+        return None
+    series = macro["yield_3m"].dropna()
+    series = series[pd.to_datetime(series.index).date <= session]
+    return None if series.empty else float(series.iloc[-1]) / 100
+
+
+def implied_baseline(
+    universe: pd.DataFrame,
+    prices: pd.DataFrame,
+    macro: pd.DataFrame | None,
+    session: date,
+    future: list[date],
+) -> pd.DataFrame:
+    """A piac-implikált baseline minden papírra (`docs/piac-implikalt-baseline.md`).
+
+    A becslés ELŐTT kérjük le, és a becslés-csomagba kerül: a napi lenyomat
+    ezt is fedi. Ha a nem hivatalos forrás elhal, üres táblát adunk — a
+    becslés ettől még elkészül.
+    """
+    from pipeline.options.fetch import COLUMNS, fetch_implied
+
+    try:
+        spots = (
+            prices[prices["date"] == session].set_index("instrument_id")["close"].astype("float64").to_dict()
+        )
+        targets = {h: target_session(session, h, future) for h in HORIZONS}
+        instruments = list(zip(universe["instrument_id"], universe["ticker"], strict=True))
+        return fetch_implied(instruments, spots, session, targets, risk_free_rate(macro, session))
+    except Exception as error:  # noqa: BLE001 — a forrás kiesése nem állíthatja meg a mérést
+        log.warning("implied_baseline_failed", error=type(error).__name__)
+        return pd.DataFrame(columns=COLUMNS)
+
+
+def attach_implied(frame: pd.DataFrame, implied: pd.DataFrame) -> pd.DataFrame:
+    """Az implikált oszlopok a becslés-sorokhoz. Ahol nincs sor: `fetch_failed`."""
+    merged = frame.merge(implied, on=["instrument_id", "horizon"], how="left")
+    merged["implied_status"] = merged["implied_status"].fillna("fetch_failed")
+    return merged
+
+
 def choose_session(coverage: Mapping[date, int], expected: date, universe_size: int) -> date:
     """Melyik napra szóljon a becslés: az ADAT napjára, nem a naptáréra.
 
@@ -257,6 +303,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         for ts in cal.sessions_in_range(pd.Timestamp(sessions_back(session, 2)[0]), cal.last_session)
     ]
     frame = build_forecasts(features, prices, session, models, future, now.astimezone(UTC))
+    frame = attach_implied(frame, implied_baseline(universe, prices, macro, session, future))
 
     package = _package_bytes(frame)
     entry = manifest_entry(session, package, frame, now.astimezone(UTC), len(universe))

@@ -36,7 +36,7 @@ from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.model.config import HORIZONS, MIN_HISTORY_SESSIONS
 from pipeline.model.evaluate import MIN_OBSERVATIONS
 from pipeline.publish.postmortem import build_postmortems
-from pipeline.resolve.run import LIVE_ARENA_PATH, load_outcomes
+from pipeline.resolve.run import IMPLIED_ID, LIVE_ARENA_PATH, load_outcomes
 from pipeline.universe import active_on, load_universe
 
 log = logging_setup.get_logger(__name__)
@@ -266,11 +266,31 @@ def build_arena(arena: pd.DataFrame) -> list[dict[str, object]]:
 
 
 def headline(records: list[dict[str, object]]) -> dict[str, object] | None:
-    """A kumulált állás egy sorban: az irány-pontosság 20 napon, minden rezsimben."""
-    for record in records:
-        if record["metric"] == "direction_accuracy" and record["horizon"] == 20 and record["regime"] == "all":
-            return record
-    return records[0] if records else None
+    """A kumulált állás egy sorban: az irány-pontosság 20 napon, minden rezsimben.
+
+    A verdict a baseline-család **legkeményebb** tagja ellen szól
+    (docs/piac-implikalt-baseline.md, 6.): amelyik ellen a modell a
+    legrosszabbul áll. Tag csak az lehet, amelyiknek már van elég
+    megfigyelése — a piaci árazás addig nem „győzhet” és nem is „veszíthet”,
+    amíg 30 párosított becslés sincs mögötte. A `family` mindig kiírja, kik a
+    tagok, hogy a felület megmondhassa, mihez mérünk.
+    """
+    candidates = [
+        r
+        for r in records
+        if r["metric"] == "direction_accuracy" and r["horizon"] == 20 and r["regime"] == "all"
+    ]
+    if not candidates:
+        return records[0] if records else None
+    measured = [r for r in candidates if int(r["n"] or 0) >= MIN_OBSERVATIONS]  # type: ignore[call-overload]
+    naive = [r for r in candidates if r["baseline"] != IMPLIED_ID]
+    pool = measured or naive or candidates
+    hardest = min(pool, key=lambda r: r["delta"] if r["delta"] is not None else math.inf)  # type: ignore[arg-type,return-value]
+    family = [
+        {"baseline": r["baseline"], "n": r["n"], "counted": any(r is m for m in pool)}
+        for r in sorted(candidates, key=lambda r: str(r["baseline"]))
+    ]
+    return {**hardest, "family": family}
 
 
 def build_latest(
@@ -383,6 +403,29 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
         "expected_price": _num(row.get("expected_price"), 4),
         "made_at": str(row.get("made_at")),
         "contributions": contributions,
+        "implied": _implied(row),
+    }
+
+
+def _implied(row: dict[str, object]) -> dict[str, object]:
+    """A piaci árazás a becslés napján — vagy az ok, amiért nincs.
+
+    A régi csomagokban még nincs ilyen mező: ott `not_collected`, hogy a
+    felület ne állítsa, hogy „a lánc nem volt likvid”, amikor meg sem néztük.
+    """
+    status = row.get("implied_status")
+    if not isinstance(status, str):
+        return {"status": "not_collected"}
+    if status != "ok":
+        return {"status": status}
+    expiry = row.get("implied_expiry")
+    return {
+        "status": "ok",
+        "prob_up": _num(row.get("implied_prob")),
+        "iv": _num(row.get("implied_iv")),
+        "band_low": _num(row.get("implied_band_low")),
+        "band_high": _num(row.get("implied_band_high")),
+        "expiry": str(expiry) if expiry is not None and pd.notna(expiry) else None,
     }
 
 
@@ -504,6 +547,14 @@ def build_instrument(
         "hits": int(outcomes["hit"].sum()) if resolved else 0,
         "baseline_hits": int(outcomes["baseline_hit"].sum()) if resolved else 0,
     }
+    # A piaci árazás ellen csak ott mérünk, ahol elérhető volt: külön mintaszám.
+    if resolved and "implied_hit" in outcomes:
+        paired = outcomes[outcomes["implied_hit"].notna()]
+        performance["implied_n"] = len(paired)
+        performance["implied_hits"] = int(paired["implied_hit"].sum())
+        performance["implied_model_hits"] = int(paired["hit"].sum())
+    else:
+        performance["implied_n"] = 0
 
     return {
         "instrument": meta,

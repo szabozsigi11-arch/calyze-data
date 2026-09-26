@@ -111,6 +111,8 @@ def test_papirszintu_teljesitmeny_csak_mintaszamot_kozol() -> None:
         "min_observations": MIN_OBSERVATIONS,
         "hits": 1,
         "baseline_hits": 2,
+        # Régi kimenetelek, implikált pontok nélkül: nincs párosított minta.
+        "implied_n": 0,
     }
     assert "value" not in payload["performance"]
 
@@ -154,7 +156,10 @@ def test_az_arena_rekordok_atmennek_a_mezonevekkel() -> None:
     records = build_arena(arena)
     assert records[0]["n"] == 120
     assert records[0]["verdict"] == "better_not_significant"
-    assert headline(records) is records[0]
+    top = headline(records)
+    assert top is not None
+    assert top["verdict"] == "better_not_significant"
+    assert top["family"] == [{"baseline": records[0]["baseline"], "n": 120, "counted": True}]
 
 
 def test_ures_arena_eseten_nincs_verdict() -> None:
@@ -343,3 +348,55 @@ def test_a_screener_sor_a_kalibraciot_a_baselinehoz_meri() -> None:
     row = screener_row({"id": "CZ00001"}, prices_frame(100), forecasts_frame(), outcomes)
     # 1 − 0,20 / 0,25 = 0,2: a modell Brier-je 20%-kal jobb a baseline-énál.
     assert row["calibration_skill"] == 0.2
+
+
+def _verdict_row(baseline: str, delta: float, n: int) -> dict[str, object]:
+    return {
+        "subject": "lgbm-core v1",
+        "metric": "direction_accuracy",
+        "horizon": 20,
+        "regime": "all",
+        "baseline": baseline,
+        "delta": delta,
+        "n": n,
+        "verdict": "same",
+    }
+
+
+def test_a_verdict_a_legkemenyebb_mert_tag_ellen_szol() -> None:
+    naive = _verdict_row("naive", 0.02, 200)
+    implied = _verdict_row("market_implied", -0.01, 80)
+    top = headline([naive, implied])
+    assert top is not None
+    assert top["baseline"] == "market_implied"
+    assert [f["counted"] for f in top["family"]] == [True, True]
+
+
+def test_a_keves_parositott_becsles_meg_nem_szamit_bele() -> None:
+    naive = _verdict_row("naive", 0.02, 200)
+    implied = _verdict_row("market_implied", -0.10, 12)
+    top = headline([naive, implied])
+    assert top is not None
+    assert top["baseline"] == "naive"
+    assert {f["baseline"]: f["counted"] for f in top["family"]} == {"market_implied": False, "naive": True}
+
+
+def test_a_regi_csomagnal_nem_allitjuk_hogy_illikvid_volt() -> None:
+    from pipeline.publish.run import format_forecast
+
+    base = {"horizon": 20, "prob_up": 0.55, "made_at": "x"}
+    assert format_forecast(base)["implied"] == {"status": "not_collected"}
+    assert format_forecast({**base, "implied_status": "illiquid"})["implied"] == {"status": "illiquid"}
+    ok = format_forecast(
+        {
+            **base,
+            "implied_status": "ok",
+            "implied_prob": 0.48,
+            "implied_iv": 0.3,
+            "implied_band_low": -0.1,
+            "implied_band_high": 0.09,
+            "implied_expiry": date(2026, 10, 23),
+        }
+    )["implied"]
+    assert ok["prob_up"] == 0.48
+    assert ok["expiry"] == "2026-10-23"

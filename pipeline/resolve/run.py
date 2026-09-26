@@ -37,6 +37,8 @@ log = logging_setup.get_logger(__name__)
 
 OUTCOMES_PREFIX = "outcomes"
 LIVE_ARENA_PATH = "arena/live.parquet"
+#: A piaci árazású baseline azonosítója (docs/piac-implikalt-baseline.md).
+IMPLIED_ID = "market_implied"
 
 
 def outcomes_path(year: int) -> str:
@@ -56,6 +58,38 @@ def load_forecasts(storage: Storage, years: list[int]) -> pd.DataFrame:
 def load_outcomes(storage: Storage, years: list[int]) -> pd.DataFrame:
     frames = [f for f in (_read_table(storage, outcomes_path(y)) for y in years) if f is not None]
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def _implied_scores(f: object, actual: float) -> dict[str, object]:
+    """Az implikált baseline pontjai egy lezárt becslésre.
+
+    Csak ott van értékük, ahol a becslés napján a lánc megbízható volt
+    (`implied_status == "ok"`). A régi, implikált mezők nélküli csomagoknál
+    és a „nem elérhető" napokon üresek — nem pótoljuk őket semmivel.
+    """
+    status = getattr(f, "implied_status", None)
+    status = status if isinstance(status, str) else None
+    empty = {
+        "implied_status": status,
+        "implied_prob": np.nan,
+        "implied_hit": np.nan,
+        "implied_brier": np.nan,
+        "implied_covered": np.nan,
+    }
+    if status != "ok":
+        return empty
+    prob = float(getattr(f, "implied_prob", np.nan))
+    low, high = float(getattr(f, "implied_band_low", np.nan)), float(getattr(f, "implied_band_high", np.nan))
+    if not (np.isfinite(prob) and np.isfinite(low) and np.isfinite(high)):
+        return empty
+    y = np.array([actual])
+    return {
+        "implied_status": status,
+        "implied_prob": prob,
+        "implied_hit": float(hit(np.array([prob]), y)[0]),
+        "implied_brier": float(brier(np.array([prob]), y)[0]),
+        "implied_covered": float(covered(np.array([low]), np.array([high]), y)[0]),
+    }
 
 
 def resolve_due(
@@ -112,9 +146,60 @@ def resolve_due(
                     covered(np.array([f.band_low]), np.array([f.band_high]), np.array([actual]))[0]
                 ),
                 "resolution_type": kind,
+                **_implied_scores(f, actual),
             }
         )
     return pd.DataFrame(rows)
+
+
+def _implied_comparisons(
+    part: pd.DataFrame, meta: dict[str, object], horizon: int
+) -> list[tuple[dict[str, object], object]]:
+    """A modell a piaci árazás ellen — csak azokon a becsléseken, ahol az elérhető volt.
+
+    Párosított összevetés: ugyanazok a becslések, ugyanazok a napok. A sáv
+    lefedettségét nem a modellhez mérjük (ott nem a „több” a jobb), hanem a
+    névleges 90%-hoz, a piaci árazás saját sorában.
+    """
+    if "implied_hit" not in part:
+        return []
+    usable = part[part["implied_hit"].notna()]
+    if usable.empty:
+        return []
+    days = usable["session"].to_numpy()
+    base = {
+        **meta,
+        "baseline_id": IMPLIED_ID,
+        "first_observed": str(usable["session"].min()),
+        "last_observed": str(usable["session"].max()),
+    }
+    out: list[tuple[dict[str, object], object]] = [
+        (
+            base,
+            compare(
+                "direction_accuracy",
+                usable["hit"].to_numpy(),
+                usable["implied_hit"].to_numpy(),
+                days,
+                horizon,
+            ),
+        ),
+        (
+            base,
+            compare("brier", usable["brier"].to_numpy(), usable["implied_brier"].to_numpy(), days, horizon),
+        ),
+        (
+            {**base, "subject_id": IMPLIED_ID, "baseline_id": "nominal_90"},
+            compare(
+                "coverage",
+                usable["implied_covered"].to_numpy(),
+                np.full(len(usable), 0.90),
+                days,
+                horizon,
+            ),
+        ),
+    ]
+    return out
 
 
 def live_arena(outcomes: pd.DataFrame) -> pd.DataFrame:
@@ -153,6 +238,7 @@ def live_arena(outcomes: pd.DataFrame) -> pd.DataFrame:
                 comparisons.append(
                     (meta if metric != "coverage" else {**meta, "baseline_id": "nominal_90"}, c)
                 )
+            comparisons.extend(_implied_comparisons(part, meta, int(horizon)))
 
     apply_fdr([c for _, c in comparisons])
     for meta, c in comparisons:
