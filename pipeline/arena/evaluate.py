@@ -8,6 +8,8 @@ mint a saját modellünk.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+
 import numpy as np
 import pandas as pd
 
@@ -71,7 +73,9 @@ def evaluate_rule(
     )
 
 
-def arena(signals: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame:
+def arena(
+    signals: pd.DataFrame, prices: pd.DataFrame, directions: Mapping[str, str] | None = None
+) -> pd.DataFrame:
     """Az egész aréna: minden szabály minden horizonton, FDR-korrekcióval.
 
     A korrekció a teljes családra megy (szabály × horizont): tizenkét szabály
@@ -81,9 +85,12 @@ def arena(signals: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame:
     records: list[dict[str, object]] = []
     comparisons: list[Comparison] = []
 
+    # Alapból az indikátor-aréna szabályai; a minta-aréna a sajátjait adja át,
+    # de ugyanez a függvény méri — ugyanazzal a protokollal.
+    rules = DIRECTIONS if directions is None else directions
     for horizon in HORIZONS:
         outcomes = forward_outcomes(prices, horizon)
-        for rule, direction in DIRECTIONS.items():
+        for rule, direction in rules.items():
             rows = signals[signals["rule"] == rule]
             if rows.empty:
                 continue
