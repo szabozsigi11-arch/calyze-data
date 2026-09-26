@@ -35,6 +35,7 @@ from pipeline.ingest.partitions import from_parquet
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.model.config import HORIZONS, MIN_HISTORY_SESSIONS
 from pipeline.model.evaluate import MIN_OBSERVATIONS
+from pipeline.publish.postmortem import build_postmortems
 from pipeline.resolve.run import LIVE_ARENA_PATH, load_outcomes
 from pipeline.universe import active_on, load_universe
 
@@ -385,6 +386,46 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
     }
 
 
+#: Legalább ennyi lezárt becslés kell egy papír kalibráció-minőségéhez.
+SCREENER_MIN_RESOLVED = 30
+#: Ennyi napos mini árfolyamgörbe kerül a screener soraiba.
+SPARK_SESSIONS = 60
+
+
+def screener_row(
+    meta: dict[str, object],
+    prices: pd.DataFrame,
+    forecasts: pd.DataFrame,
+    outcomes: pd.DataFrame,
+) -> dict[str, object]:
+    """Egy papír sora a screenerben (`docs/postmortem-es-screener.md`, 3.).
+
+    A kalibráció-minőség a Brier-készség a naiv baseline-hoz, az összes lezárt
+    becslésen: `1 − Brier(modell) / Brier(baseline)`. 30 lezárt becslés alatt
+    nincs értéke — a sorban csak a mintaszám áll.
+    """
+    bars = prices.sort_values("date").tail(SPARK_SESSIONS)
+    f20 = forecasts[forecasts["horizon"] == 20] if "horizon" in forecasts else pd.DataFrame()
+    first = f20.iloc[0] if not f20.empty else None
+    n = len(outcomes)
+    skill = None
+    if n >= SCREENER_MIN_RESOLVED:
+        base = float(outcomes["baseline_brier"].mean())
+        if base > 0:
+            skill = round(1 - float(outcomes["brier"].mean()) / base, 4)
+    return {
+        **meta,
+        "spark": [_num(v, 4) for v in bars["close"]],
+        "prob_up": _num(first["prob_up"]) if first is not None else None,
+        "baseline_prob": _num(first["baseline_prob"]) if first is not None else None,
+        "band_low": _num(first["band_low"]) if first is not None else None,
+        "band_high": _num(first["band_high"]) if first is not None else None,
+        "regime": str(first["regime"]) if first is not None and pd.notna(first.get("regime")) else None,
+        "resolved": n,
+        "calibration_skill": skill,
+    }
+
+
 def build_history(prices: pd.DataFrame) -> dict[str, object]:
     """A munkaasztal idősora egy papírra, oszlopos formában.
 
@@ -537,6 +578,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     outcome_groups = {i: g for i, g in outcomes.groupby("instrument_id")} if not outcomes.empty else {}
 
     written = 0
+    screener: list[dict[str, object]] = []
     for row in universe.to_dict("records"):
         instrument_id = str(row["instrument_id"])
         payload = build_instrument(
@@ -555,10 +597,32 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
             session=latest_session,
         )
         files.append((f"instruments/{instrument_id}.json", _dumps(payload)))
+        screener.append(
+            screener_row(
+                {
+                    "id": instrument_id,
+                    "ticker": row["ticker"],
+                    "name": row["name"],
+                    "sector": row.get("sector"),
+                    "asset_class": row.get("asset_class"),
+                },
+                price_groups.get(instrument_id, pd.DataFrame(columns=prices.columns)),
+                by_instrument.get(instrument_id, pd.DataFrame()),
+                outcome_groups.get(instrument_id, pd.DataFrame(columns=["brier", "baseline_brier"])),
+            )
+        )
         long_bars = long_groups.get(instrument_id)
         if long_bars is not None and not long_bars.empty:
             files.append((f"history/{instrument_id}.json", _dumps(build_history(long_bars))))
         written += 1
+
+    files.append(
+        (
+            "screener.json",
+            _dumps({"min_resolved": SCREENER_MIN_RESOLVED, "session": str(latest_session), "rows": screener}),
+        )
+    )
+    files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
 
     if dry_run:
         log.info("publish_dry_run", files=len(files), instruments=written)

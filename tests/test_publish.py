@@ -323,3 +323,23 @@ def test_a_rovid_multu_papir_idosora_nem_potol_semmit() -> None:
 
     history = build_history(prices_frame(40))
     assert len(history["d"]) == 40
+
+
+def test_a_screener_sor_harminc_lezaras_alatt_nem_ad_kalibraciot() -> None:
+    """30 lezárt becslés alatt nincs kalibráció-minőség — csak a mintaszám."""
+    from pipeline.publish.run import screener_row
+
+    outcomes = pd.DataFrame({"brier": [0.2] * 12, "baseline_brier": [0.25] * 12})
+    row = screener_row({"id": "CZ00001"}, prices_frame(100), forecasts_frame(), outcomes)
+    assert row["resolved"] == 12
+    assert row["calibration_skill"] is None
+    assert len(row["spark"]) == 60
+
+
+def test_a_screener_sor_a_kalibraciot_a_baselinehoz_meri() -> None:
+    from pipeline.publish.run import screener_row
+
+    outcomes = pd.DataFrame({"brier": [0.2] * 40, "baseline_brier": [0.25] * 40})
+    row = screener_row({"id": "CZ00001"}, prices_frame(100), forecasts_frame(), outcomes)
+    # 1 − 0,20 / 0,25 = 0,2: a modell Brier-je 20%-kal jobb a baseline-énál.
+    assert row["calibration_skill"] == 0.2
