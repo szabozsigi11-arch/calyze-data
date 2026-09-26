@@ -11,3 +11,7 @@ __pycache__/
 
 # A generált állapotoldal (a munkafolyamat építi minden futásnál)
 site/
+
+# helyi, ideiglenes szkriptek és kimenetek
+*.tmp.py
+patterns-local.json
