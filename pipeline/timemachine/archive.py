@@ -152,8 +152,18 @@ def load_manifests(root: Path = MANIFESTS) -> list[tuple[Path, dict[str, object]
     return items
 
 
+def published_summary(storage: Storage) -> dict[str, object] | None:
+    """A most kint lévő napi összefoglaló (`latest.json`), ha van."""
+    blob = storage.download(DISPLAY_BUCKET, "latest.json")
+    return None if blob is None else json.loads(blob)
+
+
 def run(storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = False) -> dict[str, object]:
     universe = load_universe()
+    # A verdict nincs a becslés-csomagban: az a mérésből jön. Csak akkor
+    # archiválhatjuk, ha a most kint lévő összefoglaló ugyanarra a napra szól —
+    # egy korábbi napra a mai verdictet írni utólagos bölcsesség lenne.
+    summary_now = published_summary(storage)
     index: list[dict[str, object]] = []
     written = kept = 0
 
@@ -174,6 +184,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = 
             verify_package(blob, manifest)
             package = pd.read_parquet(io.BytesIO(blob))
             archive = build_archive(manifest, commit, package, universe, now)
+            same_day = summary_now is not None and str(summary_now.get("session")) == session
+            archive["verdict_archived"] = same_day
+            archive["verdict"] = summary_now.get("verdict") if same_day and summary_now else None
             if not dry_run:
                 storage.upload(
                     DISPLAY_BUCKET,
