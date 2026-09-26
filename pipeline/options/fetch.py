@@ -20,6 +20,10 @@ log = logging_setup.get_logger(__name__)
 
 #: Két kérés közti szünet: a forrás ingyenes és nem hivatalos, ne terheljük.
 PAUSE = 0.05
+#: Ennyi másodperc után a még hátralévő papírokat nem kérjük le. A napi
+#: futásnak 45 perce van összesen; a nem hivatalos forrás lassulása nem
+#: veheti el az időt a becsléstől.
+BUDGET_SECONDS = 15 * 60
 
 COLUMNS = [
     "instrument_id",
@@ -53,6 +57,8 @@ def fetch_implied(
     targets: dict[int, date],
     rate: float | None,
     ticker_factory=None,  # teszteknél kicserélhető
+    budget_seconds: float = BUDGET_SECONDS,
+    clock=time.monotonic,  # teszteknél kicserélhető
 ) -> pd.DataFrame:
     """Papíronként és horizontonként az implikált baseline, vagy az ok, amiért nincs."""
     if ticker_factory is None:
@@ -61,7 +67,14 @@ def fetch_implied(
         ticker_factory = yf.Ticker
 
     rows: list[dict[str, object]] = []
+    started = clock()
+    skipped = 0
     for instrument, symbol in instruments:
+        if clock() - started > budget_seconds:
+            # Elfogyott az idő: a papír sora elkészül, csak lekérés nélkül.
+            rows.extend(_row(instrument, h, Implied("fetch_failed")) for h in targets)
+            skipped += 1
+            continue
         spot = spots.get(instrument)
         if rate is None or spot is None or not spot > 0:
             reason = "no_rate" if rate is None else "no_spot"
@@ -94,4 +107,6 @@ def fetch_implied(
             done = {r["horizon"] for r in rows if r["instrument_id"] == instrument}
             rows.extend(_row(instrument, h, Implied("fetch_failed")) for h in targets if h not in done)
         time.sleep(PAUSE)
+    if skipped:
+        log.warning("implied_budget_exhausted", skipped=skipped, budget_seconds=budget_seconds)
     return pd.DataFrame(rows, columns=COLUMNS)

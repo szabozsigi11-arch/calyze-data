@@ -147,3 +147,22 @@ def test_kamat_nelkul_nincs_implikalt() -> None:
         [("CZ1", "GOOD")], {"CZ1": 100.0}, SESSION, {20: date(2026, 10, 23)}, None, FakeTicker
     )
     assert list(result["implied_status"]) == ["no_rate"]
+
+
+def test_ha_elfogy_az_ido_a_maradek_papir_sora_is_elkeszul() -> None:
+    """A lassú forrás nem veheti el az időt a becsléstől."""
+    from pipeline.options.fetch import fetch_implied
+
+    ticks = iter([0.0, 0.0, 5.0, 11.0, 12.0])
+    result = fetch_implied(
+        [("CZ1", "GOOD"), ("CZ2", "GOOD"), ("CZ3", "GOOD")],
+        {"CZ1": 100.0, "CZ2": 100.0, "CZ3": 100.0},
+        SESSION,
+        {20: date(2026, 10, 23)},
+        0.04,
+        ticker_factory=FakeTicker,
+        budget_seconds=10,
+        clock=lambda: next(ticks),
+    )
+    status = dict(zip(result["instrument_id"], result["implied_status"], strict=True))
+    assert status == {"CZ1": "ok", "CZ2": "ok", "CZ3": "fetch_failed"}
