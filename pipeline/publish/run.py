@@ -46,6 +46,13 @@ DISPLAY_BUCKET = "display"
 #: Ennyi kereskedési nap ára kerül a charthoz (spec/03, 2.1: 90–250 nap).
 HISTORY_SESSIONS = 250
 
+#: A chart-munkaasztal idősora (spec/03, 2.2): öt év látható ablak, plusz 200
+#: nap bemelegítés, hogy a 200 napos átlag az ablak első napján is létezzen.
+#: Külön fájlban él, hogy a papír-nézet a saját 250 napjával gyors maradjon.
+WORKBENCH_SESSIONS = 5 * 252 + 200
+#: Ennyi naptári évet kell betölteni a munkaasztal idősorához.
+WORKBENCH_YEARS = 7
+
 #: Ennyi napra visszamenőleg mutatjuk, hogyan változott a becslés.
 TIMELINE_SESSIONS = 90
 
@@ -348,6 +355,24 @@ def build_index(
     return sorted(rows, key=lambda r: str(r["ticker"]))
 
 
+def build_history(prices: pd.DataFrame) -> dict[str, object]:
+    """A munkaasztal idősora egy papírra, oszlopos formában.
+
+    Soronkénti objektumok helyett oszloponként egy-egy tömb: 1460 napnál ez a
+    fájlméret nagyjából harmada, és a felület úgyis oszloponként számol
+    belőle indikátort.
+    """
+    bars = prices.sort_values("date").tail(WORKBENCH_SESSIONS)
+    return {
+        "d": [str(v) for v in bars["date"]],
+        "o": [_num(v, 4) for v in bars["open"]],
+        "h": [_num(v, 4) for v in bars["high"]],
+        "l": [_num(v, 4) for v in bars["low"]],
+        "c": [_num(v, 4) for v in bars["close"]],
+        "v": [_num(v, 0) for v in bars["volume"]],
+    }
+
+
 def build_instrument(
     meta: dict[str, object],
     prices: pd.DataFrame,
@@ -462,7 +487,14 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     # lista 2026-09-19-én készült, az első becslés viszont az előző napra szól,
     # és akkor minden papír kiesne a szűrőből.
     universe = active_on(load_universe(), now.astimezone(UTC).date())
-    prices = _load_prices(storage, list(range(max(2005, latest_session.year - 2), latest_session.year + 1)))
+    # A munkaasztalnak hosszabb múlt kell, mint a többi képernyőnek. Egyszer
+    # töltjük be, és a meglévő építők ugyanazt a hároméves szeletet kapják,
+    # mint eddig — a viselkedésük nem változhat attól, hogy a munkaasztal
+    # bekerült.
+    long_prices = _load_prices(
+        storage, list(range(max(2005, latest_session.year - WORKBENCH_YEARS + 1), latest_session.year + 1))
+    )
+    prices = long_prices[pd.to_datetime(long_prices["date"]).dt.year >= latest_session.year - 2]
     regime = _read_table(storage, REGIME_PATH)
 
     cutoff = pd.Timestamp(latest_session) - pd.Timedelta(days=TIMELINE_SESSIONS * 2)
@@ -491,6 +523,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
 
     by_instrument = {i: g for i, g in today_forecasts.groupby("instrument_id")}
     price_groups = {i: g for i, g in prices.groupby("instrument_id")}
+    long_groups = {i: g for i, g in long_prices.groupby("instrument_id")}
     timeline_groups = {i: g for i, g in timeline_source.groupby("instrument_id")}
     outcome_groups = {i: g for i, g in outcomes.groupby("instrument_id")} if not outcomes.empty else {}
 
@@ -513,6 +546,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
             session=latest_session,
         )
         files.append((f"instruments/{instrument_id}.json", _dumps(payload)))
+        long_bars = long_groups.get(instrument_id)
+        if long_bars is not None and not long_bars.empty:
+            files.append((f"history/{instrument_id}.json", _dumps(build_history(long_bars))))
         written += 1
 
     if dry_run:

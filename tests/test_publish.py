@@ -303,3 +303,23 @@ def test_a_csomag_kiirja_ha_a_forras_lemaradt() -> None:
         **common,
     )
     assert current["source_lag_sessions"] == 0
+
+
+def test_a_munkaasztal_idosora_oszlopos_es_eleg_hosszu() -> None:
+    """Öt év látható ablak + 200 nap bemelegítés, oszloponként egy tömb."""
+    from pipeline.publish.run import WORKBENCH_SESSIONS, build_history
+
+    history = build_history(prices_frame(WORKBENCH_SESSIONS + 100))
+    assert set(history) == {"d", "o", "h", "l", "c", "v"}
+    lengths = {len(values) for values in history.values()}
+    assert lengths == {WORKBENCH_SESSIONS}, "minden oszlop ugyanolyan hosszú"
+    # A 200 napos átlagnak az ötéves ablak első napján is léteznie kell.
+    assert WORKBENCH_SESSIONS >= 5 * 252 + 200
+
+
+def test_a_rovid_multu_papir_idosora_nem_potol_semmit() -> None:
+    """Ha kevesebb nap van, kevesebb megy ki — nem töltünk fel kitalált sorokkal."""
+    from pipeline.publish.run import build_history
+
+    history = build_history(prices_frame(40))
+    assert len(history["d"]) == 40
