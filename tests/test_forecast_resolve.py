@@ -342,3 +342,16 @@ def test_az_elo_arena_a_piaci_arazast_csak_a_parositott_mintan_meri():
     assert band["baseline_id"].tolist() == ["nominal_90"]
     # Az implikált összevetések is a többszörös tesztelés családjába tartoznak.
     assert (arena["n_tests"] == len(arena)).all()
+
+
+def test_nyitas_utan_mar_nem_kerunk_le_opcios_arat():
+    """A késve készülő becsléshez a lánc már a becslés napja utáni tudás lenne."""
+    from pipeline.forecast.run import attach_implied, implied_allowed
+
+    next_open = datetime(2026, 9, 28, 13, 30, tzinfo=UTC)
+    assert implied_allowed(datetime(2026, 9, 27, 3, 0, tzinfo=UTC), next_open)
+    assert not implied_allowed(datetime(2026, 9, 28, 14, 0, tzinfo=UTC), next_open)
+    assert not implied_allowed(datetime(2026, 9, 27, 3, 0, tzinfo=UTC), None)
+    frame = pd.DataFrame({"instrument_id": ["CZ1"], "horizon": [5], "prob_up": [0.5]})
+    out = attach_implied(frame, pd.DataFrame(), missing="stale_session")
+    assert out["implied_status"].tolist() == ["stale_session"]

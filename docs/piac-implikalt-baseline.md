@@ -70,7 +70,7 @@ Mindkét kötési áron:
 
 Ha bármelyik nem teljesül, a papír azon a horizonton „nem elérhető", és a
 csomag rögzíti, miért (`no_chain`, `no_expiry`, `illiquid`, `bad_price`,
-`fetch_failed`).
+`fetch_failed`, `stale_session`).
 
 ---
 
@@ -95,6 +95,12 @@ Ez a mi sávunkkal azonos alakú, tehát a lefedettségük közvetlenül összev
   fedi: utólag nem lehet másik piaci árat mellé tenni.
 - **Ha a lekérés elhal, a becslés akkor is elkészül**, implikált baseline
   nélkül. Egy nem hivatalos forrás kiesése nem állíthatja meg a mérést.
+- **Csak a becslés napjához tartozó ár számít.** Ha a becslés napja utáni
+  első tőzsdenap már kinyitott (a becslés késve készül, vagy kézzel,
+  kereskedési időben indították), nem kérünk le: a lánc már a becslés napja
+  utáni tudást hordozná. Ilyenkor a státusz `stale_session`, és az a nap az
+  implikált összevetésből kimarad. (Ezt a szabályt a mérés előtt, a kód
+  írása közben vettük fel.)
 
 ---
 

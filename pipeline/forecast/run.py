@@ -211,10 +211,25 @@ def implied_baseline(
         return pd.DataFrame(columns=COLUMNS)
 
 
-def attach_implied(frame: pd.DataFrame, implied: pd.DataFrame) -> pd.DataFrame:
-    """Az implikált oszlopok a becslés-sorokhoz. Ahol nincs sor: `fetch_failed`."""
+def implied_allowed(now: datetime, next_open: datetime | None) -> bool:
+    """Szabad-e még opciós árat lekérni a becslés napjához.
+
+    Csak addig, amíg a becslés napja utáni első tőzsdenap ki nem nyitott.
+    Ha a becslés késve készül (a forrás egy napot kihagyott), vagy valaki
+    kereskedési időben indítja kézzel, a lánc már a becslés napja UTÁNI
+    tudást hordozná — ez szivárgás, tehát inkább „nem elérhető".
+    """
+    return next_open is not None and now.astimezone(UTC) < next_open.astimezone(UTC)
+
+
+def attach_implied(frame: pd.DataFrame, implied: pd.DataFrame, missing: str = "fetch_failed") -> pd.DataFrame:
+    """Az implikált oszlopok a becslés-sorokhoz. Ahol nincs sor: `missing`."""
+    from pipeline.options.fetch import COLUMNS
+
+    if implied.empty:
+        implied = pd.DataFrame(columns=COLUMNS)
     merged = frame.merge(implied, on=["instrument_id", "horizon"], how="left")
-    merged["implied_status"] = merged["implied_status"].fillna("fetch_failed")
+    merged["implied_status"] = merged["implied_status"].fillna(missing)
     return merged
 
 
@@ -303,7 +318,13 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         for ts in cal.sessions_in_range(pd.Timestamp(sessions_back(session, 2)[0]), cal.last_session)
     ]
     frame = build_forecasts(features, prices, session, models, future, now.astimezone(UTC))
-    frame = attach_implied(frame, implied_baseline(universe, prices, macro, session, future))
+    later = [d for d in future if d > session]
+    next_open = cal.session_open(pd.Timestamp(later[0])).to_pydatetime() if later else None
+    if implied_allowed(now, next_open):
+        frame = attach_implied(frame, implied_baseline(universe, prices, macro, session, future))
+    else:
+        log.info("implied_skipped", reason="a következő tőzsdenap már kinyitott", session=str(session))
+        frame = attach_implied(frame, pd.DataFrame(), missing="stale_session")
 
     package = _package_bytes(frame)
     entry = manifest_entry(session, package, frame, now.astimezone(UTC), len(universe))
