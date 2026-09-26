@@ -355,6 +355,36 @@ def build_index(
     return sorted(rows, key=lambda r: str(r["ticker"]))
 
 
+def format_forecast(row: dict[str, object]) -> dict[str, object]:
+    """Egy lementett becslés-sor a felület formájában.
+
+    Az élő papír-nézet és az időgép UGYANEZT a függvényt használja: a múltbeli
+    nap nem egy másik képletből áll össze, hanem pontosan ugyanabból, amiből
+    aznap is összeállt volna.
+    """
+    raw = row.get("contributions")
+    try:
+        contributions = json.loads(raw) if isinstance(raw, str) and raw else []
+    except json.JSONDecodeError:
+        contributions = []
+    target = row.get("target_session")
+    return {
+        "horizon": int(row["horizon"]),  # type: ignore[arg-type]
+        "target_session": str(target) if target is not None and pd.notna(target) else None,
+        "prob_up": _num(row.get("prob_up")),
+        "baseline_prob": _num(row.get("baseline_prob")),
+        "baseline": row.get("baseline_id"),
+        "expected_return": _num(row.get("expected_return")),
+        "band_low": _num(row.get("band_low")),
+        "band_high": _num(row.get("band_high")),
+        "price_low": _num(row.get("price_low"), 4),
+        "price_high": _num(row.get("price_high"), 4),
+        "expected_price": _num(row.get("expected_price"), 4),
+        "made_at": str(row.get("made_at")),
+        "contributions": contributions,
+    }
+
+
 def build_history(prices: pd.DataFrame) -> dict[str, object]:
     """A munkaasztal idősora egy papírra, oszlopos formában.
 
@@ -406,28 +436,7 @@ def build_instrument(
     horizons = []
     ordered = forecasts.sort_values("horizon") if "horizon" in forecasts else forecasts
     for row in ordered.to_dict("records"):
-        raw = row.get("contributions")
-        try:
-            contributions = json.loads(raw) if isinstance(raw, str) and raw else []
-        except json.JSONDecodeError:
-            contributions = []
-        horizons.append(
-            {
-                "horizon": int(row["horizon"]),
-                "target_session": str(row["target_session"]) if pd.notna(row.get("target_session")) else None,
-                "prob_up": _num(row.get("prob_up")),
-                "baseline_prob": _num(row.get("baseline_prob")),
-                "baseline": row.get("baseline_id"),
-                "expected_return": _num(row.get("expected_return")),
-                "band_low": _num(row.get("band_low")),
-                "band_high": _num(row.get("band_high")),
-                "price_low": _num(row.get("price_low"), 4),
-                "price_high": _num(row.get("price_high"), 4),
-                "expected_price": _num(row.get("expected_price"), 4),
-                "made_at": str(row.get("made_at")),
-                "contributions": contributions,
-            }
-        )
+        horizons.append(format_forecast(row))
 
     timeline_rows = (
         history.sort_values(["session", "horizon"])

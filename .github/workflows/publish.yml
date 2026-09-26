@@ -20,6 +20,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Teljes történet: az időgép commit-linkje a manifesztet LÉTREHOZÓ
+          # commitra mutat, és azt sekély klónból nem lehet kikeresni.
+          fetch-depth: 0
       - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
         with:
           enable-cache: true
@@ -28,3 +32,10 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: uv run python -m pipeline.publish.run
+      - name: Időgép-archívum (a lenyomatok ellenőrzésével)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        # Ha egy csomag lenyomata nem egyezik a commitolttal, ez a lépés
+        # elbukik — és a futás pirosan jelzi, nem némán lép tovább.
+        run: uv run python -m pipeline.timemachine.archive
