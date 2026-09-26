@@ -123,3 +123,30 @@ def test_a_commit_link_a_letrehozo_commitra_mutat() -> None:
     assert len(all_commits) >= 2, "a fájlt létrehozása után módosítottuk"
     assert commit["sha"] == all_commits[-1], "a legelső commit, nem a legutolsó"
     assert commit["url"].endswith(commit["sha"])
+
+
+def test_sekely_klonban_nincs_commit_link(tmp_path: Path) -> None:
+    """A csonkolt történetben minden fájl „új”: rossz link helyett nincs link."""
+    import shutil
+    import subprocess
+
+    git = shutil.which("git")
+    if git is None:
+        pytest.skip("nincs git")
+    source = tmp_path / "source"
+    source.mkdir()
+    run = lambda *args, cwd=source: subprocess.run(  # noqa: E731, S603
+        [git, *args], cwd=cwd, check=True, capture_output=True
+    )
+    run("init", "-q")
+    run("config", "user.email", "t@example.com")
+    run("config", "user.name", "t")
+    (source / "m.json").write_text("{}")
+    run("add", "m.json")
+    run("commit", "-q", "-m", "létrehozás")
+    (source / "m.json").write_text('{"x": 1}')
+    run("commit", "-q", "-am", "módosítás")
+    clone = tmp_path / "clone"
+    run("clone", "-q", "--depth", "1", f"file://{source}", str(clone), cwd=tmp_path)
+    assert adding_commit(clone / "m.json", clone) is None
+    assert adding_commit(source / "m.json", source) is not None

@@ -84,6 +84,17 @@ def adding_commit(path: Path, repo: Path = REPO) -> dict[str, str] | None:
     if git is None:
         return None
     try:
+        # Sekély klónban a csonkolt első commit minden fájlt „létrehoz”: a
+        # keresés a legutolsó commitot adná vissza. Akkor inkább nincs link.
+        shallow = subprocess.run(  # noqa: S603
+            [git, "rev-parse", "--is-shallow-repository"],
+            cwd=repo,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        if shallow == "true":
+            return None
         # A paraméterek rögzített lista, shell nélkül; az útvonal a saját
         # manifeszt-mappánkból jön, nem felhasználói bemenetből.
         out = subprocess.run(  # noqa: S603
