@@ -53,18 +53,30 @@ class SupabaseStorage:
     def _request(self, method: str, url: str, **kwargs: object) -> requests.Response:
         """Kérés újrapróbálással az átmeneti hibákra.
 
-        Egy négyórás futás nem dőlhet el egyetlen 502-n. A várakozás
-        duplázódik (1, 2, 4, 8 mp), hogy egy terhelt kiszolgálót ne
-        nyomjunk tovább.
+        Kétféle átmeneti hiba van, és mindkettőt újrapróbáljuk:
+          - a szerver válaszol, de hibakóddal (429, 5xx),
+          - a kapcsolat maga szakad meg vagy nem jön válasz időben.
+
+        Az első változat csak az elsőt kezelte, és a minta-aréna egy 10 perces
+        számítás után, egyetlen lassú feltöltési válaszon veszett el.
+
+        A várakozás duplázódik (1, 2, 4 mp), hogy egy terhelt kiszolgálót ne
+        nyomjunk tovább. Az utolsó próbálkozás hibája már nem nyelődik el.
         """
         kwargs.setdefault("timeout", self.timeout)
-        response = self.session.request(method, url, **kwargs)  # type: ignore[arg-type]
-        for attempt in range(self.RETRIES - 1):
-            if response.status_code not in self.RETRY_STATUS:
+        for attempt in range(self.RETRIES):
+            last_try = attempt == self.RETRIES - 1
+            try:
+                response = self.session.request(method, url, **kwargs)  # type: ignore[arg-type]
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError):
+                if last_try:
+                    raise
+                time.sleep(2**attempt)
+                continue
+            if response.status_code not in self.RETRY_STATUS or last_try:
                 return response
             time.sleep(2**attempt)
-            response = self.session.request(method, url, **kwargs)  # type: ignore[arg-type]
-        return response
+        raise AssertionError("elérhetetlen: a ciklus mindig visszatér vagy kivételt dob")  # pragma: no cover
 
     def _check(self, response: requests.Response, what: str) -> None:
         if response.status_code >= 300:

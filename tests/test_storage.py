@@ -105,3 +105,51 @@ def test_a_vegleges_hibat_nem_probalja_ujra(monkeypatch) -> None:
     except StorageError:
         pass
     assert len(calls) == 1
+
+
+def test_az_idotullepest_is_ujraprobalja(monkeypatch) -> None:
+    """A minta-aréna egy lassú feltöltési válaszon veszett el: ez nem ismétlődhet."""
+    import time as time_module
+
+    import requests
+
+    from pipeline.ingest.storage import SupabaseStorage
+
+    storage = SupabaseStorage("https://example.invalid", "sb_secret_x")
+    monkeypatch.setattr(time_module, "sleep", lambda _seconds: None)
+    calls: list[str] = []
+
+    class Response:
+        status_code = 200
+        content = b"adat"
+        text = ""
+
+    def flaky(_method: str, url: str, **_kwargs: object) -> Response:
+        calls.append(url)
+        if len(calls) < 3:
+            raise requests.exceptions.ReadTimeout("lassú válasz")
+        return Response()
+
+    monkeypatch.setattr(storage.session, "request", flaky)
+    assert storage.download("bucket", "path.parquet") == b"adat"
+    assert len(calls) == 3
+
+
+def test_a_tartos_idotullepes_vegul_hibat_dob(monkeypatch) -> None:
+    """Ha minden próbálkozás elhal, a hiba nem nyelődik el."""
+    import time as time_module
+
+    import pytest
+    import requests
+
+    from pipeline.ingest.storage import SupabaseStorage
+
+    storage = SupabaseStorage("https://example.invalid", "sb_secret_x")
+    monkeypatch.setattr(time_module, "sleep", lambda _seconds: None)
+
+    def dead(_method: str, _url: str, **_kwargs: object) -> None:
+        raise requests.exceptions.ConnectTimeout("nincs kapcsolat")
+
+    monkeypatch.setattr(storage.session, "request", dead)
+    with pytest.raises(requests.exceptions.ConnectTimeout):
+        storage.download("bucket", "path.parquet")
