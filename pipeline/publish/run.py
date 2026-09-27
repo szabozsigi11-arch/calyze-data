@@ -368,6 +368,20 @@ def _market_shock(today: pd.DataFrame) -> dict[str, object]:
     }
 
 
+def _news(session: date, latest: dict[str, object]) -> dict[str, object]:
+    from pipeline.news.official import official_news
+
+    shock = latest.get("market_shock")
+    signals = (
+        list(shock.get("signals", [])) if isinstance(shock, dict) and shock.get("status") == "ok" else []
+    )
+    try:
+        return official_news(session, signals)
+    except Exception as error:  # noqa: BLE001
+        log.warning("news_failed", error=type(error).__name__)
+        return {"status": "failed"}
+
+
 def _upcoming(session: date) -> list[dict[str, str]]:
     from pipeline.events.calendar import upcoming
 
@@ -713,6 +727,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         regime,
         now,
     )
+    # Hivatalos közlemények címkeként, csak sokk vagy esemény napján (docs/hirek.md).
+    if not dry_run:
+        latest_doc["news"] = _news(latest_session, latest_doc)
     files: list[tuple[str, bytes]] = [
         ("latest.json", _dumps(latest_doc)),
         ("arena.json", _dumps(arena_records)),
