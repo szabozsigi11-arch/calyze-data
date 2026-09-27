@@ -211,6 +211,40 @@ def implied_baseline(
         return pd.DataFrame(columns=COLUMNS)
 
 
+def attach_shock_flags(
+    frame: pd.DataFrame,
+    prices: pd.DataFrame,
+    actions: pd.DataFrame,
+    universe: pd.DataFrame,
+    macro: pd.DataFrame | None,
+    session: date,
+) -> pd.DataFrame:
+    """A sokk-detektor jelei és a visszatartás (docs/sokk-detektor.md).
+
+    A detektor hibája nem állíthatja meg a becslést: ilyenkor a státusz
+    `failed`, és a felület nem állítja, hogy nem volt jelzés.
+    """
+    from pipeline.shocks.detect import attach_shocks, detect
+
+    try:
+        classified, shock = detect(prices, actions, universe, macro, session)
+        out = attach_shocks(frame, classified, shock)
+        out["shock_status"] = "ok"
+        log.info(
+            "shock_checked",
+            instruments_flagged=int((classified["signals"] != "").sum()) if not classified.empty else 0,
+            market=",".join(shock.signals),
+            withheld=shock.withheld,
+        )
+        return out
+    except Exception as error:  # noqa: BLE001 — a detektor kiesése nem állíthatja meg a mérést
+        log.warning("shock_detect_failed", error=type(error).__name__)
+        out = frame.copy()
+        out["shock_status"] = "failed"
+        out["withheld"] = False
+        return out
+
+
 def implied_allowed(now: datetime, next_open: datetime | None) -> bool:
     """Szabad-e még opciós árat lekérni a becslés napjához.
 
@@ -332,6 +366,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     from pipeline.events.calendar import attach_calendar
 
     frame = attach_calendar(frame)
+    frame = attach_shock_flags(frame, prices, actions, universe, macro, session)
     package = _package_bytes(frame)
     entry = manifest_entry(session, package, frame, now.astimezone(UTC), len(universe))
     if dry_run:

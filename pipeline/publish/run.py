@@ -347,6 +347,24 @@ def build_latest(
         "next_resolution": next_resolutions(all_forecasts, outcomes),
         "min_observations": MIN_OBSERVATIONS,
         "upcoming_events": _upcoming(session),
+        "market_shock": _market_shock(today_forecasts),
+    }
+
+
+def _market_shock(today: pd.DataFrame) -> dict[str, object]:
+    """A piaci szintű jelzés a mai becslés-csomagból (docs/sokk-detektor.md)."""
+    if today.empty or "shock_status" not in today:
+        return {"status": "not_collected"}
+    row = today.iloc[0]
+    if row["shock_status"] != "ok":
+        return {"status": str(row["shock_status"])}
+    market = [x for x in str(row.get("shock_market") or "").split(",") if x]
+    flagged = int((today.drop_duplicates("instrument_id")["shock_signals"].fillna("") != "").sum())
+    return {
+        "status": "ok",
+        "signals": market,
+        "withheld": bool(row.get("withheld", False)),
+        "instruments_flagged": flagged,
     }
 
 
@@ -399,6 +417,28 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
     except json.JSONDecodeError:
         contributions = []
     target = row.get("target_session")
+    # Visszatartott becslés: a szám a lenyomat alatt megvan, de a felületre
+    # nem kerül ki — az időgép is úgy mutatja, ahogy aznap látszott.
+    if row.get("withheld") is True or row.get("withheld") == 1:
+        return {
+            "horizon": int(row["horizon"]),  # type: ignore[arg-type]
+            "target_session": str(target) if target is not None and pd.notna(target) else None,
+            "withheld": True,
+            "prob_up": None,
+            "baseline_prob": None,
+            "baseline": row.get("baseline_id"),
+            "expected_return": None,
+            "band_low": None,
+            "band_high": None,
+            "price_low": None,
+            "price_high": None,
+            "expected_price": None,
+            "made_at": str(row.get("made_at")),
+            "contributions": [],
+            "implied": {"status": "not_collected"},
+            "calendar": _calendar(row),
+            "shock": _shock(row),
+        }
     return {
         "horizon": int(row["horizon"]),  # type: ignore[arg-type]
         "target_session": str(target) if target is not None and pd.notna(target) else None,
@@ -415,6 +455,32 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
         "contributions": contributions,
         "implied": _implied(row),
         "calendar": _calendar(row),
+        "shock": _shock(row),
+        "withheld": False,
+    }
+
+
+def _shock(row: dict[str, object]) -> dict[str, object]:
+    """A sokk-detektor jelei a becslés napján (docs/sokk-detektor.md)."""
+    status = row.get("shock_status")
+    if not isinstance(status, str):
+        return {"status": "not_collected"}
+    if status != "ok":
+        return {"status": status}
+
+    def _split(value: object) -> list[str]:
+        return [x for x in str(value).split(",") if x] if isinstance(value, str) else []
+
+    def _text(value: object) -> str | None:
+        return value if isinstance(value, str) and value else None
+
+    return {
+        "status": "ok",
+        "signals": _split(row.get("shock_signals")),
+        "market": _split(row.get("shock_market")),
+        "scope": _text(row.get("shock_scope")),
+        "persistence": _text(row.get("shock_persistence")),
+        "tractability": _text(row.get("shock_tractability")),
     }
 
 
