@@ -78,7 +78,10 @@ felismert völgy `L` (`L` napja < `H` napja). Csak akkor impulzus, ha
 **Visszaesés:** a `H` utáni első felismert völgy `R`. Az esemény napja `R`
 felismerésének napja (`R + 5`). **Nincs esemény**, ha a `H` napja és az
 esemény napja között bármelyik záróár `H` fölé került (az impulzus
-folytatódott, nem visszaesés volt).
+folytatódott, nem visszaesés volt). Ez az ellenőrzés mind a négy változatnál
+a `H` pivot kanóc-csúcsához mér, mert a folytatás ténye nem függ attól, honnan
+húzzuk a szinteket. *(Pontosítás a mérés előtt, 2026-09-27: az első
+változatból nem derült ki, melyik árhoz.)*
 
 **Mélység:** `d = (H − R) / (H − L)`, a változat szerinti árakkal (lent).
 
