@@ -31,6 +31,7 @@ from pipeline.features.run import _load_prices, _read_table, _write_table
 from pipeline.forecast.run import FORECAST_PREFIX
 from pipeline.ingest.partitions import ACTIONS_PATH, from_parquet
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
+from pipeline.journal import resolve as journal_resolve
 from pipeline.model.evaluate import apply_fdr, brier, compare, covered, hit, observations_needed, verdict
 
 log = logging_setup.get_logger(__name__)
@@ -264,7 +265,32 @@ def live_arena(outcomes: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
-def run(storage: Storage, now: datetime) -> dict[str, object]:
+def resolve_journal(
+    journal: journal_resolve.JournalStore,
+    prices: pd.DataFrame,
+    actions: pd.DataFrame,
+    forecasts: pd.DataFrame,
+    last: date,
+) -> dict[str, int] | None:
+    """A tézisek kiértékelése, a becslésekétől elszigetelve.
+
+    Ha elhasal, a napló csak a hiba típusát írja (a részletben felhasználói
+    adat lehetne), és a futás megy tovább: a tézisek hibája nem állíthatja meg
+    a modell mérését.
+    """
+    try:
+        tr = prices.assign(tr=total_return_prices(prices, actions))
+        return journal_resolve.run(journal, journal_resolve.as_series(tr), forecasts, last)
+    except Exception as exc:  # noqa: BLE001
+        log.error("journal_resolve_failed", error=type(exc).__name__)
+        return None
+
+
+def run(
+    storage: Storage,
+    now: datetime,
+    journal: journal_resolve.JournalStore | None = None,
+) -> dict[str, object]:
     last = last_closed_session(now)
     years = list(range(2026, last.year + 1))
     forecasts = load_forecasts(storage, years)
@@ -292,6 +318,9 @@ def run(storage: Storage, now: datetime) -> dict[str, object]:
     arena = live_arena(all_outcomes)
     if not arena.empty:
         _write_table(storage, LIVE_ARENA_PATH, arena)
+
+    if journal is not None:
+        resolve_journal(journal, prices, actions, forecasts, last)
 
     open_count = int(len(forecasts) - len(all_outcomes))
     summary: dict[str, object] = {
@@ -330,15 +359,17 @@ def main(argv: list[str] | None = None) -> int:
 
     logging_setup.configure()
     settings = load_settings()
+    journal: journal_resolve.JournalStore | None = None
     if args.local:
         storage: Storage = LocalStorage(args.local)
     elif settings.supabase_url and settings.supabase_secret_key:
         storage = SupabaseStorage(settings.supabase_url, settings.supabase_secret_key)
+        journal = journal_resolve.SupabaseJournal(settings.supabase_url, settings.supabase_secret_key)
     else:
         log.error("storage_not_configured")
         return 2
 
-    print(json.dumps(run(storage, datetime.now(UTC)), indent=2, default=str))
+    print(json.dumps(run(storage, datetime.now(UTC), journal), indent=2, default=str))
     return 0
 
 
