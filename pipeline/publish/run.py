@@ -346,7 +346,17 @@ def build_latest(
         "verdict": headline(arena_records),
         "next_resolution": next_resolutions(all_forecasts, outcomes),
         "min_observations": MIN_OBSERVATIONS,
+        "upcoming_events": _upcoming(session),
     }
+
+
+def _upcoming(session: date) -> list[dict[str, str]]:
+    from pipeline.events.calendar import upcoming
+
+    return [
+        {"id": e.id, "kind": e.kind, "day": e.day.isoformat(), "time_et": e.time_et}
+        for e in upcoming(session)
+    ]
 
 
 def build_index(
@@ -404,6 +414,32 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
         "made_at": str(row.get("made_at")),
         "contributions": contributions,
         "implied": _implied(row),
+        "calendar": _calendar(row),
+    }
+
+
+def _calendar(row: dict[str, object]) -> dict[str, object]:
+    """Az ablakba eső ütemezett események (docs/naptar.md).
+
+    A régi csomagokban nincs ilyen oszlop: ott `not_collected`, hogy a felület
+    ne állítsa, hogy az ablakban nem volt esemény, amikor nem is figyeltük.
+    """
+    from pipeline.events.calendar import EVENTS, uncovered_kinds
+
+    flag = row.get("calendar_flag")
+    if not isinstance(flag, str):
+        return {"status": "not_collected"}
+    by_id = {e.id: e for e in EVENTS}
+    events = [by_id[i] for i in flag.split(",") if i in by_id]
+    target = row.get("target_session")
+    end = date.fromisoformat(str(target)) if target is not None and pd.notna(target) else None
+    return {
+        "status": "ok",
+        "events": [
+            {"id": e.id, "kind": e.kind, "day": e.day.isoformat(), "time_et": e.time_et} for e in events
+        ],
+        # a fajták, amelyekről a célnapig még nincs teljes naptárunk
+        "uncovered": uncovered_kinds(end) if end is not None else [],
     }
 
 

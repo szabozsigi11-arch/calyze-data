@@ -326,6 +326,12 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         log.info("implied_skipped", reason="a következő tőzsdenap már kinyitott", session=str(session))
         frame = attach_implied(frame, pd.DataFrame(), missing="stale_session")
 
+    # Az ablakba eső ütemezett események (docs/naptar.md): a becsléssel
+    # együtt, a lenyomat alá kerülnek, hogy később mérhető legyen, rosszabb-e
+    # a modell az események közelében.
+    from pipeline.events.calendar import attach_calendar
+
+    frame = attach_calendar(frame)
     package = _package_bytes(frame)
     entry = manifest_entry(session, package, frame, now.astimezone(UTC), len(universe))
     if dry_run:
