@@ -83,3 +83,44 @@ kiírja.
 
 A napi pipeline a becslések kiértékelése után. Egy tézis akkor zárul, amikor
 `E` záróára megvan. A kiértékelés egyszer íródik, utána nem változik.
+
+## 7. Ember kontra modell kontra baseline, és a közösségi rangsor
+
+*Kiegészítés, rögzítve 2026-09-27-én, a rangsor első sora előtt.*
+
+**Összevethető tézis:** kiértékelt, és az ablakára volt modell- és
+baseline-becslés (3. fejezet). Csak ezeken hasonlítunk, mindhárom
+szereplőre ugyanazokon.
+
+**Ember-aréna (a saját oldalon).** Az átlagos Brier-pontszám különbsége a
+naiv baseline-hoz és a modellhez, `n` összevethető tézisen:
+
+| Feltétel | Verdict |
+|---|---|
+| `n < 30` | Not enough data |
+| `|Δ| < 0,005` | Same |
+| `Δ ≥ 0,005` a felhasználó javára | Better, **not significant** |
+| `Δ ≤ −0,005` | Worse |
+
+A személyes rekordra **nem mondunk szignifikanciát**: a tézisek ablakai
+átfednek, egy felhasználó mintája kicsi, és a blokkos bootstrapot erre még
+nem futtatjuk. Ezt a felület ki is írja. (A küszöb a modellé, CLAUDE.md,
+2026-09-19.)
+
+**Brier skill score (BSS):** `1 − Brier_ember / Brier_baseline`, az
+összevethető téziseken.
+
+**Miért nem ad előnyt a könnyű tézis.** A BSS ugyanarra az ablakra mért
+baseline-hoz viszonyít. Aki csak ott tesz tézist, ahol a baseline már
+magabiztos, és vele egyezően mond valószínűséget, annak a Brier-pontszáma
+a baseline-éval egyezik, a BSS-e 0 — akármilyen „könnyű” volt a papír. A
+BSS csak akkor pozitív, ha a felhasználó *többet* tud a baseline-nál. Ezt
+teszt is igazolja.
+
+**Rangsor.**
+- Benne van, akinek legalább **30 összevethető** tézise van, részt vesz
+  (a beállításokban kiléphet), és nincs kizárva (admin, indoklással).
+- Álnévvel jelenik meg, amit a szerver ad; e-mail, azonosító nem látszik.
+- Sorrend: BSS csökkenő; mellette mindig ott az `n`.
+- Amíg kevesebb mint két résztvevő van, a rangsor üres, és ezt ki is mondja.
+- Csak a szerver számolja; a felhasználó a saját sorát sem írhatja.
