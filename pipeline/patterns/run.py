@@ -1,9 +1,11 @@
 """A minta-aréna teljes historikus mérése (spec/03 3.3; spec/08).
 
 Minden papíron időrendben: támasz-ellenállás (M7), gyertyaminták (M2),
-váll-fej-váll (M3). Az eseményeket ugyanaz a kód méri, mint az
-indikátor-arénát — ugyanazzal a baseline-nal, effektív mintaszámmal és
-FDR-korrekcióval, ami itt a teljes minta-családra megy.
+váll-fej-váll (M3), és a 2. rész (`docs/minta-definiciok-2.md`): szerkezettörés
+(M5), kitörés-visszateszt (M6), Fibonacci (M1), top-down (M4), trendvonal (M9).
+Az eseményeket ugyanaz a kód méri, mint az indikátor-arénát — ugyanazzal a
+baseline-nal, effektív mintaszámmal és FDR-korrekcióval, ami itt a teljes
+minta-családra megy.
 
 A bontások a spec szerint:
   - gyertyaminták: szinten (`at_level`) és nem szinten (`none`), külön
@@ -32,7 +34,8 @@ from pipeline.arena.evaluate import HORIZONS, arena
 from pipeline.config import HISTORY_START, RAW_BUCKET, load_settings
 from pipeline.features.run import _load_prices
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
-from pipeline.patterns import candles, headshoulders
+from pipeline.patterns import breakouts, candles, fibonacci, headshoulders, structure, topdown, trendlines
+from pipeline.patterns.common import lock, pivots
 from pipeline.patterns.levels import touch_bucket, walk_levels
 from pipeline.publish.run import DISPLAY_BUCKET
 from pipeline.universe import active_on, load_universe
@@ -73,6 +76,30 @@ def instrument_events(instrument: str, frame: pd.DataFrame) -> list[dict[str, ob
 
     for day, name, state, direction in headshoulders.events(data):
         add(day, f"{name}|{state}", direction)
+
+    # A 2. rész (`minta-definiciok-2.md`): a pivotokat egyszer számoljuk, és
+    # minden detektor kimenetére ugyanaz az ismétlődés-zár fut.
+    found = pivots(data)
+
+    for day, name, variant, direction in lock(structure.events(data, found)):
+        add(day, name, direction)
+        add(day, f"{name}|{variant}", direction)
+
+    for day, name, direction in lock(breakouts.events(data, walk)):
+        add(day, name, direction)
+
+    # A Fibonacci-változatok mind önálló szabályok (nincs összesítés).
+    for day, name, variant, direction in lock(fibonacci.events(data, found), key=(1, 2)):
+        add(day, f"{name}|{variant}", direction)
+
+    for day, name, variant, direction in lock(topdown.events(data, found)):
+        add(day, name, direction)
+        if variant:
+            add(day, f"{name}|{variant}", direction)
+
+    for day, name, variant, direction in lock(trendlines.events(data, found)):
+        add(day, name, direction)
+        add(day, f"{name}|{variant}", direction)
 
     return rows
 

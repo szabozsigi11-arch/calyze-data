@@ -72,3 +72,25 @@ def pivots(frame: pd.DataFrame, k: int = K) -> list[Pivot]:
         if lo[p] == window_l.min() and int(np.argmin(window_l)) == k:
             out.append(Pivot("low", p, float(lo[p]), p + k))
     return out
+
+
+#: Az ismétlődés-zár: ugyanaz a szabály ugyanazon a papíron ennyi napon belül egyszer.
+LOCK_DAYS = 5
+
+
+def lock(events: list[tuple], key: int | tuple[int, ...] = 1, days: int = LOCK_DAYS) -> list[tuple]:
+    """Az ismétlődés-zár (`minta-definiciok.md`, 1. fejezet) egy detektor kimenetére.
+
+    Az eseménytupel 0. eleme a napindex; a `key` indexű elem a szabály, amire a
+    zár vonatkozik. Időrendben az első marad meg, a 5 napon belüli ismétlés kiesik.
+    """
+    last: dict[object, int] = {}
+    kept: list[tuple] = []
+    for event in sorted(events, key=lambda e: e[0]):
+        rule = event[key] if not isinstance(key, tuple) else tuple(event[k] for k in key)
+        day = int(event[0])
+        if rule in last and day - last[rule] < days:
+            continue
+        last[rule] = day
+        kept.append(event)
+    return kept

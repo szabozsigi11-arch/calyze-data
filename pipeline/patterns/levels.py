@@ -73,6 +73,8 @@ class LevelWalk:
     supports: list[tuple[float, ...]]
     resistances: list[tuple[float, ...]]
     tolerance: np.ndarray
+    #: lejárt (áttört) szintek: (napindex, fajta, a szint ára) — az M6 kitörései
+    breaks: list[tuple[int, str, float]] = field(default_factory=list)
 
     def at_support(self, day: int, price: float) -> bool:
         tol = self.tolerance[day]
@@ -97,6 +99,7 @@ def walk_levels(frame: pd.DataFrame) -> LevelWalk:
 
     levels: list[Level] = []
     touches: list[tuple[int, str, int, bool]] = []
+    breaks: list[tuple[int, str, float]] = []
     near_support = np.zeros(n, dtype=bool)
     near_resistance = np.zeros(n, dtype=bool)
     supports: list[tuple[float, ...]] = [() for _ in range(n)]
@@ -133,8 +136,10 @@ def walk_levels(frame: pd.DataFrame) -> LevelWalk:
                 continue
             if lv.kind == "support" and close[t] < lv.price - EXPIRY * band[t]:
                 lv.alive = False
+                breaks.append((t, "support", lv.price))
             elif lv.kind == "resistance" and close[t] > lv.price + EXPIRY * band[t]:
                 lv.alive = False
+                breaks.append((t, "resistance", lv.price))
 
         # 3. A mai nap a szintnél volt-e (a gyertyaminták kontextusa).
         live = [lv for lv in levels if lv.live]
@@ -160,7 +165,7 @@ def walk_levels(frame: pd.DataFrame) -> LevelWalk:
             touches.append((t, rule, len(lv.contacts), fresh))
             last_event[lv.kind] = t
 
-    return LevelWalk(touches, near_support, near_resistance, supports, resistances, tolerance)
+    return LevelWalk(touches, near_support, near_resistance, supports, resistances, tolerance, breaks)
 
 
 def touch_bucket(number: int) -> str:
