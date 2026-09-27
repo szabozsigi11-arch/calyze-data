@@ -703,22 +703,18 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     cutoff = pd.Timestamp(latest_session) - pd.Timedelta(days=TIMELINE_SESSIONS * 2)
     timeline_source = all_forecasts[pd.to_datetime(all_forecasts["session"]) >= cutoff]
 
+    latest_doc = build_latest(
+        latest_session,
+        universe,
+        today_forecasts,
+        all_forecasts,
+        outcomes,
+        arena_records,
+        regime,
+        now,
+    )
     files: list[tuple[str, bytes]] = [
-        (
-            "latest.json",
-            _dumps(
-                build_latest(
-                    latest_session,
-                    universe,
-                    today_forecasts,
-                    all_forecasts,
-                    outcomes,
-                    arena_records,
-                    regime,
-                    now,
-                )
-            ),
-        ),
+        ("latest.json", _dumps(latest_doc)),
         ("arena.json", _dumps(arena_records)),
         ("honesty.json", _dumps(build_honesty(prices, latest_session))),
         ("instruments.json", _dumps(build_index(universe, today_forecasts, prices))),
@@ -791,6 +787,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         "instruments": written,
         "files": len(files),
         "status": "published",
+        "latest": latest_doc,
     }
 
 
@@ -812,6 +809,14 @@ def main(argv: list[str] | None = None) -> int:
         storage = SupabaseStorage(settings.supabase_url or "", settings.supabase_secret_key or "")
 
     result = run(storage, datetime.now(UTC), dry_run=args.dry_run)
+    latest = result.pop("latest", None)
+    if args.local is None and not args.dry_run and isinstance(latest, dict):
+        # Az értesítések piaci összefoglalója (spec/07, 6.). A felhasználókra
+        # bontás az adatbázisban történik; ide felhasználói adat nem jön vissza.
+        from pipeline.notify import enqueue
+
+        settings = load_settings()
+        enqueue(settings.supabase_url or "", settings.supabase_secret_key or "", latest)
     print(json.dumps(result, indent=2, default=str))
     return 0
 
