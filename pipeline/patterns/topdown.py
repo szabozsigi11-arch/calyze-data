@@ -94,3 +94,26 @@ def events(frame: pd.DataFrame, daily: list[Pivot] | None = None) -> list[tuple[
             out.append((t, name, variant, direction))
         previous = aligned
     return out
+
+
+def alignment_states(frame: pd.DataFrame, daily: list[Pivot] | None = None) -> list[str]:
+    """Minden napra: "up", ha mindhárom idősík emelkedő, "down", ha mindhárom csökkenő, egyébként "none".
+
+    Ugyanaz a szabály, mint az eseményeknél (`events`); a konfluencia-motor
+    kontextusa ez.
+    """
+    weekly, weekly_last = _bars(frame, "W-FRI")
+    monthly, monthly_last = _bars(frame, "M")
+    day_usable: dict[int, list[Pivot]] = {}
+    for p in daily if daily is not None else pivots(frame):
+        day_usable.setdefault(p.known_at, []).append(p)
+    states = (
+        _State(day_usable),
+        _State(_usable_from(pivots(weekly, HTF_K), weekly_last)),
+        _State(_usable_from(pivots(monthly, HTF_K), monthly_last)),
+    )
+    out: list[str] = []
+    for t in range(len(frame)):
+        d, w, m = (st.advance(t) for st in states)
+        out.append(d if d != "neutral" and d == w == m else "none")
+    return out

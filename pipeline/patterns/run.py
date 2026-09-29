@@ -36,7 +36,7 @@ from pipeline.features.run import _load_prices
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.patterns import breakouts, candles, fibonacci, headshoulders, structure, topdown, trendlines
 from pipeline.patterns.common import lock, pivots
-from pipeline.patterns.levels import touch_bucket, walk_levels
+from pipeline.patterns.levels import LevelWalk, touch_bucket, walk_levels
 from pipeline.publish.run import DISPLAY_BUCKET
 from pipeline.universe import active_on, load_universe
 
@@ -48,7 +48,9 @@ DISPLAY_FILE = "pattern-arena.json"
 SR_DIRECTIONS = {"sr_support_touch": "long", "sr_resistance_touch": "short"}
 
 
-def instrument_events(instrument: str, frame: pd.DataFrame) -> list[dict[str, object]]:
+def instrument_events(
+    instrument: str, frame: pd.DataFrame, walk: LevelWalk | None = None
+) -> list[dict[str, object]]:
     """Egy papír összes minta-eseménye, a bontásokkal együtt.
 
     Egy esemény több sorban is megjelenhet: egyszer az összesítésben (pl.
@@ -62,7 +64,9 @@ def instrument_events(instrument: str, frame: pd.DataFrame) -> list[dict[str, ob
     def add(day: int, rule: str, direction: str) -> None:
         rows.append({"instrument_id": instrument, "date": dates[day], "rule": rule, "direction": direction})
 
-    walk = walk_levels(data)
+    # A szint-bejárás a legdrágább rész; a konfluencia-motor a sajátját adja át,
+    # hogy ne fusson kétszer. A bemenetnek ugyanúgy dátum szerint rendezettnek kell lennie.
+    walk = walk if walk is not None else walk_levels(data)
     for day, rule, number, fresh in walk.touches:
         direction = SR_DIRECTIONS[rule]
         add(day, rule, direction)

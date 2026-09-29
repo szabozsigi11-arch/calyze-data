@@ -68,3 +68,22 @@ def events(frame: pd.DataFrame, found: Sequence[Pivot] | None = None) -> list[tu
             variant = "bos" if state == "down" else "choch" if state == "up" else "neutral"
             out.append((t, "structure_break_down", variant, "short"))
     return out
+
+
+def daily_states(frame: pd.DataFrame, found: Sequence[Pivot] | None = None) -> list[str]:
+    """A napi szerkezet minden napra ("up", "down", "neutral"), az aznap ismert pivotokból.
+
+    Ugyanaz a szabály, mint a törésnél (`events`): a `t` napon felismert pivot
+    már a `t` napi állapot része. A konfluencia-motor kontextusa ez.
+    """
+    by_day: dict[int, list[Pivot]] = {}
+    for p in found if found is not None else pivots(frame):
+        by_day.setdefault(p.known_at, []).append(p)
+    highs: list[float] = []
+    lows: list[float] = []
+    out: list[str] = []
+    for t in range(len(frame)):
+        for p in sorted(by_day.get(t, []), key=lambda x: x.index):
+            (highs if p.kind == "high" else lows).append(p.price)
+        out.append(trend_state(highs, lows))
+    return out
