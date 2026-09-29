@@ -62,6 +62,13 @@ horizont (5, 20, 60 nap). Az egyedülálló kiváltó nem tartozik a családhoz
 részhalmaz jut egy kiváltóra; a teljes szám a futás elején kiíródik, és a
 felület kiírja (4. korlát).
 
+**A korrekció családja** *(pontosítás a mérés előtt, 2026-09-29)*: a
+Benjamini–Hochberg-korrekció azokon a kombinációkon fut (mindhárom horizonton
+együtt), amelyeknek a felfedezési időszakban legalább 30 lezárt megfigyelésük
+van — p-érték csak ezekre számolható. A többi „Too early”. A felület mindkét
+számot kiírja: hány kombinációt definiáltunk, és hányat teszteltünk ténylegesen.
+A megerősítési időszakot csak a felfedezésen átment kombinációkra számoljuk.
+
 ---
 
 ## 3. Felfedezés és megerősítés — két időszak
