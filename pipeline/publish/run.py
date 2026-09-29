@@ -737,6 +737,28 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         ("instruments.json", _dumps(build_index(universe, today_forecasts, prices))),
     ]
 
+    # A konfluencia élő panelje (docs/konfluencia.md, 5.): a mai kiváltók és
+    # kontextusok, a heti mérés számaival. Ha bármi elbukik, a napi csomag
+    # ettől nem áll meg; a panel kimondja, hogy ma nem érhető el.
+    # Itt töltjük be, nem a modul tetején: a konfluencia a publikálás állandóit
+    # használja, a felső import körbeérne.
+    from pipeline.confluence.live import panel, standing_all
+    from pipeline.confluence.run import RESULTS_PATH as CONFLUENCE_RESULTS_PATH
+
+    confluence_results = _read_table(storage, CONFLUENCE_RESULTS_PATH)
+    try:
+        regime_labels: dict[date, str] = {}
+        if regime is not None and not regime.empty:
+            labelled = regime.dropna(subset=["regime"])
+            regime_labels = dict(
+                zip(pd.to_datetime(labelled["date"]).dt.date, labelled["regime"].astype(str), strict=True)
+            )
+        standing_today = standing_all(long_prices, regime_labels, latest_session)
+        confluence_ok = True
+    except Exception as error:  # noqa: BLE001 — a napi csomag fontosabb a panelnél
+        log.warning("confluence_panel_failed", error=type(error).__name__)
+        standing_today, confluence_ok = {}, False
+
     by_instrument = {i: g for i, g in today_forecasts.groupby("instrument_id")}
     price_groups = {i: g for i, g in prices.groupby("instrument_id")}
     long_groups = {i: g for i, g in long_prices.groupby("instrument_id")}
@@ -761,6 +783,17 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
             history=timeline_groups.get(instrument_id, pd.DataFrame(columns=["session", "horizon"])),
             outcomes=outcome_groups.get(instrument_id, pd.DataFrame()),
             session=latest_session,
+        )
+        payload["confluence"] = (
+            panel(standing_today.get(instrument_id, []), confluence_results, latest_session)
+            if confluence_ok
+            else {
+                "session": str(latest_session),
+                "measured": False,
+                "available": False,
+                "tested": 0,
+                "active": [],
+            }
         )
         files.append((f"instruments/{instrument_id}.json", _dumps(payload)))
         screener.append(

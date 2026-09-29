@@ -157,3 +157,96 @@ def test_az_osszesites_csak_darabszam() -> None:
     assert set(summary) == {"events", "triggers", "defined", "tested", "found", "confirmed"}
     assert all(isinstance(v, int) for v in summary.values())
     assert summary["confirmed"] >= 1
+
+
+# ---------------------------------------------------------------- élő panel
+
+
+def test_a_panel_csak_a_ma_allo_kombinaciokat_hozza() -> None:
+    from pipeline.confluence.live import panel
+
+    results = pd.DataFrame(
+        [
+            {
+                "combo": "hammer+trend",
+                "horizon": 20,
+                "status": "not_found",
+                "disc_n": 400,
+                "disc_hit": 0.55,
+                "disc_baseline": 0.55,
+                "disc_delta": 0.0,
+                "disc_n_eff": 200.0,
+                "disc_p": 0.9,
+                "disc_verdict": "same",
+            },
+            {
+                "combo": "hammer+trend+calm",
+                "horizon": 20,
+                "status": "found_not_confirmed",
+                "disc_n": 300,
+                "disc_hit": 0.6,
+                "disc_baseline": 0.55,
+                "disc_delta": 0.05,
+                "disc_n_eff": 150.0,
+                "disc_p": 0.01,
+                "disc_verdict": "better_significant",
+                "conf_n": 120,
+                "conf_hit": 0.54,
+                "conf_baseline": 0.56,
+                "conf_delta": -0.02,
+                "conf_n_eff": 60.0,
+                "conf_p": 0.8,
+                "conf_verdict": "worse",
+            },
+            # a „volume” ma nem áll: nem kerülhet a panelre
+            {
+                "combo": "hammer+volume",
+                "horizon": 20,
+                "status": "not_found",
+                "disc_n": 90,
+                "disc_hit": 0.5,
+                "disc_baseline": 0.55,
+                "disc_delta": -0.05,
+                "disc_n_eff": 50.0,
+                "disc_p": 0.5,
+                "disc_verdict": "worse",
+            },
+            {"combo": "hammer+calm", "horizon": 20, "status": "too_early", "disc_n": 12},
+        ]
+    )
+    out = panel([("hammer", "long", ("trend", "calm"))], results, date(2026, 9, 25))
+    assert out["measured"] is True
+    assert out["tested"] == 3
+    combos = {c["combo"]: c for c in out["active"][0]["combos"]}
+    assert set(combos) == {"hammer+trend", "hammer+trend+calm", "hammer+calm"}
+    assert combos["hammer+trend+calm"]["confirmation"]["verdict"] == "worse"
+    assert combos["hammer+trend"]["confirmation"] is None
+    assert combos["hammer+calm"]["discovery"] == {
+        "n": 12,
+        "n_eff": None,
+        "hit": None,
+        "baseline": None,
+        "delta": None,
+        "p": None,
+        "verdict": None,
+    }
+
+
+def test_meres_nelkul_kimondja() -> None:
+    from pipeline.confluence.live import panel
+
+    out = panel([("hammer", "long", ("trend",))], None, date(2026, 9, 25))
+    assert out == {"session": "2026-09-25", "measured": False, "tested": 0, "active": []}
+
+
+def test_a_mai_kivaltok_ugyanazok_mint_a_teljes_mulon() -> None:
+    from pipeline.confluence.live import standing
+    from pipeline.confluence.run import instrument_triggers
+
+    frame = random_walk(9, n=1200)
+    regime = {d: "calm" for d in frame["date"]}
+    empty = pd.DataFrame(columns=["date", "rule", "direction"])
+    events = instrument_triggers("CZ00009", frame, empty, regime)
+    busiest = events["date"].value_counts().index[0]
+    got = standing("CZ00009", frame[frame["date"] <= busiest].reset_index(drop=True), empty, regime, busiest)
+    assert {t for t, _, _ in got} == set(events.loc[events["date"] == busiest, "trigger"])
