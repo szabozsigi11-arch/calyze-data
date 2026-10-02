@@ -30,7 +30,7 @@ Csak kereskedési napok vannak benne: hétvégén és ünnepnapon nincs célnap.
 **30 lezárt becslés alatt nincs érték** (2. sarokkő): a cella üres, és a
 jelmagyarázat kimondja, miért.
 
-**Sávok** (a határ a felsőbe tartozik):
+**Sávok** (a határ a nagyobb eltérésű sávba tartozik: a +0,5 már enyhén jobb, a −5 már erősen rosszabb):
 
 | Eltérés | Jelölés |
 |---|---|
