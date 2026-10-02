@@ -188,3 +188,17 @@ def test_a_tezisek_hibaja_nem_allitja_meg_a_becslesek_kiertekeleset(monkeypatch)
     assert result is None
     # csak a hiba típusa, az üzenete nem
     assert errors == [("journal_resolve_failed", {"error": "RuntimeError"})]
+
+
+def test_kripto_ablak_a_rogzites_utc_napja_plusz_h_nap():
+    """`docs/tezis-kiertekeles.md`, 10.: ugyanaz, mint a 0022-es adatbázis-szabály."""
+    from datetime import UTC, date, datetime
+
+    from pipeline.journal.resolve import start_session, target_session
+
+    # Szombat késő este (UTC) rögzítve: aznap indul, nincs hétvégi ugrás.
+    s = start_session(datetime(2026, 10, 3, 23, 59, tzinfo=UTC), "24/7")
+    assert s == date(2026, 10, 3)
+    assert target_session(s, 5, "24/7") == date(2026, 10, 8)
+    # Éjfél után már a következő UTC-nap.
+    assert start_session(datetime(2026, 10, 4, 0, 0, 1, tzinfo=UTC), "24/7") == date(2026, 10, 4)

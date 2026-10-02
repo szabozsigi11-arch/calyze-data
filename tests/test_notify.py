@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from pipeline.notify import digest, session_rows
+from pipeline.notify import calendar_rows, digest, session_rows
 
 
 def latest(session: str, **extra: object) -> dict[str, object]:
@@ -44,3 +44,10 @@ def test_a_naptar_a_zaras_idopontjaval_megy():
     assert by_day["2026-11-27"].startswith("2026-11-27T18:00")  # hálaadás utáni rövidített nap, 13:00
     assert "2026-11-26" not in by_day  # hálaadás
     assert len(rows) < 400  # az adatbázis ennél többet nem fogad el
+
+
+def test_a_kripto_papirok_24_7_es_naptarat_kapnak():
+    rows = calendar_rows()
+    assert len(rows) == 50
+    assert rows[0] == {"instrument_id": "CZ00621", "calendar": "24/7"}
+    assert {r["calendar"] for r in rows} == {"24/7"}

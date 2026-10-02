@@ -126,3 +126,34 @@ def push_sessions(url: str, secret_key: str, today: date) -> int | None:
     count = int(response.json())
     log.info("sessions_pushed", sessions=count)
     return count
+
+
+def calendar_rows() -> list[dict[str, str]]:
+    """A nem NYSE-naptárú papírok (ma: a kripto, `24/7`). Ami nincs benne, az NYSE."""
+    from pipeline.universe import load_crypto_universe
+
+    crypto = load_crypto_universe()
+    return [{"instrument_id": i, "calendar": "24/7"} for i in crypto["instrument_id"]]
+
+
+def push_calendars(url: str, secret_key: str) -> int | None:
+    """A papír → naptár párok feltöltése (0022). Hiba esetén csak a státusz megy a naplóba."""
+    if not url or not secret_key:
+        return None
+    try:
+        response = requests.post(
+            f"{url.rstrip('/')}/rest/v1/rpc/set_instrument_calendars",
+            headers={"apikey": secret_key, "Authorization": f"Bearer {secret_key}"},
+            json={"p": calendar_rows()},
+            timeout=30,
+        )
+    except Exception as error:  # noqa: BLE001 — a naptár nem állíthatja meg a közzétételt
+        log.warning("calendars_failed", error=type(error).__name__)
+        return None
+    # A 404: a 0022-es migráció még nincs fent.
+    if response.status_code != 200:
+        log.warning("calendars_failed", status=response.status_code)
+        return None
+    count = int(response.json())
+    log.info("calendars_pushed", instruments=count)
+    return count
