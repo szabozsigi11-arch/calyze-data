@@ -168,3 +168,30 @@ megválasztása.
 
 **Gyors trade:** ugyanígy, de a saját belépő és kilépő árával (spec/09, 3b),
 külön blokkban, „unregistered” jelöléssel; a kalibrációba nem számít.
+
+## 10. Kripto (24/7)
+
+*Kiegészítés, rögzítve 2026-10-02-án, az első kripto-tézis előtt
+(5. fázis, E2; `docs/kripto-univerzum.md`).*
+
+A kriptónak nincs zárvatartása, ezért a „nap” UTC 00:00–24:00, és minden nap
+kereskedési nap (`24/7` naptár). Ami a 2. fejezetben a NYSE-zárás, az itt a
+nap végi 24:00 UTC.
+
+- **Kezdőnap `S`:** az az UTC-nap, amelyben a rögzítés történt. A zárása
+  (a következő 00:00 UTC) mindig a rögzítés után van, tehát a 2. fejezet
+  szabálya („az első zárás, ami a rögzítéskor vagy utána van”) ugyanazt adja.
+- **Célnap `E`:** `S` + `h` nap. Mivel minden nap kereskedési nap, ez naptári
+  nap: egy 5 napos kripto-tézis 5 napig tart, nem egy hétig, mint egy 5
+  kereskedési napos részvény-tézis. A felület a kettőt nem hasonlítja össze.
+- **Hozam:** `S` zárásától `E` zárásáig, a kripto-záróárból (osztalék
+  nincs). Ha `E`-re nincs ár, az utolsó ismert nap zár,
+  `resolution_type = delisted_or_halted`, mint a részvényeknél.
+- **Pontozás, modell, baseline:** a 3. fejezet szerint; a modell és a
+  baseline a kripto-modellé (5. fázis, E3), ugyanarra az ablakra.
+- **Kalibráció:** a kripto-tézis ugyanabba a kalibrációba számít, mert a
+  kalibráció a felhasználó valószínűség-ítéletét méri, nem az eszközt. A
+  rangsor mércéje (BSS) tézisenként a saját ablakának baseline-jához
+  viszonyít, így az eszközosztály nem torzítja.
+- **„Ma zárul a tézised”:** a kripto-tézisnél a nap az UTC-nap, a zárás
+  24:00 UTC.
