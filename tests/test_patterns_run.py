@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from pipeline.patterns import candles
 from pipeline.patterns.run import build, directions_of, display_payload
 
 
@@ -42,7 +43,10 @@ def test_a_bontasok_kulon_sorok() -> None:
     signals, results = build(prices())
     rules = set(signals["rule"])
     # A gyertyamintáknál az összesítés és a kontextus-bontás is megvan.
-    candle = [r for r in rules if "|" not in r and not r.startswith(("sr_", "hs_"))]
+    # Csak a valódi gyertyaminták (a `candles.PATTERNS` kulcsai): a 2. rész
+    # szabályai (szerkezettörés, kitörés…) is „|” nélküliek, de nem kapnak
+    # szint-bontást. A sorrend rögzített, hogy a teszt ne függjön a halmaz bejárásától.
+    candle = sorted(r for r in rules if r in candles.PATTERNS)
     assert candle, "véletlen bolyongáson is kell lennie gyertyamintának"
     name = candle[0]
     assert {f"{name}|at_level", f"{name}|none"} & rules
