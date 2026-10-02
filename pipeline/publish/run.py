@@ -774,6 +774,50 @@ def build_news_arena(table: pd.DataFrame | None, now: datetime) -> dict[str, obj
     }
 
 
+def build_lab(table: pd.DataFrame | None, now: datetime) -> dict[str, object]:
+    """A labor rácsa (`docs/labor.md`). Minden pont kimegy, a gyengék is."""
+    rows: list[dict[str, object]] = []
+    if table is not None and not table.empty:
+        for r in table.to_dict("records"):
+            needed = r.get("observations_needed")
+            rows.append(
+                {
+                    "universe": r["universe"],
+                    "horizon": int(r["horizon"]),
+                    "threshold": float(r["threshold"]),
+                    "cost": float(r["cost"]),
+                    "periods": int(r["periods"]),
+                    "first": r["first"],
+                    "last": r["last"],
+                    **{
+                        k: _num(r[k])
+                        for k in (
+                            "ann_return",
+                            "ann_vol",
+                            "max_drawdown",
+                            "bh_ann_return",
+                            "bh_ann_vol",
+                            "bh_max_drawdown",
+                            "share_better",
+                            "avg_positions",
+                            "excess_per_period",
+                            "n_eff",
+                            "p_value_fdr",
+                        )
+                    },
+                    "cash_periods": int(r["cash_periods"]),
+                    "verdict": r["verdict"],
+                    "observations_needed": None if needed is None or pd.isna(needed) else int(needed),
+                    "curve": json.loads(r["curve"]) if isinstance(r["curve"], str) else [],
+                }
+            )
+    return {
+        "generated_at": now.astimezone(UTC).replace(microsecond=0).isoformat(),
+        "n_tests": int(table["n_tests"].iloc[0]) if table is not None and not table.empty else 0,
+        "rows": rows,
+    }
+
+
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
     session = last_closed_session(now)
     years = sorted({2026, session.year})
@@ -911,7 +955,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         )
     )
     files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
-    from pipeline.model.run import ARENA_BACKTEST_PATH
+    from pipeline.model.run import ARENA_BACKTEST_PATH, LAB_PATH
+
+    files.append(("lab.json", _dumps(build_lab(_read_table(storage, LAB_PATH), now))))
     from pipeline.newsarena.run import RESULTS_PATH as NEWS_ARENA_PATH
 
     files.append(("news-arena.json", _dumps(build_news_arena(_read_table(storage, NEWS_ARENA_PATH), now))))

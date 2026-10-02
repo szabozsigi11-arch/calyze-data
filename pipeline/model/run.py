@@ -224,6 +224,8 @@ def task_challengers(storage: Storage, now: datetime) -> dict[str, object]:
 
 #: A modell-aréna backtestjének eredménye (docs/modell-arena.md, 3.).
 ARENA_BACKTEST_PATH = "arena/models_backtest.parquet"
+#: A labor rácsa (docs/labor.md).
+LAB_PATH = "arena/lab.parquet"
 
 
 def task_arena_backtest(storage: Storage, now: datetime) -> dict[str, object]:
@@ -236,11 +238,23 @@ def task_arena_backtest(storage: Storage, now: datetime) -> dict[str, object]:
     records = arena_backtest_records(scored)
     if not records.empty:
         _write_table(storage, ARENA_BACKTEST_PATH, records)
+
+    # A labor (docs/labor.md) ugyanezekből a mintán kívüli becslésekből: az
+    # lgbm-core sorai, a teljes 144 pontos rács.
+    from pipeline.model.lab import run_lab
+    from pipeline.universe import load_universe
+
+    segments = dict(zip(load_universe()["instrument_id"], load_universe()["segment"], strict=True))
+    lab = run_lab(scored[scored["family"] == MODEL_FAMILY] if not scored.empty else scored, segments)
+    if not lab.empty:
+        lab = lab.assign(curve=[json.dumps(c, separators=(",", ":")) for c in lab["curve"]])
+        _write_table(storage, LAB_PATH, lab)
     # A naplóba csak darabszám: mért érték nem.
     return {
         "last_session": last.isoformat(),
         "rows_scored": len(scored),
         "records": len(records),
+        "lab_points": len(lab),
         "families": sorted(scored["family"].unique()) if not scored.empty else [],
     }
 
