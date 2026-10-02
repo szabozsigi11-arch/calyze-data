@@ -16,7 +16,8 @@ on:
         default: daily
 
 permissions:
-  contents: read
+  # A napi deviza-lenyomat (hash) commitolásához írás kell a repóba.
+  contents: write
 
 concurrency:
   group: fx
@@ -36,3 +37,31 @@ jobs:
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           MODE: ${{ inputs.mode || 'daily' }}
         run: uv run python -m pipeline.ingest.fx --mode "$MODE"
+      - name: Napi deviza-becslés (a fixálás után 6 órán belül)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.fx.forecast --manifest-dir manifests-fx
+      - name: A napi deviza-lenyomat commitolása
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p manifests-fx
+          git add manifests-fx
+          if git diff --cached --quiet; then
+            echo "nincs uj lenyomat"
+            exit 0
+          fi
+          git commit -m "fx forecast manifest"
+          git pull --rebase --autostash
+          git push
+      - name: A lejárt deviza-becslések és -tézisek kiértékelése
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.fx.resolve
+      - name: Deviza megjelenítési fájlok
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.fx.publish

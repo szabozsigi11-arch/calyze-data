@@ -44,3 +44,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: uv run python -m pipeline.timemachine.archive --kind crypto
+      - name: Deviza-időgép (a deviza-lenyomatok ellenőrzésével)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.timemachine.archive --kind fx

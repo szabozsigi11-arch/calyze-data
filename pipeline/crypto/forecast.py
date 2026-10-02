@@ -16,6 +16,7 @@ import hashlib
 import json
 import pickle
 import sys
+from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
@@ -76,8 +77,18 @@ def load_models(storage: Storage) -> dict[int, dict[str, object]]:
 
 
 def build(
-    features: pd.DataFrame, prices: pd.DataFrame, day: date, models: dict, made_at: datetime
+    features: pd.DataFrame,
+    prices: pd.DataFrame,
+    day: date,
+    models: dict,
+    made_at: datetime,
+    family: str = FAMILY,
+    version: str = VERSION,
+    calendar: str = CALENDAR,
+    target: Callable[[date, int], date] | None = None,
 ) -> pd.DataFrame:
+    """A napi becslés-sorok. A deviza a saját családjával és TARGET-célnappal hívja."""
+    target_of = target or (lambda d, h: d + timedelta(days=h))
     today = features[(features["date"] == day) & (features["history_sessions"] >= MIN_HISTORY_SESSIONS)]
     if today.empty:
         raise RuntimeError(f"Nincs kripto feature-sor a(z) {day} napra.")
@@ -94,30 +105,39 @@ def build(
         out["baseline_id"] = "naive"
         out["momentum_prob"] = baselines["momentum"].predict(today)["prob_up"].to_numpy()
         out["session"] = day
-        # 24/7: a horizont vége naptári nap (tezis-kiertekeles.md, 10.).
-        out["target_session"] = day + timedelta(days=horizon)
+        # 24/7: a horizont vége naptári nap (tezis-kiertekeles.md, 10.); devizán TARGET-nap.
+        out["target_session"] = target_of(day, horizon)
         out["made_at"] = pd.Timestamp(made_at)
-        out["model_family"] = FAMILY
-        out["model_version"] = VERSION
-        out["calendar"] = CALENDAR
+        out["model_family"] = family
+        out["model_version"] = version
+        out["calendar"] = calendar
         out["regime"] = today["regime"].to_numpy()
         c = np.array([close.get(i, np.nan) for i in out["instrument_id"]])
         out["close"] = c
         out["price_low"] = c * np.exp(out["band_low"].to_numpy())
         out["price_high"] = c * np.exp(out["band_high"].to_numpy())
         out["expected_price"] = c * np.exp(out["expected_return"].to_numpy())
-        out["forecast_id"] = [forecast_id(i, day, horizon, VERSION) for i in out["instrument_id"]]
+        out["forecast_id"] = [forecast_id(i, day, horizon, version) for i in out["instrument_id"]]
         rows.append(out)
     return pd.concat(rows, ignore_index=True).drop(columns=["prob_up_raw"], errors="ignore")
 
 
-def manifest_entry(day: date, package: bytes, frame: pd.DataFrame, made_at: datetime, universe: int) -> dict:
+def manifest_entry(
+    day: date,
+    package: bytes,
+    frame: pd.DataFrame,
+    made_at: datetime,
+    universe: int,
+    family: str = FAMILY,
+    version: str = VERSION,
+    calendar: str = CALENDAR,
+) -> dict:
     return {
         "session": day.isoformat(),
-        "calendar": CALENDAR,
+        "calendar": calendar,
         "made_at": made_at.isoformat(timespec="seconds"),
-        "model_family": FAMILY,
-        "model_version": VERSION,
+        "model_family": family,
+        "model_version": version,
         "horizons": sorted(int(h) for h in frame["horizon"].unique()),
         "instruments": int(frame["instrument_id"].nunique()),
         "universe": universe,

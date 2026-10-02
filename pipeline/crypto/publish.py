@@ -21,13 +21,11 @@ from pathlib import Path
 import pandas as pd
 
 from pipeline import log as logging_setup
-from pipeline.calendar import last_closed_session
+from pipeline.assetspec import AssetSpec
+from pipeline.assetspec import crypto as crypto_spec
 from pipeline.config import load_settings
-from pipeline.crypto.features import CALENDAR, load_crypto_prices
-from pipeline.crypto.model import BACKTEST_PATH, FAMILY, VERSION
-from pipeline.crypto.resolve import FIRST_YEAR, LIVE_PATH, load_forecasts, load_outcomes
+from pipeline.crypto.resolve import load_forecasts, load_outcomes
 from pipeline.features.run import _read_table
-from pipeline.ingest.crypto import CRYPTO_HISTORY_START
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.publish.record import build_record
 from pipeline.publish.run import (
@@ -39,14 +37,9 @@ from pipeline.publish.run import (
     build_instrument,
     screener_row,
 )
-from pipeline.universe import active_on, load_crypto_universe
+from pipeline.universe import active_on
 
 log = logging_setup.get_logger(__name__)
-
-PREFIX = "crypto"
-EXPORT_PREFIX = "record-crypto"
-#: A papír-nézet chartja ennyi napot mutat (a részvényeknél 250 session ≈ 1 év).
-HISTORY_DAYS = 365
 
 
 def _latest(
@@ -56,6 +49,7 @@ def _latest(
     universe: int,
     first_live: str | None,
     now: datetime,
+    spec: AssetSpec,
 ) -> dict[str, object]:
     resolved: dict[str, object] = {"count": 0}
     if not outcomes.empty and "resolved_at" in outcomes:
@@ -73,8 +67,8 @@ def _latest(
     return {
         "generated_at": now.isoformat(),
         "session": day,
-        "calendar": CALENDAR,
-        "model": f"{FAMILY} {VERSION}",
+        "calendar": spec.calendar,
+        "model": f"{spec.family} {spec.version}",
         "regime": regime,
         "instruments_with_forecast": int(today["instrument_id"].nunique()) if not today.empty else 0,
         "universe": universe,
@@ -84,12 +78,18 @@ def _latest(
     }
 
 
-def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
-    last = last_closed_session(now, CALENDAR)
-    universe = active_on(load_crypto_universe(), now.astimezone(UTC).date())
-    prices = load_crypto_prices(storage, list(range(CRYPTO_HISTORY_START.year, last.year + 1)))
-    forecasts = load_forecasts(storage, list(range(FIRST_YEAR, last.year + 1)))
-    outcomes = load_outcomes(storage, list(range(FIRST_YEAR, last.year + 1)))
+def run(
+    storage: Storage, now: datetime, dry_run: bool = False, spec: AssetSpec | None = None
+) -> dict[str, object]:
+    """Az eszközosztály megjelenítési fájljai; alapból a kriptóé (`pipeline.assetspec`)."""
+    spec = spec or crypto_spec()
+    prefix, export_prefix, calendar = spec.display_prefix, spec.export_prefix, spec.calendar
+    last = spec.last_day(now)
+    universe = active_on(spec.load_universe(), now.astimezone(UTC).date())
+    prices = spec.load_prices(storage, list(range(spec.history_start_year, last.year + 1)))
+    years = list(range(spec.first_year, last.year + 1))
+    forecasts = load_forecasts(storage, years, spec.forecasts_prefix)
+    outcomes = load_outcomes(storage, years, spec.outcomes_prefix)
 
     if forecasts.empty:
         day, today, first_live = str(last), pd.DataFrame(columns=["instrument_id"]), None
@@ -106,26 +106,26 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     def add(path: str, payload: object) -> None:
         files.append((path, _dumps(payload), "application/json"))
 
-    add(f"{PREFIX}/latest.json", _latest(day, today, outcomes, len(universe), first_live, now))
+    add(f"{prefix}/latest.json", _latest(day, today, outcomes, len(universe), first_live, now, spec))
     index = build_index(universe, today, prices)
-    add(f"{PREFIX}/instruments.json", [{**row, "calendar": CALENDAR} for row in index])
+    add(f"{prefix}/instruments.json", [{**row, "calendar": calendar} for row in index])
 
-    live = _read_table(storage, LIVE_PATH)
-    backtest = _read_table(storage, BACKTEST_PATH)
+    live = _read_table(storage, spec.live_path)
+    backtest = _read_table(storage, spec.backtest_path)
     add(
-        f"{PREFIX}/evidence.json",
+        f"{prefix}/evidence.json",
         {
             "generated_at": now.isoformat(),
-            "calendar": CALENDAR,
+            "calendar": calendar,
             "live_from": first_live,
             "live": build_arena(live if live is not None else pd.DataFrame()),
             "backtest": build_arena(backtest if backtest is not None else pd.DataFrame()),
         },
     )
 
-    existing = set() if dry_run else set(storage.list(DISPLAY_BUCKET, EXPORT_PREFIX))
-    record, record_files = build_record(outcomes, forecasts, universe, existing, now, EXPORT_PREFIX)
-    add(f"{PREFIX}/record.json", record)
+    existing = set() if dry_run else set(storage.list(DISPLAY_BUCKET, export_prefix))
+    record, record_files = build_record(outcomes, forecasts, universe, existing, now, export_prefix)
+    add(f"{prefix}/record.json", record)
     files.extend(record_files)
 
     by_price = {i: g for i, g in prices.groupby("instrument_id")}
@@ -142,14 +142,14 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
             "id": iid,
             "ticker": row["ticker"],
             "name": row["name"],
-            "asset_class": "crypto",
+            "asset_class": spec.name,
             "sector": None,
-            "exchange_calendar": CALENDAR,
+            "exchange_calendar": calendar,
         }
         bars = by_price.get(iid, prices.iloc[0:0])
         payload = build_instrument(
             meta=meta,
-            prices=bars.tail(HISTORY_DAYS),
+            prices=bars.tail(spec.history_days),
             forecasts=by_today.get(iid, pd.DataFrame()),
             history=by_history.get(iid, pd.DataFrame(columns=["session", "horizon"])),
             outcomes=by_outcome.get(iid, pd.DataFrame()),
@@ -166,18 +166,18 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
                 by_outcome.get(iid, pd.DataFrame(columns=["brier", "baseline_brier"])),
             )
         )
-    add(f"{PREFIX}/screener.json", {"session": day, "rows": screener})
+    add(f"{prefix}/screener.json", {"session": day, "rows": screener})
 
     if dry_run:
         return {"files": len(files), "status": "dry_run"}
     storage.ensure_private_bucket(DISPLAY_BUCKET)
     for path, blob, content_type in files:
         storage.upload(DISPLAY_BUCKET, path, blob, content_type)
-    log.info("crypto_publish_done", files=len(files), day=day)
+    log.info("asset_publish_done", asset=spec.name, files=len(files), day=day)
     return {"files": len(files), "day": day, "status": "published"}
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, spec: AssetSpec | None = None) -> int:
     parser = argparse.ArgumentParser(description="Calyze kripto megjelenítési fájlok")
     parser.add_argument("--local", type=Path)
     parser.add_argument("--dry-run", action="store_true")
@@ -191,7 +191,7 @@ def main(argv: list[str] | None = None) -> int:
             log.error("storage_not_configured")
             return 2
         storage = SupabaseStorage(settings.supabase_url, settings.supabase_secret_key)
-    print(json.dumps(run(storage, datetime.now(UTC), args.dry_run), indent=2, default=str))
+    print(json.dumps(run(storage, datetime.now(UTC), args.dry_run, spec), indent=2, default=str))
     return 0
 
 

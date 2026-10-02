@@ -48,6 +48,9 @@ MANIFESTS = REPO / "manifests"
 #: A kripto saját lenyomatai és archívuma (5. fázis, E4).
 CRYPTO_MANIFESTS = REPO / "manifests-crypto"
 CRYPTO_ARCHIVE_PREFIX = "archive-crypto"
+#: A deviza saját lenyomatai és archívuma (6. fázis, F4).
+FX_MANIFESTS = REPO / "manifests-fx"
+FX_ARCHIVE_PREFIX = "archive-fx"
 PUBLIC_REPO_URL = "https://github.com/szabozsigi11-arch/calyze-data"
 ARCHIVE_PREFIX = "archive"
 INDEX_PATH = f"{ARCHIVE_PREFIX}/index.json"
@@ -176,7 +179,13 @@ def run(
     storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = False, kind: str = "equity"
 ) -> dict[str, object]:
     crypto = kind == "crypto"
-    if crypto:
+    if kind == "fx":
+        from pipeline.fx.forecast import package_path as fx_package_path
+        from pipeline.universe import load_fx_universe
+
+        universe = load_fx_universe()
+        manifests_root, prefix, path_of = FX_MANIFESTS, FX_ARCHIVE_PREFIX, fx_package_path
+    elif crypto:
         from pipeline.crypto.forecast import package_path as crypto_package_path
         from pipeline.universe import load_crypto_universe
 
@@ -189,7 +198,9 @@ def run(
     # archiválhatjuk, ha a most kint lévő összefoglaló ugyanarra a napra szól —
     # egy korábbi napra a mai verdictet írni utólagos bölcsesség lenne. A
     # kriptónál ez a kripto-összefoglaló.
-    summary_now = published_summary(storage, "crypto/latest.json" if crypto else "latest.json")
+    summary_now = published_summary(
+        storage, f"{kind}/latest.json" if kind in ("crypto", "fx") else "latest.json"
+    )
     index: list[dict[str, object]] = []
     written = kept = 0
 
@@ -253,7 +264,9 @@ def main() -> None:
     parser.add_argument("--local", type=Path, default=None, help="helyi tár a Supabase helyett")
     parser.add_argument("--dry-run", action="store_true", help="ellenőriz és épít, de nem ír")
     parser.add_argument("--rebuild", action="store_true", help="a meglévő archívumokat is újraírja")
-    parser.add_argument("--kind", choices=["equity", "crypto"], default="equity", help="melyik eszközosztály")
+    parser.add_argument(
+        "--kind", choices=["equity", "crypto", "fx"], default="equity", help="melyik eszközosztály"
+    )
     args = parser.parse_args()
 
     logging_setup.configure()
