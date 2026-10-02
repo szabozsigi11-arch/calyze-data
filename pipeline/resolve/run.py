@@ -322,6 +322,36 @@ def run(
     if journal is not None:
         resolve_journal(journal, prices, actions, forecasts, last)
 
+    # A modell-aréna (docs/modell-arena.md). Külön csomagból, külön táblába;
+    # ha elbukik, a fő kiértékelés ettől nem marad el.
+    arena_resolved = 0
+    try:
+        from pipeline.resolve import arena as model_arena
+
+        arena_forecasts = model_arena.load_arena_forecasts(storage, years)
+        if not arena_forecasts.empty:
+            known_arena = model_arena.load_arena_outcomes(storage, years)
+            done_arena = set(known_arena["forecast_id"]) if not known_arena.empty else set()
+            fresh_arena = resolve_due(
+                arena_forecasts[~arena_forecasts["forecast_id"].isin(done_arena)],
+                prices,
+                actions,
+                last,
+                now.astimezone(UTC),
+            )
+            all_arena = (
+                pd.concat([known_arena, fresh_arena], ignore_index=True)
+                if not fresh_arena.empty
+                else known_arena
+            )
+            if not fresh_arena.empty:
+                model_arena.write_arena_outcomes(storage, all_arena)
+            if not all_arena.empty:
+                model_arena.write_models_live(storage, model_arena.models_live(all_arena, all_outcomes))
+            arena_resolved = len(all_arena)
+    except Exception as error:  # noqa: BLE001 — a fő kiértékelés fontosabb
+        log.warning("model_arena_failed", error=type(error).__name__)
+
     open_count = int(len(forecasts) - len(all_outcomes))
     summary: dict[str, object] = {
         "last_session": last.isoformat(),
@@ -329,6 +359,7 @@ def run(
         "resolved_total": len(all_outcomes),
         "open": open_count,
         "live_records": len(arena),
+        "arena_resolved": arena_resolved,
     }
     if not arena.empty:
         headline = arena[(arena["metric"] == "direction_accuracy") & (arena["regime"] == "all")]

@@ -49,6 +49,7 @@ from pipeline.model.backtest import (
 from pipeline.model.baselines import add_sector_return, fit_baselines
 from pipeline.model.config import CALIBRATION_SESSIONS, HORIZONS, MODEL_FAMILY, MODEL_VERSION, SEED
 from pipeline.model.dataset import add_targets, feature_columns, trainable
+from pipeline.model.families import FAMILY_VERSION, fit_challengers
 from pipeline.model.predictor import fit_horizon
 
 log = logging_setup.get_logger(__name__)
@@ -127,6 +128,20 @@ def task_train(storage: Storage, now: datetime) -> dict[str, object]:
         calibration = usable[usable["date"].isin(calib_dates)]
         model = fit_horizon(train, calibration, columns, horizon)
         baselines = fit_baselines(train, horizon)
+
+        # A modell-aréna kihívói ugyanazon az ablakon (docs/modell-arena.md).
+        # Ha elbuknak, az lgbm-core mentése ettől nem marad el.
+        try:
+            for family, challenger in fit_challengers(train, calibration, columns, horizon, model).items():
+                storage.upload(
+                    RAW_BUCKET,
+                    f"models/{family}/{FAMILY_VERSION}/h{horizon}.pkl",
+                    pickle.dumps(challenger),
+                    "application/octet-stream",
+                )
+            log.info("challengers_trained", horizon=horizon)
+        except Exception as error:  # noqa: BLE001 — a fő modell fontosabb
+            log.warning("challengers_failed", horizon=horizon, error=type(error).__name__)
 
         storage.upload(
             RAW_BUCKET,

@@ -81,6 +81,14 @@ def target_session(session: date, horizon: int, sessions: list[date]) -> date | 
     return sessions[i + horizon] if i + horizon < len(sessions) else None
 
 
+#: A modell-aréna kihívóinak csomagja (`docs/modell-arena.md`, 2.): külön a fő csomagtól.
+ARENA_PREFIX = "forecasts-arena"
+
+
+def arena_package_path(session: date) -> str:
+    return f"{ARENA_PREFIX}/{session.year}/{session.isoformat()}.parquet"
+
+
 def package_path(session: date) -> str:
     return f"{FORECAST_PREFIX}/{session.year}/{session.isoformat()}.parquet"
 
@@ -134,6 +142,58 @@ def build_forecasts(
 
     frame = pd.concat(rows, ignore_index=True)
     return frame.drop(columns=["prob_up_raw"], errors="ignore")
+
+
+def build_challenger_forecasts(
+    features: pd.DataFrame,
+    session: date,
+    challengers: dict[str, dict[int, object]],
+    main: pd.DataFrame,
+    made_at: datetime,
+) -> pd.DataFrame:
+    """A kihívó családok becslései ugyanarra a napra és papírokra, mint a fő csomag.
+
+    A baseline, a célnap és a rezsim a fő csomagból jön, soronként párosítva:
+    így a kihívó és az `lgbm-core` ugyanazon a soron, ugyanahhoz a baseline-hoz
+    mérhető (`docs/modell-arena.md`, 2.).
+    """
+    today = features[features["date"] == session]
+    today = today[today["history_sessions"] >= MIN_HISTORY_SESSIONS]
+    keys = main[["instrument_id", "horizon", "baseline_prob", "target_session", "regime"]]
+    rows = []
+    for family, by_horizon in sorted(challengers.items()):
+        for horizon, model in sorted(by_horizon.items()):
+            out = model.predict(today)  # type: ignore[attr-defined]
+            out["horizon"] = horizon
+            out = out.merge(keys, on=["instrument_id", "horizon"], how="inner")
+            version = str(getattr(model, "version", "v1"))
+            out["session"] = session
+            out["made_at"] = pd.Timestamp(made_at)
+            out["model_family"] = family
+            out["model_version"] = version
+            out["forecast_id"] = [
+                forecast_id(i, session, horizon, f"{family}-{version}") for i in out["instrument_id"]
+            ]
+            rows.append(out)
+    if not rows:
+        return pd.DataFrame()
+    return pd.concat(rows, ignore_index=True).drop(columns=["date"], errors="ignore")
+
+
+def load_challengers(storage: Storage) -> dict[str, dict[int, object]]:
+    """A kihívók betanított modelljei. Ami hiányzik, az kimarad (a napon „not available”)."""
+    from pipeline.model.families import FAMILY_VERSION
+
+    out: dict[str, dict[int, object]] = {}
+    for family in ("ar-linear", "mlp-core", "ensemble"):
+        models = {}
+        for horizon in HORIZONS:
+            blob = storage.download(RAW_BUCKET, f"models/{family}/{FAMILY_VERSION}/h{horizon}.pkl")
+            if blob is not None:
+                models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
+        if len(models) == len(HORIZONS):
+            out[family] = models
+    return out
 
 
 def load_models(storage: Storage) -> dict[int, object]:
@@ -381,7 +441,30 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         "application/json",
     )
     log.info("forecast_saved", **entry)
-    return {**entry, "status": "saved"}
+    result: dict[str, object] = {**entry, "status": "saved"}
+
+    # A modell-aréna kihívói. Bármi baj van velük, a fő csomag már elmentődött,
+    # és a napi futás ettől nem bukik el: a nap a kihívóknál „not available”.
+    try:
+        challengers = load_challengers(storage)
+        arena = build_challenger_forecasts(features, session, challengers, frame, now.astimezone(UTC))
+        if arena.empty:
+            result["arena"] = {"status": "not_available", "reason": "no_trained_challengers"}
+        else:
+            arena_package = _package_bytes(arena)
+            arena_entry = manifest_entry(session, arena_package, arena, now.astimezone(UTC), len(universe))
+            arena_entry["model_family"] = "arena"
+            arena_entry["model_version"] = "+".join(
+                f"{f} {v}"
+                for f, v in sorted(set(zip(arena["model_family"], arena["model_version"], strict=True)))
+            )
+            storage.upload(RAW_BUCKET, arena_package_path(session), arena_package, "application/octet-stream")
+            result["arena"] = {**arena_entry, "status": "saved"}
+            log.info("arena_forecast_saved", forecasts=len(arena), families=arena["model_family"].nunique())
+    except Exception as error:  # noqa: BLE001 — a fő becslés fontosabb
+        log.warning("arena_forecast_failed", error=type(error).__name__)
+        result["arena"] = {"status": "not_available", "reason": type(error).__name__}
+    return result
 
 
 def _package_bytes(frame: pd.DataFrame) -> bytes:
@@ -418,7 +501,15 @@ def main(argv: list[str] | None = None) -> int:
         session = date.fromisoformat(str(result["session"]))
         out = args.manifest_dir / str(session.year)
         out.mkdir(parents=True, exist_ok=True)
-        (out / f"{session.isoformat()}.json").write_text(json.dumps(result, indent=2) + "\n")
+        main_entry = {k: v for k, v in result.items() if k != "arena"}
+        (out / f"{session.isoformat()}.json").write_text(json.dumps(main_entry, indent=2) + "\n")
+        # A kihívók lenyomata külön mappába: a fő manifesteket olvasó kódok
+        # (állapotoldal, időgép) így nem keverik a kettőt.
+        arena = result.get("arena")
+        if isinstance(arena, dict) and arena.get("status") == "saved":
+            arena_dir = args.manifest_dir.parent / "manifests-arena" / str(session.year)
+            arena_dir.mkdir(parents=True, exist_ok=True)
+            (arena_dir / f"{session.isoformat()}.json").write_text(json.dumps(arena, indent=2) + "\n")
     print(json.dumps(result, indent=2, default=str))
     return 0
 
