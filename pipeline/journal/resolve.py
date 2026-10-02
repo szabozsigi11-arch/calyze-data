@@ -80,8 +80,13 @@ def resolve_theses(
     series: dict[str, pd.Series],
     forecasts: pd.DataFrame,
     last_session: date,
+    calendar_code: str = "XNYS",
 ) -> tuple[dict[str, dict[str, object]], dict[str, int]]:
     """Kiértékeli a lejárt téziseket.
+
+    A `calendar_code` a papírok naptára: a kripto-futás `24/7`-tel hívja, a
+    saját árfolyamaival (`docs/tezis-kiertekeles.md`, 10.). Amelyik tézis
+    papírjára nincs ár ebben a futásban, az kimarad, és a másik futás zárja le.
 
     Visszaad: azonosító → a kiírandó mezők, és a darabszámok a naplóhoz.
     """
@@ -95,8 +100,8 @@ def resolve_theses(
     counts = {"open": 0, "not_due": 0, "no_price": 0, "resolved": 0, "no_model": 0}
     for t in theses:
         counts["open"] += 1
-        start = start_session(t.created_at)
-        end_day = target_session(start, t.horizon)
+        start = start_session(t.created_at, calendar_code)
+        end_day = target_session(start, t.horizon, calendar_code)
         if end_day > last_session:
             counts["not_due"] += 1
             continue
@@ -216,9 +221,10 @@ def run(
     series: dict[str, pd.Series],
     forecasts: pd.DataFrame,
     last_session: date,
+    calendar_code: str = "XNYS",
 ) -> dict[str, int]:
-    theses = store.open_theses()
-    outcomes, counts = resolve_theses(theses, series, forecasts, last_session)
+    theses = [t for t in store.open_theses() if t.instrument_id in series]
+    outcomes, counts = resolve_theses(theses, series, forecasts, last_session, calendar_code)
     written = sum(1 for thesis_id, row in outcomes.items() if store.write_outcome(thesis_id, row))
     counts["written"] = written
     counts["write_failed"] = len(outcomes) - written

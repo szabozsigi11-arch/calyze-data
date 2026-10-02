@@ -39,3 +39,8 @@ jobs:
         # Ha egy csomag lenyomata nem egyezik a commitolttal, ez a lépés
         # elbukik — és a futás pirosan jelzi, nem némán lép tovább.
         run: uv run python -m pipeline.timemachine.archive
+      - name: Kripto-időgép (a kripto-lenyomatok ellenőrzésével)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.timemachine.archive --kind crypto

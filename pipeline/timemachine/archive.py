@@ -45,6 +45,9 @@ log = logging_setup.get_logger(__name__)
 
 REPO = Path(__file__).resolve().parents[2]
 MANIFESTS = REPO / "manifests"
+#: A kripto saját lenyomatai és archívuma (5. fázis, E4).
+CRYPTO_MANIFESTS = REPO / "manifests-crypto"
+CRYPTO_ARCHIVE_PREFIX = "archive-crypto"
 PUBLIC_REPO_URL = "https://github.com/szabozsigi11-arch/calyze-data"
 ARCHIVE_PREFIX = "archive"
 INDEX_PATH = f"{ARCHIVE_PREFIX}/index.json"
@@ -163,24 +166,36 @@ def load_manifests(root: Path = MANIFESTS) -> list[tuple[Path, dict[str, object]
     return items
 
 
-def published_summary(storage: Storage) -> dict[str, object] | None:
-    """A most kint lévő napi összefoglaló (`latest.json`), ha van."""
-    blob = storage.download(DISPLAY_BUCKET, "latest.json")
+def published_summary(storage: Storage, path: str = "latest.json") -> dict[str, object] | None:
+    """A most kint lévő napi összefoglaló, ha van."""
+    blob = storage.download(DISPLAY_BUCKET, path)
     return None if blob is None else json.loads(blob)
 
 
-def run(storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = False) -> dict[str, object]:
-    universe = load_universe()
+def run(
+    storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = False, kind: str = "equity"
+) -> dict[str, object]:
+    crypto = kind == "crypto"
+    if crypto:
+        from pipeline.crypto.forecast import package_path as crypto_package_path
+        from pipeline.universe import load_crypto_universe
+
+        universe = load_crypto_universe()
+        manifests_root, prefix, path_of = CRYPTO_MANIFESTS, CRYPTO_ARCHIVE_PREFIX, crypto_package_path
+    else:
+        universe = load_universe()
+        manifests_root, prefix, path_of = MANIFESTS, ARCHIVE_PREFIX, package_path
     # A verdict nincs a becslés-csomagban: az a mérésből jön. Csak akkor
     # archiválhatjuk, ha a most kint lévő összefoglaló ugyanarra a napra szól —
-    # egy korábbi napra a mai verdictet írni utólagos bölcsesség lenne.
-    summary_now = published_summary(storage)
+    # egy korábbi napra a mai verdictet írni utólagos bölcsesség lenne. A
+    # kriptónál ez a kripto-összefoglaló.
+    summary_now = published_summary(storage, "crypto/latest.json" if crypto else "latest.json")
     index: list[dict[str, object]] = []
     written = kept = 0
 
-    for path, manifest in load_manifests():
+    for path, manifest in load_manifests(manifests_root):
         session = str(manifest["session"])
-        target = f"{ARCHIVE_PREFIX}/{session}.json"
+        target = f"{prefix}/{session}.json"
         commit = adding_commit(path)
 
         existing = None if rebuild else storage.download(DISPLAY_BUCKET, target)
@@ -188,7 +203,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = 
             archive = json.loads(existing)
             kept += 1
         else:
-            blob = storage.download(RAW_BUCKET, package_path(date.fromisoformat(session)))
+            blob = storage.download(RAW_BUCKET, path_of(date.fromisoformat(session)))
             if blob is None:
                 log.warning("archive_package_missing", session=session)
                 continue
@@ -224,7 +239,7 @@ def run(storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = 
     if not dry_run:
         storage.upload(
             DISPLAY_BUCKET,
-            INDEX_PATH,
+            f"{prefix}/index.json",
             json.dumps({"sessions": index}, separators=(",", ":"), default=str).encode(),
             "application/json",
         )
@@ -238,6 +253,7 @@ def main() -> None:
     parser.add_argument("--local", type=Path, default=None, help="helyi tár a Supabase helyett")
     parser.add_argument("--dry-run", action="store_true", help="ellenőriz és épít, de nem ír")
     parser.add_argument("--rebuild", action="store_true", help="a meglévő archívumokat is újraírja")
+    parser.add_argument("--kind", choices=["equity", "crypto"], default="equity", help="melyik eszközosztály")
     args = parser.parse_args()
 
     logging_setup.configure()
@@ -247,7 +263,7 @@ def main() -> None:
     else:
         settings = load_settings()
         storage = SupabaseStorage(settings.supabase_url or "", settings.supabase_secret_key or "")
-    result = run(storage, datetime.now(UTC), dry_run=args.dry_run, rebuild=args.rebuild)
+    result = run(storage, datetime.now(UTC), dry_run=args.dry_run, rebuild=args.rebuild, kind=args.kind)
     json.dump(result, sys.stdout, indent=2, default=str)
     sys.stdout.write("\n")
 

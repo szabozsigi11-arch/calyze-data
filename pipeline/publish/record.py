@@ -125,7 +125,7 @@ def _month(value: object) -> str:
 
 
 def exports(
-    data: pd.DataFrame, existing: set[str], now: datetime
+    data: pd.DataFrame, existing: set[str], now: datetime, prefix: str = EXPORT_PREFIX
 ) -> tuple[list[dict[str, object]], list[tuple[str, bytes, str]]]:
     """A havi CSV és Parquet: a jegyzék mindig teljes, fájl csak ahol kell.
 
@@ -144,8 +144,8 @@ def exports(
     index: list[dict[str, object]] = []
     files: list[tuple[str, bytes, str]] = []
     for month, part in data.groupby(months, sort=True):
-        csv_path = f"{EXPORT_PREFIX}/{month}.csv"
-        parquet_path = f"{EXPORT_PREFIX}/{month}.parquet"
+        csv_path = f"{prefix}/{month}.csv"
+        parquet_path = f"{prefix}/{month}.parquet"
         index.append({"month": month, "rows": len(part), "csv": csv_path, "parquet": parquet_path})
         if month in fresh or csv_path not in existing or parquet_path not in existing:
             table = part[EXPORT_COLUMNS].reset_index(drop=True)
@@ -163,12 +163,17 @@ def build_record(
     universe: pd.DataFrame,
     existing: set[str],
     now: datetime,
+    prefix: str = EXPORT_PREFIX,
 ) -> tuple[dict[str, object], list[tuple[str, bytes, str]]]:
-    """A `record.json` és a hozzá tartozó letölthető fájlok."""
+    """A `record.json` és a hozzá tartozó letölthető fájlok.
+
+    A kripto a saját mappájába ír (`record-crypto/`), hogy a havi fájlok ne
+    írják felül a részvényekét.
+    """
     data = enrich(outcomes, forecasts, universe)
     if data.empty:
         return {"generated_at": now.isoformat(), "resolved": 0, "daily": {}, "worst": [], "months": []}, []
-    index, files = exports(data, existing, now)
+    index, files = exports(data, existing, now, prefix)
     return {
         "generated_at": now.isoformat(),
         "resolved": len(data),

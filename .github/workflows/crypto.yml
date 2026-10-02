@@ -58,3 +58,13 @@ jobs:
           git commit -m "crypto forecast manifest"
           git pull --rebase --autostash
           git push
+      - name: A lejárt kripto-becslések és -tézisek kiértékelése
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.crypto.resolve
+      - name: Kripto megjelenítési fájlok (külön a részvényesektől)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.crypto.publish
