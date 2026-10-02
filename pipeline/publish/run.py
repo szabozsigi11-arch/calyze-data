@@ -740,6 +740,40 @@ def build_model_arena(
     }
 
 
+def build_news_arena(table: pd.DataFrame | None, now: datetime) -> dict[str, object]:
+    """A hír-aréna megjelenítése (`docs/hir-arena.md`): élő és backtest külön kulcs alatt."""
+
+    def rows(period: str) -> list[dict[str, object]]:
+        if table is None or table.empty:
+            return []
+        out = []
+        for r in table[table["period"] == period].to_dict("records"):
+            needed = r.get("observations_needed")
+            out.append(
+                {
+                    "signal": r["signal"],
+                    "value": _num(r["value"]),
+                    "baseline_value": _num(r["baseline_value"]),
+                    "delta": _num(r["delta"]),
+                    "n": int(r["n"]),
+                    "n_eff": _num(r["n_eff"], 1),
+                    "p_value_fdr": _num(r["p_value_fdr"]),
+                    "verdict": r["verdict"],
+                    "observations_needed": None if needed is None or pd.isna(needed) else int(needed),
+                    "first": r["first"],
+                    "last": r["last"],
+                }
+            )
+        return out
+
+    return {
+        "generated_at": now.astimezone(UTC).replace(microsecond=0).isoformat(),
+        "live_from": "2026-09-26",
+        "live": rows("live"),
+        "backtest": rows("backtest"),
+    }
+
+
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
     session = last_closed_session(now)
     years = sorted({2026, session.year})
@@ -878,6 +912,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     )
     files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
     from pipeline.model.run import ARENA_BACKTEST_PATH
+    from pipeline.newsarena.run import RESULTS_PATH as NEWS_ARENA_PATH
+
+    files.append(("news-arena.json", _dumps(build_news_arena(_read_table(storage, NEWS_ARENA_PATH), now))))
     from pipeline.resolve.arena import MODELS_LIVE_PATH
 
     files.append(
