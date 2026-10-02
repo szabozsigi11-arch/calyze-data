@@ -53,15 +53,22 @@ def expanding_percentile(x: pd.Series, min_periods: int = MIN_HISTORY) -> pd.Ser
 
 def compute_regime(prices: pd.DataFrame, universe: pd.DataFrame) -> pd.DataFrame:
     rets = _returns_by_ticker(prices, universe, CROSS_MARKET)
-    market_vol = rets[MARKET].rolling(20).std() * np.sqrt(252)
+    return regime_from_returns(rets, MARKET, CROSS_MARKET, MIN_HISTORY)
 
-    pairs = [(a, b) for a, b in combinations(CROSS_MARKET, 2) if a in rets and b in rets]
+
+def regime_from_returns(
+    rets: pd.DataFrame, market: str, basket: list[str], min_history: int = MIN_HISTORY
+) -> pd.DataFrame:
+    """A rezsim széles hozamtáblából (oszlop = ticker). A kripto ezt hívja a saját kosarával."""
+    market_vol = rets[market].rolling(20).std() * np.sqrt(252)
+
+    pairs = [(a, b) for a, b in combinations(basket, 2) if a in rets and b in rets]
     corr = pd.concat(
         [rets[a].rolling(60, min_periods=60).corr(rets[b]).abs() for a, b in pairs], axis=1
     ).mean(axis=1, skipna=False)
 
-    vol_pct = expanding_percentile(market_vol.dropna()).reindex(rets.index)
-    corr_pct = expanding_percentile(corr.dropna()).reindex(rets.index)
+    vol_pct = expanding_percentile(market_vol.dropna(), min_history).reindex(rets.index)
+    corr_pct = expanding_percentile(corr.dropna(), min_history).reindex(rets.index)
     stress = (vol_pct + corr_pct) / 2
 
     label = pd.Series(pd.NA, index=rets.index, dtype="string")

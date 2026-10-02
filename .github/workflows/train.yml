@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "train = heti tanítás, challengers = csak a modell-aréna kihívói, arena-backtest = a négy család backtestje, backtest = teljes walk-forward mérés, report = a tárolt mérés kiírása"
+        description: "train = heti tanítás, challengers = csak a modell-aréna kihívói, arena-backtest = a négy család backtestje, backtest = teljes walk-forward mérés, report = a tárolt mérés kiírása, crypto-train / crypto-backtest = a kripto-modell (docs/kripto-modell.md)"
         type: choice
-        options: [train, challengers, backtest, arena-backtest, report]
+        options: [train, challengers, backtest, arena-backtest, report, crypto-train, crypto-backtest]
         default: train
 
 permissions:
@@ -38,5 +38,16 @@ jobs:
         # A részletes kimenet (papíronkénti sorok) a privát tárba megy; a
         # naplóba csak az összesített, modellszintű összefoglaló kerül.
         run: |
-          uv run python -m pipeline.model.run --task "$TASK" | tee /tmp/result.json
+          case "$TASK" in
+            crypto-*) uv run python -m pipeline.crypto.model --task "${TASK#crypto-}" | tee /tmp/result.json ;;
+            *) uv run python -m pipeline.model.run --task "$TASK" | tee /tmp/result.json ;;
+          esac
           echo "kesz: $TASK"
+      - name: A kripto-modell heti tanítása
+        # Az ütemezett heti futásban a részvényes tanítás után; ha elbukik, a
+        # részvényes modell mentése ettől már megtörtént.
+        if: ${{ github.event_name == 'schedule' }}
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.crypto.model --task train

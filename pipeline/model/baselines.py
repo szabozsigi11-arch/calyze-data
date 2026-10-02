@@ -118,5 +118,10 @@ def fit_baselines(train: pd.DataFrame, horizon: int) -> dict[str, Baseline]:
 
 
 def add_sector_return(features: pd.DataFrame) -> pd.DataFrame:
-    """A szektor 20 napos hozama: a papír hozama mínusz a szektorhoz mért többlete."""
+    """A szektor 20 napos hozama: a papír hozama mínusz a szektorhoz mért többlete.
+
+    Szektor nélküli panelen (kripto) változatlanul adja vissza.
+    """
+    if "sector_rel_20" not in features.columns:
+        return features
     return features.assign(sector_ret_20=features["ret_20"] - features["sector_rel_20"])

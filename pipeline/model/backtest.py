@@ -49,7 +49,11 @@ MIN_TRAIN_SESSIONS = 756
 
 
 def _fold_frames(
-    data: pd.DataFrame, fold: Fold, horizon: int, sessions: list
+    data: pd.DataFrame,
+    fold: Fold,
+    horizon: int,
+    sessions: list,
+    calibration_sessions: int = CALIBRATION_SESSIONS,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Tanító, kalibrációs és teszt sorok egy foldhoz, purge-dzsel."""
     index = {d: i for i, d in enumerate(sessions)}
@@ -57,7 +61,7 @@ def _fold_frames(
     # Csak az a sor tanít, amelynek a CÍMKÉJE is a purge előtt lezárul.
     label_ends_by = data["date"].map(lambda d: index.get(d, -1)) + horizon
     eligible = data[(label_ends_by <= end_i) & (label_ends_by > 0)]
-    calib_dates = sorted(eligible["date"].unique())[-CALIBRATION_SESSIONS:]
+    calib_dates = sorted(eligible["date"].unique())[-calibration_sessions:]
     calibration = eligible[eligible["date"].isin(calib_dates)]
     train = eligible[~eligible["date"].isin(calib_dates)]
     # Ritkítás a horizont szerint (lásd `train_stride`): a tanítóhalmaz minden
@@ -77,8 +81,17 @@ def run_backtest(
     horizons: tuple[int, ...] = HORIZONS,
     test_sessions: int = TEST_SESSIONS,
     min_train: int = MIN_TRAIN_SESSIONS,
+    calibration_sessions: int = CALIBRATION_SESSIONS,
+    min_train_rows: int = 10_000,
+    min_calibration_rows: int = 1_000,
+    params: dict[str, object] | None = None,
+    baseline_ids: tuple[str, ...] = BASELINE_IDS,
 ) -> pd.DataFrame:
-    """Végigmegy a foldokon, és visszaadja a pontozott becsléseket (modell + baseline-ök)."""
+    """Végigmegy a foldokon, és visszaadja a pontozott becsléseket (modell + baseline-ök).
+
+    Az alapértékek a részvényes modellé; a kripto a saját, előre rögzített
+    méreteivel hívja (`docs/kripto-modell.md`, 5.).
+    """
     data = add_sector_return(add_targets(features, prices, actions))
     columns = feature_columns(data)
     sessions = sorted(data["date"].unique())
@@ -88,18 +101,20 @@ def run_backtest(
         usable = trainable(data, horizon)
         folds = walk_forward(sessions, horizon, test_sessions=test_sessions, min_train=min_train)
         for i, fold in enumerate(folds, start=1):
-            train, calibration, test = _fold_frames(usable, fold, horizon, sessions)
-            if len(train) < 10_000 or len(calibration) < 1_000 or test.empty:
+            train, calibration, test = _fold_frames(usable, fold, horizon, sessions, calibration_sessions)
+            if len(train) < min_train_rows or len(calibration) < min_calibration_rows or test.empty:
                 log.warning("fold_skipped", horizon=horizon, fold=i, train=len(train), test=len(test))
                 continue
 
-            model = fit_horizon(train, calibration, columns, horizon)
+            model = fit_horizon(train, calibration, columns, horizon, params)
             out = model.predict(test)
             out["y"] = test[f"y_{horizon}"].to_numpy()
             out["regime"] = test["regime"].to_numpy()
             out["fold"] = i
 
             for baseline_id, baseline in fit_baselines(train, horizon).items():
+                if baseline_id not in baseline_ids:
+                    continue
                 b = baseline.predict(test)
                 out[f"prob_up__{baseline_id}"] = b["prob_up"].to_numpy()
                 out[f"expected__{baseline_id}"] = b["expected_return"].to_numpy()
@@ -120,12 +135,21 @@ def run_backtest(
     return pd.concat(scored, ignore_index=True) if scored else pd.DataFrame()
 
 
-def _meta(horizon, regime: str, baseline_id: str, part: pd.DataFrame, live: bool) -> dict[str, object]:
+def _meta(
+    horizon,
+    regime: str,
+    baseline_id: str,
+    part: pd.DataFrame,
+    live: bool,
+    family: str = MODEL_FAMILY,
+    version: str = MODEL_VERSION,
+    scope: str = "universe",
+) -> dict[str, object]:
     return {
-        "subject_id": f"{MODEL_FAMILY} {MODEL_VERSION}",
-        "model_family": MODEL_FAMILY,
-        "model_version": MODEL_VERSION,
-        "scope": "universe",
+        "subject_id": f"{family} {version}",
+        "model_family": family,
+        "model_version": version,
+        "scope": scope,
         "horizon": int(horizon),
         "regime": regime,
         "baseline_id": baseline_id,
@@ -136,8 +160,20 @@ def _meta(horizon, regime: str, baseline_id: str, part: pd.DataFrame, live: bool
     }
 
 
-def arena_records(scored: pd.DataFrame, live: bool = False) -> pd.DataFrame:
-    """A mért értékek a spec/06 8. fejezetének közös rekordszerkezetében."""
+def arena_records(
+    scored: pd.DataFrame,
+    live: bool = False,
+    baseline_ids: tuple[str, ...] = BASELINE_IDS,
+    family: str = MODEL_FAMILY,
+    version: str = MODEL_VERSION,
+    scope: str = "universe",
+) -> pd.DataFrame:
+    """A mért értékek a spec/06 8. fejezetének közös rekordszerkezetében.
+
+    A kripto saját családként hívja (`scope = "crypto"`): a FDR-korrekció
+    csak a saját rekordjain fut, a részvényekével nem keveredik.
+    """
+    meta_kw = {"family": family, "version": version, "scope": scope}
     rows: list[dict[str, object]] = []
     comparisons: list[tuple[dict[str, object], Comparison]] = []
 
@@ -161,21 +197,21 @@ def arena_records(scored: pd.DataFrame, live: bool = False) -> pd.DataFrame:
             comparisons.append(
                 (
                     {
-                        **_meta(horizon, regime, "nominal_90", part, live),
+                        **_meta(horizon, regime, "nominal_90", part, live, **meta_kw),
                         "note": "a 90%-os névleges lefedettséghez mérve",
                     },
                     cov_comparison,
                 )
             )
 
-            for baseline_id in BASELINE_IDS:
+            for baseline_id in baseline_ids:
                 base_prob = part[f"prob_up__{baseline_id}"].to_numpy()
                 for metric, model_rows, base_rows in (
                     ("direction_accuracy", model_hit, hit(base_prob, y)),
                     ("brier", model_brier, brier(base_prob, y)),
                 ):
                     c = compare(metric, model_rows, base_rows, days, int(horizon))
-                    comparisons.append((_meta(horizon, regime, baseline_id, part, live), c))
+                    comparisons.append((_meta(horizon, regime, baseline_id, part, live, **meta_kw), c))
 
     apply_fdr([c for _, c in comparisons])
     for meta, c in comparisons:

@@ -18,7 +18,8 @@ on:
         default: daily
 
 permissions:
-  contents: read
+  # A napi kripto-lenyomat (hash) commitolásához írás kell a repóba.
+  contents: write
 
 concurrency:
   group: crypto
@@ -38,3 +39,22 @@ jobs:
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
           MODE: ${{ inputs.mode || (github.event.schedule == '0 7 * * 0' && 'backfill') || 'daily' }}
         run: uv run python -m pipeline.ingest.crypto --mode "$MODE"
+      - name: Napi kripto-becslés (a megjelenítés előtt mentve)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.crypto.forecast --manifest-dir manifests-crypto
+      - name: A napi kripto-lenyomat commitolása
+        # Csak a hash és a darabszámok kerülnek a publikus repóba (commit–reveal).
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p manifests-crypto
+          git add manifests-crypto
+          if git diff --cached --quiet; then
+            echo "nincs uj lenyomat"
+            exit 0
+          fi
+          git commit -m "crypto forecast manifest"
+          git pull --rebase --autostash
+          git push
