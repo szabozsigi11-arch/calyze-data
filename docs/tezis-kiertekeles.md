@@ -195,3 +195,21 @@ nap végi 24:00 UTC.
   viszonyít, így az eszközosztály nem torzítja.
 - **„Ma zárul a tézised”:** a kripto-tézisnél a nap az UTC-nap, a zárás
   24:00 UTC.
+
+## 11. Deviza (EKB-fixálás, TARGET-napok)
+
+*Kiegészítés, rögzítve 2026-10-02-án, az első deviza-tézis előtt
+(6. fázis, F2; `docs/fx-univerzum.md`).*
+
+A deviza „zárása” az EKB napi referencia-árfolyama (14:10 CET), és csak
+TARGET-munkanapokon van.
+
+- **Kezdőnap `S`:** az első TARGET-nap, amelynek fixálása a rögzítéskor
+  vagy utána van (ugyanaz a szabály, mint a 2. fejezetben, a NYSE-zárás
+  helyett a fixálással).
+- **Célnap `E`:** `S` után a `h`-adik TARGET-nap.
+- **Hozam:** `S` fixálásától `E` fixálásáig, a keresztárfolyamból.
+- **Pontozás, modell, baseline:** a 3. fejezet szerint, a deviza-modellel.
+- **Kalibráció:** ugyanabba a kalibrációba számít (lásd 10. fejezet).
+- **„Ma zárul a tézised”:** a nap a TARGET-nap, a zárás a 14:10 CET-es
+  fixálás; csak előtte megy ki.
