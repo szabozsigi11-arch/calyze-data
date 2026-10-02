@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, date, datetime
 
+import numpy as np
 import pandas as pd
 
 from pipeline.assetspec import fx
@@ -88,3 +89,54 @@ def test_deviza_lezarasa_target_nappal_es_kulon_mappaba(tmp_path):
     written = set(storage.list(DISPLAY_BUCKET, "fx"))
     assert {"fx/latest.json", "fx/evidence.json", "fx/record.json", "fx/instruments.json"} <= written
     assert not storage.list(DISPLAY_BUCKET, "crypto")
+
+
+def test_deviza_sokk_csak_elmozdulas_es_dollar_kosar():
+    from pipeline.fx.shocks import BROAD_MIN, attach
+    from pipeline.universe import load_fx_universe
+
+    u = load_fx_universe()
+    usd_ids = list(
+        u[u["ticker"].isin(["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDCAD", "USDCHF", "USDJPY"])][
+            "instrument_id"
+        ]
+    )
+    days = target_days(date(2026, 6, 1), date(2026, 9, 25))
+    rng = np.random.default_rng(5)
+    rows = []
+    for k, iid in enumerate(usd_ids):
+        rate = 1.1 * np.exp(np.cumsum(rng.normal(0, 0.003, len(days))))
+        if k < BROAD_MIN:
+            rate[-1] = rate[-2] * 1.05
+        rows += [{"instrument_id": iid, "date": d, "close": r} for d, r in zip(days, rate, strict=True)]
+    out = attach(pd.DataFrame({"instrument_id": usd_ids}), pd.DataFrame(rows), u, days[-1]).set_index(
+        "instrument_id"
+    )
+    assert set(out["shock_market"]) == {"usd_broad"}
+    assert out.loc[usd_ids[0], "shock_signals"] == "move"
+    assert not out["withheld"].any()
+
+
+def test_a_gyertyamintak_a_korrekcio_elott_kiesnek():
+    from pipeline.patterns import candles
+    from pipeline.patterns.run import build
+
+    days = target_days(date(2024, 1, 1), date(2026, 9, 25))
+    rows = []
+    for iid, drift in (("CZ00674", 0.0002), ("CZ00680", -0.0001)):
+        for i, d in enumerate(days):
+            r = 1.1 * (1 + drift) ** i * (1 + 0.01 * np.sin(i / 7))
+            rows.append(
+                {
+                    "instrument_id": iid,
+                    "date": d,
+                    "open": r,
+                    "high": r,
+                    "low": r,
+                    "close": r,
+                    "volume": float("nan"),
+                }
+            )
+    signals, _results = build(pd.DataFrame(rows), workers=1, exclude=frozenset(candles.PATTERNS))
+    bases = set(signals["rule"].str.split("|").str[0]) if not signals.empty else set()
+    assert not bases & set(candles.PATTERNS)

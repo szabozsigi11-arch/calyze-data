@@ -88,9 +88,10 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         calendar=CALENDAR,
         target=offset,
     )
-    # Devizán nincs volumen és rés: a sokk-jel az F5-ben jön, addig kimondjuk, hogy nincs.
-    frame["shock_tracked"] = False
-    frame["withheld"] = False
+    # A sokk-jel a csomagba kerül, a lenyomat alá (docs/fx-arenak.md, 3.).
+    from pipeline.fx.shocks import attach
+
+    frame = attach(frame, prices, universe, day)
     package = _package_bytes(frame)
     entry = manifest_entry(day, package, frame, now.astimezone(UTC), len(universe), FAMILY, VERSION, CALENDAR)
     if dry_run:

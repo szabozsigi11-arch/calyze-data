@@ -121,7 +121,9 @@ def _events_of(item: tuple[str, pd.DataFrame]) -> list[dict[str, object]]:
     return instrument_events(*item)
 
 
-def build(prices: pd.DataFrame, workers: int | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+def build(
+    prices: pd.DataFrame, workers: int | None = None, exclude: frozenset[str] | None = None
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Az összes esemény és a mérés.
 
     A szint-bejárás szándékosan napról napra halad (így nem nézhet a
@@ -139,6 +141,10 @@ def build(prices: pd.DataFrame, workers: int | None = None) -> tuple[pd.DataFram
             for part in pool.map(_events_of, groups, chunksize=4):
                 rows.extend(part)
     signals = pd.DataFrame(rows, columns=["instrument_id", "date", "rule", "direction"])
+    if exclude:
+        # A kizárt minták (pl. devizán a gyertyák) a korrekció ELŐTT esnek ki:
+        # a tesztelt család mérete így nem tartalmazza őket (docs/fx-arenak.md, 2.).
+        signals = signals[~signals["rule"].str.split("|").str[0].isin(exclude)].reset_index(drop=True)
     if signals.empty:
         return signals, pd.DataFrame()
     results = arena(signals, prices, directions_of(signals))

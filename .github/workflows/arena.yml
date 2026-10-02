@@ -16,9 +16,9 @@ on:
         type: boolean
         default: false
       scope:
-        description: "all = minden aréna, crypto = csak a kripto-arénák"
+        description: "all = minden aréna, crypto = csak a kripto-, fx = csak a deviza-arénák"
         type: choice
-        options: [all, crypto]
+        options: [all, crypto, fx]
         default: all
 
 permissions:
@@ -30,7 +30,7 @@ concurrency:
 
 jobs:
   arena:
-    if: ${{ inputs.scope != 'crypto' }}
+    if: ${{ inputs.scope != 'crypto' && inputs.scope != 'fx' }}
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -47,7 +47,7 @@ jobs:
   # A minta-aréna (spec/03 3.3): támasz-ellenállás, gyertyaminták,
   # váll-fej-váll. Független az indikátor-arénától, ezért mellette fut.
   patterns:
-    if: ${{ inputs.scope != 'crypto' }}
+    if: ${{ inputs.scope != 'crypto' && inputs.scope != 'fx' }}
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -64,7 +64,7 @@ jobs:
   # A konfluencia-motor (docs/konfluencia.md): kiváltó × kontextus-kombinációk,
   # felfedezés 2018 végéig, megerősítés 2019-től. A naplóba csak darabszám kerül.
   confluence:
-    if: ${{ inputs.scope != 'crypto' }}
+    if: ${{ inputs.scope != 'crypto' && inputs.scope != 'fx' }}
     runs-on: ubuntu-latest
     timeout-minutes: 300
     steps:
@@ -81,7 +81,7 @@ jobs:
   # A hír-aréna (docs/hir-arena.md): a sokk- és naptári jelzések pontossága a
   # realizált volatilitáson. Élő 2026-09-26-tól, előtte backtest, külön.
   news:
-    if: ${{ inputs.scope != 'crypto' }}
+    if: ${{ inputs.scope != 'crypto' && inputs.scope != 'fx' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -95,6 +95,7 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && '--dry-run' || '' }}
         run: uv run python -m pipeline.newsarena.run $DRY_RUN
   crypto:
+    if: ${{ inputs.scope != 'fx' }}
     # A kripto-arénák (docs/kripto-arenak.md): saját korrekciós családban, a
     # crypto/ megjelenítési mappába. A részvényes jobokkal nem függ össze.
     runs-on: ubuntu-latest
@@ -108,3 +109,17 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: uv run python -m pipeline.crypto.arenas
+  fx:
+    if: ${{ inputs.scope != 'crypto' }}
+    # A deviza-arénák (docs/fx-arenak.md): saját családban, az fx/ mappába.
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen --no-dev
+      - name: Deviza indikátor-, minta- és hír-aréna
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.fx.arenas
