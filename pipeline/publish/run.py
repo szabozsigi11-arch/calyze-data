@@ -685,6 +685,49 @@ def build_instrument(
     }
 
 
+#: A felület fő modellje; a többi kihívó (docs/modell-arena.md).
+MAIN_FAMILY = "lgbm-core"
+
+
+def build_model_arena(table: pd.DataFrame | None, now: datetime) -> dict[str, object]:
+    """A modell-aréna megjelenítése (`docs/modell-arena.md`).
+
+    Amíg nincs lezárt kihívó-becslés, a csomag üres sorokkal megy ki: a felület
+    ebből mondja ki, hogy az élő rekord még nem indult — nem hallgat el róla.
+    """
+    rows: list[dict[str, object]] = []
+    if table is not None and not table.empty:
+        for r in table.to_dict("records"):
+            rows.append(
+                {
+                    "family": r["family"],
+                    "version": r["version"],
+                    "horizon": int(r["horizon"]),
+                    "metric": r["metric"],
+                    "against": r["against"],
+                    "value": _num(r["value"]),
+                    "baseline_value": _num(r["baseline_value"]),
+                    "delta": _num(r["delta"]),
+                    "n": int(r["n"]),
+                    "n_eff": _num(r["n_eff"], 1),
+                    "p_value_fdr": _num(r["p_value_fdr"]),
+                    "verdict": r["verdict"],
+                    "observations_needed": None
+                    if r.get("observations_needed") is None or pd.isna(r.get("observations_needed"))
+                    else int(r["observations_needed"]),
+                    "first_observed": r["first_observed"],
+                    "last_observed": r["last_observed"],
+                }
+            )
+    return {
+        "generated_at": now.astimezone(UTC).replace(microsecond=0).isoformat(),
+        "main": MAIN_FAMILY,
+        "families": ["lgbm-core", "ar-linear", "mlp-core", "ensemble"],
+        "n_tests": int(table["n_tests"].iloc[0]) if table is not None and not table.empty else 0,
+        "rows": rows,
+    }
+
+
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:
     session = last_closed_session(now)
     years = sorted({2026, session.year})
@@ -822,6 +865,9 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         )
     )
     files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
+    from pipeline.resolve.arena import MODELS_LIVE_PATH
+
+    files.append(("model-arena.json", _dumps(build_model_arena(_read_table(storage, MODELS_LIVE_PATH), now))))
 
     if dry_run:
         log.info("publish_dry_run", files=len(files), instruments=written)

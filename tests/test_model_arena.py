@@ -111,3 +111,17 @@ def test_az_elo_arena_minden_csaladot_ugyanazon_a_mintan_mer() -> None:
 
 def test_ures_arena_ures_tabla() -> None:
     assert models_live(pd.DataFrame(), pd.DataFrame()).empty
+
+
+def test_a_megjelenites_ures_aranat_is_kimond() -> None:
+    from pipeline.publish.run import build_model_arena
+
+    empty = build_model_arena(None, datetime(2026, 10, 2, tzinfo=UTC))
+    assert empty["rows"] == []
+    assert empty["families"] == ["lgbm-core", "ar-linear", "mlp-core", "ensemble"]
+
+    main = _outcomes(MODEL_FAMILY, "v1", 0.5, 2000, 1)
+    arena = _outcomes("ar-linear", "v1", 0.5, 1000, 2)
+    payload = build_model_arena(models_live(arena, main), datetime(2026, 10, 2, tzinfo=UTC))
+    assert payload["n_tests"] == len(payload["rows"])
+    assert {r["against"] for r in payload["rows"]} == {"naive", "nominal_90", MODEL_FAMILY}
