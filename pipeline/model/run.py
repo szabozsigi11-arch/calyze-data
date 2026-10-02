@@ -173,6 +173,55 @@ def task_train(storage: Storage, now: datetime) -> dict[str, object]:
     return meta
 
 
+def task_challengers(storage: Storage, now: datetime) -> dict[str, object]:
+    """Csak a modell-aréna kihívói, a meglévő lgbm-core mellé — az lgbm-core-hoz nem nyúl.
+
+    Az első indításhoz kell (a heti tanítás csak vasárnap fut), és akkor, ha a
+    kihívók tanítása egy héten elbukott. Az adatot arra a napra vágja,
+    ameddig a mentett lgbm-core tanult (`meta.json`), így a tanító és a
+    kalibrációs ablak pontosan ugyanaz (`docs/modell-arena.md`, 1.).
+    """
+    from datetime import date as _date
+
+    meta_blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/meta.json")
+    if meta_blob is None:
+        raise RuntimeError("Nincs mentett lgbm-core — előbb: --task train")
+    last = _date.fromisoformat(json.loads(meta_blob)["last_session"])
+    prices, actions, features = load_panel(storage, last)
+    # Az árakat is a vágás napjáig: különben a célváltozó (a jövőbeli hozam) a
+    # mentett modell napjánál későbbi árakat is látna, és az ablak elcsúszna.
+    prices = prices[pd.to_datetime(prices["date"]).dt.date <= last]
+    features = features[pd.to_datetime(features["date"]).dt.date <= last]
+    data = add_sector_return(add_targets(features, prices, actions))
+    columns = feature_columns(data)
+
+    trained: dict[str, object] = {}
+    for horizon in HORIZONS:
+        blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/h{horizon}.pkl")
+        if blob is None:
+            raise RuntimeError(f"Nincs mentett lgbm-core a(z) {horizon} napos horizontra")
+        lgbm = pickle.loads(blob)["model"]  # noqa: S301 — saját, privát tárból származó fájl
+        usable = trainable(data, horizon)
+        dates = sorted(usable["date"].unique())
+        calib_dates = set(dates[-CALIBRATION_SESSIONS:])
+        train = usable[~usable["date"].isin(calib_dates)]
+        calibration = usable[usable["date"].isin(calib_dates)]
+        for family, challenger in fit_challengers(train, calibration, columns, horizon, lgbm).items():
+            storage.upload(
+                RAW_BUCKET,
+                f"models/{family}/{FAMILY_VERSION}/h{horizon}.pkl",
+                pickle.dumps(challenger),
+                "application/octet-stream",
+            )
+        trained[str(horizon)] = {"train_rows": len(train), "calibration_rows": len(calibration)}
+        log.info("challengers_trained", horizon=horizon)
+    return {
+        "last_session": last.isoformat(),
+        "families": ["ar-linear", "mlp-core", "ensemble"],
+        "horizons": trained,
+    }
+
+
 def task_report(storage: Storage, now: datetime) -> dict[str, object]:
     """A tárolt mérési összesítések kiírása (gyors, nem számol újra).
 
@@ -218,7 +267,7 @@ def task_report(storage: Storage, now: datetime) -> dict[str, object]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Calyze tanítás és backtest")
-    parser.add_argument("--task", choices=["train", "backtest", "report"], required=True)
+    parser.add_argument("--task", choices=["train", "challengers", "backtest", "report"], required=True)
     parser.add_argument("--local", type=Path, help="helyi mappa a privát tár helyett")
     args = parser.parse_args(argv)
 
@@ -233,7 +282,12 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     now = datetime.now(UTC)
-    tasks = {"backtest": task_backtest, "train": task_train, "report": task_report}
+    tasks = {
+        "backtest": task_backtest,
+        "train": task_train,
+        "challengers": task_challengers,
+        "report": task_report,
+    }
     result = tasks[args.task](storage, now)
     log.info(f"{args.task}_done", **{k: v for k, v in result.items() if k in {"last_session", "rows_scored"}})
     print(json.dumps(result, indent=2, default=str))

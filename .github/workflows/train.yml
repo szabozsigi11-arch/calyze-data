@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "train = heti tanítás, backtest = teljes walk-forward mérés, report = a tárolt mérés kiírása"
+        description: "train = heti tanítás, challengers = csak a modell-aréna kihívói, backtest = teljes walk-forward mérés, report = a tárolt mérés kiírása"
         type: choice
-        options: [train, backtest, report]
+        options: [train, challengers, backtest, report]
         default: train
 
 permissions:
