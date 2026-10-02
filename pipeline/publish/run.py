@@ -955,6 +955,14 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         )
     )
     files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
+    # A teljes eredménynapló (docs/eredmenynaplo.md). A havi letöltések csak
+    # akkor mennek fel újra, ha változtak; a jegyzék a record.json-ban mindig teljes.
+    # A tickerhez a teljes lista kell: a kivezetett papír sora sem maradhat név nélkül.
+    from pipeline.publish.record import EXPORT_PREFIX, build_record
+
+    existing_exports = set() if dry_run else set(storage.list(DISPLAY_BUCKET, EXPORT_PREFIX))
+    record_doc, record_files = build_record(outcomes, all_forecasts, load_universe(), existing_exports, now)
+    files.append(("record.json", _dumps(record_doc)))
     from pipeline.model.run import ARENA_BACKTEST_PATH, LAB_PATH
 
     files.append(("lab.json", _dumps(build_lab(_read_table(storage, LAB_PATH), now))))
@@ -975,14 +983,16 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
     )
 
     if dry_run:
-        log.info("publish_dry_run", files=len(files), instruments=written)
+        log.info("publish_dry_run", files=len(files), exports=len(record_files), instruments=written)
         return {"session": str(latest_session), "instruments": written, "status": "dry_run"}
 
     storage.ensure_private_bucket(DISPLAY_BUCKET)
     for path, blob in files:
         storage.upload(DISPLAY_BUCKET, path, blob, "application/json")
+    for path, blob, content_type in record_files:
+        storage.upload(DISPLAY_BUCKET, path, blob, content_type)
 
-    log.info("publish_done", session=str(latest_session), files=len(files))
+    log.info("publish_done", session=str(latest_session), files=len(files), exports=len(record_files))
     return {
         "session": str(latest_session),
         "instruments": written,
