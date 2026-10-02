@@ -106,9 +106,6 @@ def build(
         out["price_low"] = c * np.exp(out["band_low"].to_numpy())
         out["price_high"] = c * np.exp(out["band_high"].to_numpy())
         out["expected_price"] = c * np.exp(out["expected_return"].to_numpy())
-        # Sokk- és naptári jelölés kriptón az E5-ben jön; addig kimondjuk, hogy nincs.
-        out["shock_tracked"] = False
-        out["withheld"] = False
         out["forecast_id"] = [forecast_id(i, day, horizon, VERSION) for i in out["instrument_id"]]
         rows.append(out)
     return pd.concat(rows, ignore_index=True).drop(columns=["prob_up_raw"], errors="ignore")
@@ -153,6 +150,10 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         return {"session": str(day), "status": "already_saved"}
 
     frame = build(features, prices, day, load_models(storage), now.astimezone(UTC))
+    # A sokk-jel a csomagba kerül, a lenyomat alá (docs/kripto-arenak.md, 2.).
+    from pipeline.crypto.shocks import attach
+
+    frame = attach(frame, prices, universe, day)
     package = _package_bytes(frame)
     entry = manifest_entry(day, package, frame, now.astimezone(UTC), len(universe))
     if dry_run:
