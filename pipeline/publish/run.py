@@ -1024,10 +1024,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.local is None and not args.dry_run and isinstance(latest, dict):
         # Az értesítések piaci összefoglalója (spec/07, 6.). A felhasználókra
         # bontás az adatbázisban történik; ide felhasználói adat nem jön vissza.
-        from pipeline.notify import enqueue
+        from pipeline.notify import enqueue, push_sessions
 
         settings = load_settings()
         enqueue(settings.supabase_url or "", settings.supabase_secret_key or "", latest)
+        # A kereskedési naptár a „ma zárul a tézised” értesítéshez (0021).
+        push_sessions(
+            settings.supabase_url or "", settings.supabase_secret_key or "", datetime.now(UTC).date()
+        )
     print(json.dumps(result, indent=2, default=str))
     return 0
 

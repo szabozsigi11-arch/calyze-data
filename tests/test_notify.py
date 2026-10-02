@@ -1,6 +1,8 @@
 """Az értesítések piaci összefoglalója (pipeline/notify.py)."""
 
-from pipeline.notify import digest
+from datetime import date
+
+from pipeline.notify import digest, session_rows
 
 
 def latest(session: str, **extra: object) -> dict[str, object]:
@@ -32,3 +34,13 @@ def test_a_kovetkezo_kereskedesi_nap_esemenye_holnapi():
 def test_a_het_utolso_napja_utan_heti_attekinto():
     assert digest(latest("2026-10-02"))["week_end"] is True  # péntek
     assert digest(latest("2026-10-01"))["week_end"] is False
+
+
+def test_a_naptar_a_zaras_idopontjaval_megy():
+    rows = session_rows(date(2026, 10, 2))
+    by_day = {r["session"]: r["close_at"] for r in rows}
+    assert "2026-10-03" not in by_day  # szombat
+    assert by_day["2026-10-02"].startswith("2026-10-02T20:00")  # 16:00 New York, nyári idő
+    assert by_day["2026-11-27"].startswith("2026-11-27T18:00")  # hálaadás utáni rövidített nap, 13:00
+    assert "2026-11-26" not in by_day  # hálaadás
+    assert len(rows) < 400  # az adatbázis ennél többet nem fogad el

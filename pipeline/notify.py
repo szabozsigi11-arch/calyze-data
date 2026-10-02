@@ -8,7 +8,7 @@ naplójába is csak darabszám kerül.
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 
 import pandas as pd
 import requests
@@ -17,6 +17,11 @@ from pipeline import log as logging_setup
 from pipeline.calendar import calendar
 
 log = logging_setup.get_logger(__name__)
+
+#: A naptár ablaka a mai naptól, naptári napban. Hátra: a legrégebbi még
+#: nyitott 60 napos tézis kezdőnapja is beleférjen; előre: a célnapja is.
+SESSIONS_BACK_DAYS = 150
+SESSIONS_AHEAD_DAYS = 150
 
 
 def _next_session(session: date) -> date | None:
@@ -82,4 +87,42 @@ def enqueue(url: str, secret_key: str, latest: dict[str, object]) -> int | None:
         return None
     count = int(response.json())
     log.info("notify_enqueued", notifications=count)
+    return count
+
+
+def session_rows(today: date) -> list[dict[str, str]]:
+    """A NYSE kereskedési napjai a zárás időpontjával (rövidített napon 13:00).
+
+    Nyilvános adat: az adatbázis ebből számolja ki, melyik tézis zárul ma
+    (0021), ugyanazzal a szabállyal, mint a kiértékelés.
+    """
+    cal = calendar()
+    start = pd.Timestamp(today - timedelta(days=SESSIONS_BACK_DAYS))
+    end = min(pd.Timestamp(today + timedelta(days=SESSIONS_AHEAD_DAYS)), cal.last_session)
+    return [
+        {"session": s.date().isoformat(), "close_at": cal.session_close(s).isoformat()}
+        for s in cal.sessions_in_range(start, end)
+    ]
+
+
+def push_sessions(url: str, secret_key: str, today: date) -> int | None:
+    """A naptár feltöltése. Hiba esetén csak a státusz kerül a naplóba."""
+    if not url or not secret_key:
+        return None
+    try:
+        response = requests.post(
+            f"{url.rstrip('/')}/rest/v1/rpc/set_trading_sessions",
+            headers={"apikey": secret_key, "Authorization": f"Bearer {secret_key}"},
+            json={"p": session_rows(today)},
+            timeout=30,
+        )
+    except Exception as error:  # noqa: BLE001 — a naptár nem állíthatja meg a közzétételt
+        log.warning("sessions_failed", error=type(error).__name__)
+        return None
+    # A 404: a 0021-es migráció még nincs fent. Nem hiba, csak még nincs hová.
+    if response.status_code != 200:
+        log.warning("sessions_failed", status=response.status_code)
+        return None
+    count = int(response.json())
+    log.info("sessions_pushed", sessions=count)
     return count
