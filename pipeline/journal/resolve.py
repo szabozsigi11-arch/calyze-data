@@ -55,6 +55,11 @@ def start_session(created_at: datetime, code: str = "XNYS") -> date:
     """
     if created_at.tzinfo is None:
         raise ValueError("A rögzítési idő időzóna nélkül nem értelmezhető — UTC kell.")
+    if code == "TARGET":
+        # Deviza: a zárás az EKB-fixálás (tezis-kiertekeles.md, 11.).
+        from pipeline.fx.calendar import first_fixing_day
+
+        return first_fixing_day(created_at)
     cal = calendar(code)
     ts = pd.Timestamp(created_at.astimezone(UTC))
     session = cal.date_to_session(pd.Timestamp(ts.date()), direction="next")
@@ -64,6 +69,10 @@ def start_session(created_at: datetime, code: str = "XNYS") -> date:
 
 
 def target_session(start: date, horizon: int, code: str = "XNYS") -> date:
+    if code == "TARGET":
+        from pipeline.fx.calendar import offset
+
+        return offset(start, horizon)
     return calendar(code).session_offset(pd.Timestamp(start), horizon).date()
 
 

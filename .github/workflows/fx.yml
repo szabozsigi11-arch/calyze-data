@@ -1,0 +1,38 @@
+# A deviza napi letöltése az EKB referencia-árfolyamából (docs/fx-univerzum.md; 6. fázis).
+# Az EKB 14:10 CET-kor fixál és kb. 16:00 CET-kor közöl; a futás utána,
+# hétköznap. A napló nyilvános: csak darabszám kerül bele, árfolyam nem.
+name: FX
+
+on:
+  schedule:
+    # 15:20 UTC: télen 16:20, nyáron 17:20 CET — a közlés után, a fixálástól 6 órán belül.
+    - cron: "20 15 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "daily = utolsó 3 hét, backfill = teljes múlt 1999-től"
+        type: choice
+        options: [daily, backfill]
+        default: daily
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fx
+  cancel-in-progress: false
+
+jobs:
+  fx:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen --no-dev
+      - name: Letöltés (EKB)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          MODE: ${{ inputs.mode || 'daily' }}
+        run: uv run python -m pipeline.ingest.fx --mode "$MODE"

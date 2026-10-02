@@ -129,11 +129,14 @@ def push_sessions(url: str, secret_key: str, today: date) -> int | None:
 
 
 def calendar_rows() -> list[dict[str, str]]:
-    """A nem NYSE-naptárú papírok (ma: a kripto, `24/7`). Ami nincs benne, az NYSE."""
-    from pipeline.universe import load_crypto_universe
+    """A nem NYSE-naptárú papírok: a kripto (`24/7`) és a deviza (`TARGET`). Ami nincs benne, az NYSE."""
+    from pipeline.universe import load_crypto_universe, load_fx_universe
 
     crypto = load_crypto_universe()
-    return [{"instrument_id": i, "calendar": "24/7"} for i in crypto["instrument_id"]]
+    fx = load_fx_universe()
+    return [{"instrument_id": i, "calendar": "24/7"} for i in crypto["instrument_id"]] + [
+        {"instrument_id": i, "calendar": "TARGET"} for i in fx["instrument_id"]
+    ]
 
 
 def push_calendars(url: str, secret_key: str) -> int | None:
@@ -156,4 +159,37 @@ def push_calendars(url: str, secret_key: str) -> int | None:
         return None
     count = int(response.json())
     log.info("calendars_pushed", instruments=count)
+    return count
+
+
+def target_day_rows(today: date) -> list[dict[str, str]]:
+    """A TARGET-napok a fixálás időpontjával (0024): a deviza-tézis zárónapjához."""
+    from pipeline.fx.calendar import fixing_at, target_days
+
+    days = target_days(
+        today - timedelta(days=SESSIONS_BACK_DAYS), today + timedelta(days=SESSIONS_AHEAD_DAYS)
+    )
+    return [{"session": d.isoformat(), "fixing_at": fixing_at(d).isoformat()} for d in days]
+
+
+def push_target_days(url: str, secret_key: str, today: date) -> int | None:
+    """A TARGET-napok feltöltése. Hiba esetén csak a státusz megy a naplóba."""
+    if not url or not secret_key:
+        return None
+    try:
+        response = requests.post(
+            f"{url.rstrip('/')}/rest/v1/rpc/set_target_days",
+            headers={"apikey": secret_key, "Authorization": f"Bearer {secret_key}"},
+            json={"p": target_day_rows(today)},
+            timeout=30,
+        )
+    except Exception as error:  # noqa: BLE001 — a naptár nem állíthatja meg a közzétételt
+        log.warning("target_days_failed", error=type(error).__name__)
+        return None
+    # A 404: a 0024-es migráció még nincs fent.
+    if response.status_code != 200:
+        log.warning("target_days_failed", status=response.status_code)
+        return None
+    count = int(response.json())
+    log.info("target_days_pushed", days=count)
     return count

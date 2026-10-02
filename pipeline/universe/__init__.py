@@ -17,10 +17,12 @@ UNIVERSE_FILE = Path(__file__).with_name("instruments.csv")
 #: A kripto külön fájlban él (`docs/kripto-univerzum.md`): a részvényes futás
 #: így nem kap egyetlen 24/7-es papírt sem, amíg minden része meg nem tanulja.
 CRYPTO_FILE = Path(__file__).with_name("instruments_crypto.csv")
+#: A deviza is külön fájlban (`docs/fx-univerzum.md`).
+FX_FILE = Path(__file__).with_name("instruments_fx.csv")
 TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
-ASSET_CLASSES = {"equity", "etf", "crypto"}
-SEGMENTS = {"sp500", "midcap", "etf", "crypto"}
+ASSET_CLASSES = {"equity", "etf", "crypto", "fx"}
+SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx"}
 
 
 class UniverseError(ValueError):
@@ -43,6 +45,14 @@ def load_crypto_universe(path: Path = CRYPTO_FILE) -> pd.DataFrame:
     frame = load_universe(path)
     if set(frame["asset_class"]) != {"crypto"} or set(frame["exchange_calendar"]) != {"24/7"}:
         raise UniverseError("a kripto-fájlban csak 24/7-es kripto lehet")
+    return frame
+
+
+def load_fx_universe(path: Path = FX_FILE) -> pd.DataFrame:
+    """A 28 devizapár; a `source_symbol` a `BASE/QUOTE` alak."""
+    frame = load_universe(path)
+    if set(frame["asset_class"]) != {"fx"} or set(frame["exchange_calendar"]) != {"TARGET"}:
+        raise UniverseError("a deviza-fájlban csak TARGET-naptárú deviza lehet")
     return frame
 
 

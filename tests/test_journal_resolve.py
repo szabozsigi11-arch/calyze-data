@@ -202,3 +202,17 @@ def test_kripto_ablak_a_rogzites_utc_napja_plusz_h_nap():
     assert target_session(s, 5, "24/7") == date(2026, 10, 8)
     # Éjfél után már a következő UTC-nap.
     assert start_session(datetime(2026, 10, 4, 0, 0, 1, tzinfo=UTC), "24/7") == date(2026, 10, 4)
+
+
+def test_deviza_ablak_a_fixalashoz_igazodik():
+    """`docs/tezis-kiertekeles.md`, 11.: ugyanaz, mint a 0024-es adatbázis-szabály."""
+    from datetime import UTC, date, datetime
+
+    from pipeline.journal.resolve import start_session, target_session
+
+    # A fixálás (12:10 UTC, nyári idő) előtt rögzítve: aznap indul.
+    assert start_session(datetime(2026, 10, 2, 11, 0, tzinfo=UTC), "TARGET") == date(2026, 10, 2)
+    # Utána: a következő TARGET-nap (hétfő).
+    s = start_session(datetime(2026, 10, 2, 12, 30, tzinfo=UTC), "TARGET")
+    assert s == date(2026, 10, 5)
+    assert target_session(s, 5, "TARGET") == date(2026, 10, 12)

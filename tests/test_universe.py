@@ -114,3 +114,18 @@ def test_symbol_resolution_needs_an_exact_name():
     ]
     assert resolve("Toncoin", lambda _q: quotes) == "TON11419-USD"
     assert resolve("Mantle", lambda _q: quotes) is None
+
+
+def test_fx_universe_28_pars_rule_and_ids():
+    from pipeline.fx.universe import build
+    from pipeline.universe import load_crypto_universe, load_fx_universe
+
+    fx = load_fx_universe()
+    assert len(fx) == 28
+    assert list(fx["instrument_id"]) == [f"CZ{i:05d}" for i in range(671, 699)]
+    # A fájl a szabályból áll elő: újragenerálva ugyanaz.
+    assert list(build()["ticker"]) == list(fx["ticker"])
+    assert {"EURUSD", "USDJPY", "GBPUSD", "AUDNZD", "CHFJPY"} <= set(fx["ticker"])
+    taken = set(load_universe()["instrument_id"]) | set(load_crypto_universe()["instrument_id"])
+    assert not set(fx["instrument_id"]) & taken
+    assert not set(fx["ticker"]) & set(load_universe()["ticker"])

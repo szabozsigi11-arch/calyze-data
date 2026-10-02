@@ -48,6 +48,19 @@ def test_a_naptar_a_zaras_idopontjaval_megy():
 
 def test_a_kripto_papirok_24_7_es_naptarat_kapnak():
     rows = calendar_rows()
-    assert len(rows) == 50
+    assert len(rows) == 50 + 28
     assert rows[0] == {"instrument_id": "CZ00621", "calendar": "24/7"}
-    assert {r["calendar"] for r in rows} == {"24/7"}
+    assert {r["calendar"] for r in rows} == {"24/7", "TARGET"}
+    assert {"instrument_id": "CZ00671", "calendar": "TARGET"} in rows
+
+
+def test_target_napok_a_fixalas_idopontjaval():
+    from pipeline.notify import target_day_rows
+
+    rows = {r["session"]: r["fixing_at"] for r in target_day_rows(date(2026, 10, 2))}
+    assert rows["2026-10-02"].startswith("2026-10-02T12:10")  # nyári időben 14:10 CET = 12:10 UTC
+    assert rows["2026-12-02"].startswith("2026-12-02T13:10")
+    assert "2026-10-03" not in rows  # szombat
+    assert "2026-12-25" not in rows
+    assert "2026-12-24" in rows
+    assert len(rows) < 400
