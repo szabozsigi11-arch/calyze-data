@@ -689,42 +689,54 @@ def build_instrument(
 MAIN_FAMILY = "lgbm-core"
 
 
-def build_model_arena(table: pd.DataFrame | None, now: datetime) -> dict[str, object]:
+def _arena_rows(table: pd.DataFrame | None) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    if table is None or table.empty:
+        return rows
+    for r in table.to_dict("records"):
+        needed = r.get("observations_needed")
+        rows.append(
+            {
+                "family": r["family"],
+                "version": r["version"],
+                "horizon": int(r["horizon"]),
+                "metric": r["metric"],
+                "against": r["against"],
+                "value": _num(r["value"]),
+                "baseline_value": _num(r["baseline_value"]),
+                "delta": _num(r["delta"]),
+                "n": int(r["n"]),
+                "n_eff": _num(r["n_eff"], 1),
+                "p_value_fdr": _num(r["p_value_fdr"]),
+                "verdict": r["verdict"],
+                "observations_needed": None if needed is None or pd.isna(needed) else int(needed),
+                "first_observed": r["first_observed"],
+                "last_observed": r["last_observed"],
+            }
+        )
+    return rows
+
+
+def build_model_arena(
+    table: pd.DataFrame | None, now: datetime, backtest: pd.DataFrame | None = None
+) -> dict[str, object]:
     """A modell-aréna megjelenítése (`docs/modell-arena.md`).
 
     Amíg nincs lezárt kihívó-becslés, a csomag üres sorokkal megy ki: a felület
     ebből mondja ki, hogy az élő rekord még nem indult — nem hallgat el róla.
     """
-    rows: list[dict[str, object]] = []
-    if table is not None and not table.empty:
-        for r in table.to_dict("records"):
-            rows.append(
-                {
-                    "family": r["family"],
-                    "version": r["version"],
-                    "horizon": int(r["horizon"]),
-                    "metric": r["metric"],
-                    "against": r["against"],
-                    "value": _num(r["value"]),
-                    "baseline_value": _num(r["baseline_value"]),
-                    "delta": _num(r["delta"]),
-                    "n": int(r["n"]),
-                    "n_eff": _num(r["n_eff"], 1),
-                    "p_value_fdr": _num(r["p_value_fdr"]),
-                    "verdict": r["verdict"],
-                    "observations_needed": None
-                    if r.get("observations_needed") is None or pd.isna(r.get("observations_needed"))
-                    else int(r["observations_needed"]),
-                    "first_observed": r["first_observed"],
-                    "last_observed": r["last_observed"],
-                }
-            )
+    rows = _arena_rows(table)
     return {
         "generated_at": now.astimezone(UTC).replace(microsecond=0).isoformat(),
         "main": MAIN_FAMILY,
         "families": ["lgbm-core", "ar-linear", "mlp-core", "ensemble"],
         "n_tests": int(table["n_tests"].iloc[0]) if table is not None and not table.empty else 0,
         "rows": rows,
+        # A backtest külön kulcs alatt: a felület soha nem keverheti az élő számmal.
+        "backtest": {
+            "n_tests": int(backtest["n_tests"].iloc[0]) if backtest is not None and not backtest.empty else 0,
+            "rows": _arena_rows(backtest),
+        },
     }
 
 
@@ -865,9 +877,19 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         )
     )
     files.append(("postmortems.json", _dumps(build_postmortems(outcomes, universe))))
+    from pipeline.model.run import ARENA_BACKTEST_PATH
     from pipeline.resolve.arena import MODELS_LIVE_PATH
 
-    files.append(("model-arena.json", _dumps(build_model_arena(_read_table(storage, MODELS_LIVE_PATH), now))))
+    files.append(
+        (
+            "model-arena.json",
+            _dumps(
+                build_model_arena(
+                    _read_table(storage, MODELS_LIVE_PATH), now, _read_table(storage, ARENA_BACKTEST_PATH)
+                )
+            ),
+        )
+    )
 
     if dry_run:
         log.info("publish_dry_run", files=len(files), instruments=written)

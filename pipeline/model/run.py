@@ -222,6 +222,29 @@ def task_challengers(storage: Storage, now: datetime) -> dict[str, object]:
     }
 
 
+#: A modell-aréna backtestjének eredménye (docs/modell-arena.md, 3.).
+ARENA_BACKTEST_PATH = "arena/models_backtest.parquet"
+
+
+def task_arena_backtest(storage: Storage, now: datetime) -> dict[str, object]:
+    """A négy család purged walk-forward backtestje, ugyanazokon a foldokon. Lassú: kézzel indul."""
+    from pipeline.model.arena_backtest import arena_backtest_records, run_arena_backtest
+
+    last = last_closed_session(now)
+    prices, actions, features = load_panel(storage, last)
+    scored = run_arena_backtest(features, prices, actions)
+    records = arena_backtest_records(scored)
+    if not records.empty:
+        _write_table(storage, ARENA_BACKTEST_PATH, records)
+    # A naplóba csak darabszám: mért érték nem.
+    return {
+        "last_session": last.isoformat(),
+        "rows_scored": len(scored),
+        "records": len(records),
+        "families": sorted(scored["family"].unique()) if not scored.empty else [],
+    }
+
+
 def task_report(storage: Storage, now: datetime) -> dict[str, object]:
     """A tárolt mérési összesítések kiírása (gyors, nem számol újra).
 
@@ -267,7 +290,9 @@ def task_report(storage: Storage, now: datetime) -> dict[str, object]:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Calyze tanítás és backtest")
-    parser.add_argument("--task", choices=["train", "challengers", "backtest", "report"], required=True)
+    parser.add_argument(
+        "--task", choices=["train", "challengers", "backtest", "arena-backtest", "report"], required=True
+    )
     parser.add_argument("--local", type=Path, help="helyi mappa a privát tár helyett")
     args = parser.parse_args(argv)
 
@@ -286,6 +311,7 @@ def main(argv: list[str] | None = None) -> int:
         "backtest": task_backtest,
         "train": task_train,
         "challengers": task_challengers,
+        "arena-backtest": task_arena_backtest,
         "report": task_report,
     }
     result = tasks[args.task](storage, now)

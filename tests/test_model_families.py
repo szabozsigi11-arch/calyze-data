@@ -107,3 +107,31 @@ def test_a_neuralis_halo_sorkorlatja(panel, monkeypatch) -> None:
     monkeypatch.setattr(families.Standardizer, "fit", spy)
     MLPCore.fit(train, "y_20", columns)
     assert seen == [500]
+
+
+def test_a_backtest_mind_a_negy_csaladot_ugyanazokon_a_foldokon_meri() -> None:
+    from pipeline.model.arena_backtest import arena_backtest_records, run_arena_backtest
+    from pipeline.model.config import MODEL_FAMILY
+
+    # A backtest 10 000 tanító sor alatt kihagyja a foldot: ehhez kell ekkora panel.
+    data, actions = synthetic_panel(n_instruments=60, n_days=1600)
+    rng = np.random.default_rng(3)
+    for column in ("ret_1", "ret_5", "ret_60"):
+        data[column] = rng.normal(0, 0.01, len(data))
+    features = data.drop(columns=[c for c in data.columns if c.startswith("y_")])
+    prices = data[["instrument_id", "date", "open", "high", "low", "close"]]
+
+    scored = run_arena_backtest(
+        features, prices, actions, horizons=(20,), test_sessions=150, min_train=1200, num_boost_round=40
+    )
+    assert set(scored["family"]) == {MODEL_FAMILY, "ar-linear", "mlp-core", "ensemble"}
+    # minden család pontosan ugyanazokon a teszt-sorokon
+    keys = scored.groupby("family")[["instrument_id", "date"]].apply(
+        lambda g: frozenset(map(tuple, g.to_numpy()))
+    )
+    assert len(set(keys)) == 1
+
+    records = arena_backtest_records(scored)
+    assert (~records["live"]).all()
+    assert set(records[records["against"] == MODEL_FAMILY]["family"]) == {"ar-linear", "mlp-core", "ensemble"}
+    assert (records["n_tests"] == len(records)).all()
