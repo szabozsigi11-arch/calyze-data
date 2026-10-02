@@ -85,6 +85,11 @@ Purged walk-forward, a részvényekével azonos szabállyal, kripto-méretekkel:
 
 - Naponta **00:30 UTC** után, az előző (lezárt) UTC-napra, minden aktív
   kripto-papírra, mindhárom horizonton.
+- **Legfeljebb 6 órával a nap zárása (24:00 UTC) után.** A kripto közben is
+  kereskedik: egy később elkészülő becslés ablakának egy része már lezajlott,
+  és bár a modell csak a zárásig lát, a késői lenyomat utólagos válogatásnak
+  látszhatna. Ami 6 órán belül nem készül el, az a nap kimarad, és **nem
+  pótoljuk** (kiegészítés, rögzítve 2026-10-02-án, az első élő becslés előtt).
 - A becslés-csomag a privát tárba (`forecasts-crypto/`), a lenyomata (hash
   és darabszám) a nyilvános repóba (`manifests-crypto/`), commit–reveal,
   mint a részvényeknél. **Az élő rekord az első lenyomatolt naptól számít**;
