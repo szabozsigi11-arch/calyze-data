@@ -124,3 +124,47 @@ teszt is igazolja.
 - Sorrend: BSS csökkenő; mellette mindig ott az `n`.
 - Amíg kevesebb mint két résztvevő van, a rangsor üres, és ezt ki is mondja.
 - Csak a szerver számolja; a felhasználó a saját sorát sem írhatja.
+
+## 8. Kiváltó ok szerinti bontás
+
+*Kiegészítés, rögzítve 2026-10-02-án, mielőtt a bontás bármit mutatott volna.*
+
+Ugyanaz a mérés, mint az ember-arénáé (7. fejezet), csak a tézis kiváltó oka
+(`trigger_kind`) szerint csoportosítva: `model`, `other`, `indicator:<szabály>`,
+és ami régebbi tézisnél üres, az „nincs megadva”.
+
+- Csak **összevethető** tézisek (7. fejezet), a kiértékelés után töröltek is.
+- Csoportonként: `n`, a felhasználó és a naiv baseline átlagos
+  Brier-pontszáma ugyanazokon a téziseken, és a verdikt a 7. fejezet
+  táblázatával (`n < 30` → Not enough data; szignifikancia nincs).
+- Találati arány csak `n ≥ 30` mellett, a baseline-é mellett.
+- **Sorrend: `n` szerint csökkenő**, nem eredmény szerint. A legjobb csoport
+  kiemelése kiválasztás lenne: sok csoportból egy mindig jónak látszik.
+
+## 9. R-eloszlás
+
+*Kiegészítés, rögzítve 2026-10-02-án.*
+
+**Tézisnél R csak akkor van**, ha a végrehajtási rétegben belépő és stop is
+van, és a stop a jó oldalon áll (long: a belépő alatt, short: fölötte):
+
+- kockázat `k = |belépő − stop| / belépő`;
+- `R = irányított hozam / k`, ahol az irányított hozam a mért ablak (2.
+  fejezet) hozama, shortnál előjelváltva.
+
+A mért ablakot használjuk, nem a felhasználó saját kilépését: a kilépés
+időpontját semmi nem igazolja, az ablak viszont mindenkinek ugyanaz. Az R
+tehát azt mondja meg, mit hozott volna a tézis a horizont végéig tartva, a
+megadott stop távolságával mint egységgel (a stop kiütését nem szimuláljuk).
+
+**Baseline:** ugyanazokon a téziseken a long oldal ugyanazzal a kockázati
+egységgel (`R_long = hozam / k`). Ez azt méri, hozzátett-e valamit az irány
+megválasztása.
+
+**Megjelenítés:** hisztogram rögzített sávokkal: ≤ −3, −3…−2, −2…−1, −1…0,
+0…1, 1…2, 2…3, ≥ 3 (a határ a nagyobb abszolút értékű sávba tartozik; a 0 a
+0…1 sávba). Darabszám mindig látszik. Az átlagos R és a baseline átlaga csak
+`n ≥ 30` mellett.
+
+**Gyors trade:** ugyanígy, de a saját belépő és kilépő árával (spec/09, 3b),
+külön blokkban, „unregistered” jelöléssel; a kalibrációba nem számít.
