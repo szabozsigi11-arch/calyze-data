@@ -54,3 +54,63 @@ def test_duplicate_active_ticker_is_rejected():
     bad = pd.concat([u, u.iloc[[0]].assign(instrument_id="CZ99999")])
     with pytest.raises(UniverseError):
         validate_universe(bad)
+
+
+# ------------------------------------------------------------------ kripto (docs/kripto-univerzum.md)
+
+#: A 2026-10-02-i kiválasztás lenyomata (azonosító : Yahoo-szimbólum).
+DIGEST_CRYPTO = "062565fc954975d66baff074851f034c69ffcf3faa70141f5cc390d1b1e66c68"
+
+
+def test_crypto_universe_is_separate_and_continues_the_ids():
+    from pipeline.universe import load_crypto_universe
+
+    c = load_crypto_universe()
+    assert len(c) == 50
+    assert set(c["asset_class"]) == {"crypto"}
+    assert set(c["exchange_calendar"]) == {"24/7"}
+    # A részvények után folytatódik, ütközés nélkül.
+    assert list(c["instrument_id"]) == [f"CZ{i:05d}" for i in range(621, 671)]
+    assert not set(c["instrument_id"]) & set(load_universe()["instrument_id"])
+    # A részvényes futás továbbra sem lát kriptót.
+    assert "crypto" not in set(load_universe()["asset_class"])
+
+
+def test_crypto_ids_never_change():
+    import hashlib
+
+    from pipeline.universe import load_crypto_universe
+
+    c = load_crypto_universe()
+    digest = hashlib.sha256(",".join(c["instrument_id"] + ":" + c["source_symbol"]).encode()).hexdigest()
+    assert c.iloc[0]["source_symbol"] == "BTC-USD"
+    assert c.iloc[1]["source_symbol"] == "ETH-USD"
+    assert digest == DIGEST_CRYPTO
+
+
+def test_crypto_display_tickers_do_not_collide_with_equities():
+    from pipeline.universe import load_crypto_universe
+
+    assert not set(load_crypto_universe()["ticker"]) & set(load_universe()["ticker"])
+
+
+def test_candidate_list_is_read_from_the_rule_document():
+    from pipeline.universe.select_crypto import DOC, candidates_from_doc, display_ticker
+
+    names = candidates_from_doc(DOC.read_text(encoding="utf-8"))
+    assert names[:2] == ["Bitcoin", "Ethereum"]
+    assert len(names) == len(set(names)) == 135
+    assert display_ticker("UNI7083-USD") == "UNI-USD"
+    assert display_ticker("1INCH-USD") == "1INCH-USD"
+
+
+def test_symbol_resolution_needs_an_exact_name():
+    from pipeline.universe.select_crypto import resolve
+
+    quotes = [
+        {"symbol": "GRAM-USD", "shortname": "Gram (prev. Toncoin) USD", "quoteType": "CRYPTOCURRENCY"},
+        {"symbol": "TON11419-USD", "shortname": "Toncoin USD", "quoteType": "CRYPTOCURRENCY"},
+        {"symbol": "TON", "shortname": "Toncoin USD", "quoteType": "EQUITY"},
+    ]
+    assert resolve("Toncoin", lambda _q: quotes) == "TON11419-USD"
+    assert resolve("Mantle", lambda _q: quotes) is None

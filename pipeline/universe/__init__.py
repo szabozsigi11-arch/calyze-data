@@ -14,10 +14,13 @@ from pathlib import Path
 import pandas as pd
 
 UNIVERSE_FILE = Path(__file__).with_name("instruments.csv")
+#: A kripto külön fájlban él (`docs/kripto-univerzum.md`): a részvényes futás
+#: így nem kap egyetlen 24/7-es papírt sem, amíg minden része meg nem tanulja.
+CRYPTO_FILE = Path(__file__).with_name("instruments_crypto.csv")
 TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
-ASSET_CLASSES = {"equity", "etf"}
-SEGMENTS = {"sp500", "midcap", "etf"}
+ASSET_CLASSES = {"equity", "etf", "crypto"}
+SEGMENTS = {"sp500", "midcap", "etf", "crypto"}
 
 
 class UniverseError(ValueError):
@@ -32,6 +35,14 @@ def load_universe(path: Path = UNIVERSE_FILE) -> pd.DataFrame:
     # mert a pandas a csupa-üres oszlopot dátum helyett időbélyeggé alakítaná.
     valid_to = [date.fromisoformat(v) if v else None for v in frame["valid_to"]]
     frame["valid_to"] = pd.Series(valid_to, dtype=object, index=frame.index)
+    return frame
+
+
+def load_crypto_universe(path: Path = CRYPTO_FILE) -> pd.DataFrame:
+    """A kripto-univerzum; a `source_symbol` a Yahoo-szimbólum (pl. `UNI7083-USD`)."""
+    frame = load_universe(path)
+    if set(frame["asset_class"]) != {"crypto"} or set(frame["exchange_calendar"]) != {"24/7"}:
+        raise UniverseError("a kripto-fájlban csak 24/7-es kripto lehet")
     return frame
 
 

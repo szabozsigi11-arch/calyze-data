@@ -1,0 +1,51 @@
+instrument_id,ticker,name,asset_class,sector,exchange_calendar,valid_from,valid_to,segment,source_symbol
+CZ00621,BTC-USD,Bitcoin,crypto,,24/7,2026-10-02,,crypto,BTC-USD
+CZ00622,ETH-USD,Ethereum,crypto,,24/7,2026-10-02,,crypto,ETH-USD
+CZ00623,SOL-USD,Solana,crypto,,24/7,2026-10-02,,crypto,SOL-USD
+CZ00624,XRP-USD,XRP,crypto,,24/7,2026-10-02,,crypto,XRP-USD
+CZ00625,BNB-USD,BNB,crypto,,24/7,2026-10-02,,crypto,BNB-USD
+CZ00626,ZEC-USD,Zcash,crypto,,24/7,2026-10-02,,crypto,ZEC-USD
+CZ00627,DOGE-USD,Dogecoin,crypto,,24/7,2026-10-02,,crypto,DOGE-USD
+CZ00628,SUI-USD,Sui,crypto,,24/7,2026-10-02,,crypto,SUI20947-USD
+CZ00629,ENA-USD,Ethena,crypto,,24/7,2026-10-02,,crypto,ENA-USD
+CZ00630,UNI-USD,Uniswap,crypto,,24/7,2026-10-02,,crypto,UNI7083-USD
+CZ00631,ADA-USD,Cardano,crypto,,24/7,2026-10-02,,crypto,ADA-USD
+CZ00632,TRX-USD,TRON,crypto,,24/7,2026-10-02,,crypto,TRX-USD
+CZ00633,LINK-USD,Chainlink,crypto,,24/7,2026-10-02,,crypto,LINK-USD
+CZ00634,NEAR-USD,NEAR Protocol,crypto,,24/7,2026-10-02,,crypto,NEAR-USD
+CZ00635,AVAX-USD,Avalanche,crypto,,24/7,2026-10-02,,crypto,AVAX-USD
+CZ00636,LTC-USD,Litecoin,crypto,,24/7,2026-10-02,,crypto,LTC-USD
+CZ00637,AAVE-USD,Aave,crypto,,24/7,2026-10-02,,crypto,AAVE-USD
+CZ00638,PEPE-USD,Pepe,crypto,,24/7,2026-10-02,,crypto,PEPE24478-USD
+CZ00639,WLD-USD,Worldcoin,crypto,,24/7,2026-10-02,,crypto,WLD-USD
+CZ00640,TAO-USD,Bittensor,crypto,,24/7,2026-10-02,,crypto,TAO22974-USD
+CZ00641,ARB-USD,Arbitrum,crypto,,24/7,2026-10-02,,crypto,ARB11841-USD
+CZ00642,BCH-USD,Bitcoin Cash,crypto,,24/7,2026-10-02,,crypto,BCH-USD
+CZ00643,XLM-USD,Stellar,crypto,,24/7,2026-10-02,,crypto,XLM-USD
+CZ00644,FET-USD,Artificial Superintelligence Alliance,crypto,,24/7,2026-10-02,,crypto,FET-USD
+CZ00645,ONDO-USD,Ondo,crypto,,24/7,2026-10-02,,crypto,ONDO-USD
+CZ00646,DOT-USD,Polkadot,crypto,,24/7,2026-10-02,,crypto,DOT-USD
+CZ00647,XMR-USD,Monero,crypto,,24/7,2026-10-02,,crypto,XMR-USD
+CZ00648,DASH-USD,Dash,crypto,,24/7,2026-10-02,,crypto,DASH-USD
+CZ00649,FIL-USD,Filecoin,crypto,,24/7,2026-10-02,,crypto,FIL-USD
+CZ00650,INJ-USD,Injective,crypto,,24/7,2026-10-02,,crypto,INJ-USD
+CZ00651,SHIB-USD,Shiba Inu,crypto,,24/7,2026-10-02,,crypto,SHIB-USD
+CZ00652,APT-USD,Aptos,crypto,,24/7,2026-10-02,,crypto,APT21794-USD
+CZ00653,OP-USD,Optimism,crypto,,24/7,2026-10-02,,crypto,OP-USD
+CZ00654,ICP-USD,Internet Computer,crypto,,24/7,2026-10-02,,crypto,ICP-USD
+CZ00655,WIF-USD,dogwifhat,crypto,,24/7,2026-10-02,,crypto,WIF-USD
+CZ00656,CRV-USD,Curve DAO Token,crypto,,24/7,2026-10-02,,crypto,CRV-USD
+CZ00657,HBAR-USD,Hedera,crypto,,24/7,2026-10-02,,crypto,HBAR-USD
+CZ00658,BONK-USD,Bonk,crypto,,24/7,2026-10-02,,crypto,BONK-USD
+CZ00659,CAKE-USD,PancakeSwap,crypto,,24/7,2026-10-02,,crypto,CAKE-USD
+CZ00660,ZRO-USD,LayerZero,crypto,,24/7,2026-10-02,,crypto,ZRO26997-USD
+CZ00661,STRK-USD,Starknet,crypto,,24/7,2026-10-02,,crypto,STRK22691-USD
+CZ00662,LDO-USD,Lido DAO,crypto,,24/7,2026-10-02,,crypto,LDO-USD
+CZ00663,ETC-USD,Ethereum Classic,crypto,,24/7,2026-10-02,,crypto,ETC-USD
+CZ00664,PENDLE-USD,Pendle,crypto,,24/7,2026-10-02,,crypto,PENDLE-USD
+CZ00665,SEI-USD,Sei,crypto,,24/7,2026-10-02,,crypto,SEI-USD
+CZ00666,OKB-USD,OKB,crypto,,24/7,2026-10-02,,crypto,OKB-USD
+CZ00667,ATOM-USD,Cosmos,crypto,,24/7,2026-10-02,,crypto,ATOM-USD
+CZ00668,JTO-USD,Jito,crypto,,24/7,2026-10-02,,crypto,JTO-USD
+CZ00669,ALGO-USD,Algorand,crypto,,24/7,2026-10-02,,crypto,ALGO-USD
+CZ00670,RENDER-USD,Render,crypto,,24/7,2026-10-02,,crypto,RENDER-USD

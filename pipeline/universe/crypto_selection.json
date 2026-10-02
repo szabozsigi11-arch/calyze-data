@@ -1,0 +1,817 @@
+{
+  "selected_on": "2026-10-02",
+  "as_of": "2026-10-01",
+  "rule": "docs/kripto-univerzum.md",
+  "candidates": [
+    {
+      "name": "Bitcoin",
+      "symbol": "BTC-USD",
+      "status": "selected",
+      "rank": 1
+    },
+    {
+      "name": "Ethereum",
+      "symbol": "ETH-USD",
+      "status": "selected",
+      "rank": 2
+    },
+    {
+      "name": "BNB",
+      "symbol": "BNB-USD",
+      "status": "selected",
+      "rank": 5
+    },
+    {
+      "name": "XRP",
+      "symbol": "XRP-USD",
+      "status": "selected",
+      "rank": 4
+    },
+    {
+      "name": "Solana",
+      "symbol": "SOL-USD",
+      "status": "selected",
+      "rank": 3
+    },
+    {
+      "name": "TRON",
+      "symbol": "TRX-USD",
+      "status": "selected",
+      "rank": 12
+    },
+    {
+      "name": "Dogecoin",
+      "symbol": "DOGE-USD",
+      "status": "selected",
+      "rank": 7
+    },
+    {
+      "name": "Cardano",
+      "symbol": "ADA-USD",
+      "status": "selected",
+      "rank": 11
+    },
+    {
+      "name": "Chainlink",
+      "symbol": "LINK-USD",
+      "status": "selected",
+      "rank": 13
+    },
+    {
+      "name": "Stellar",
+      "symbol": "XLM-USD",
+      "status": "selected",
+      "rank": 23
+    },
+    {
+      "name": "Monero",
+      "symbol": "XMR-USD",
+      "status": "selected",
+      "rank": 27
+    },
+    {
+      "name": "Zcash",
+      "symbol": "ZEC-USD",
+      "status": "selected",
+      "rank": 6
+    },
+    {
+      "name": "Hyperliquid",
+      "symbol": "HYPE32196-USD",
+      "status": "short_history",
+      "rank": null
+    },
+    {
+      "name": "Bitcoin Cash",
+      "symbol": "BCH-USD",
+      "status": "selected",
+      "rank": 22
+    },
+    {
+      "name": "Litecoin",
+      "symbol": "LTC-USD",
+      "status": "selected",
+      "rank": 16
+    },
+    {
+      "name": "Avalanche",
+      "symbol": "AVAX-USD",
+      "status": "selected",
+      "rank": 15
+    },
+    {
+      "name": "Sui",
+      "symbol": "SUI20947-USD",
+      "status": "selected",
+      "rank": 8
+    },
+    {
+      "name": "Hedera",
+      "symbol": "HBAR-USD",
+      "status": "selected",
+      "rank": 37
+    },
+    {
+      "name": "Toncoin",
+      "symbol": "TON11419-USD",
+      "status": "short_history",
+      "rank": null
+    },
+    {
+      "name": "Shiba Inu",
+      "symbol": "SHIB-USD",
+      "status": "selected",
+      "rank": 31
+    },
+    {
+      "name": "Polkadot",
+      "symbol": "DOT-USD",
+      "status": "selected",
+      "rank": 26
+    },
+    {
+      "name": "UNUS SED LEO",
+      "symbol": "LEO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Uniswap",
+      "symbol": "UNI7083-USD",
+      "status": "selected",
+      "rank": 10
+    },
+    {
+      "name": "Cronos",
+      "symbol": "CRO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Ethereum Classic",
+      "symbol": "ETC-USD",
+      "status": "selected",
+      "rank": 43
+    },
+    {
+      "name": "NEAR Protocol",
+      "symbol": "NEAR-USD",
+      "status": "selected",
+      "rank": 14
+    },
+    {
+      "name": "Aptos",
+      "symbol": "APT21794-USD",
+      "status": "selected",
+      "rank": 32
+    },
+    {
+      "name": "Internet Computer",
+      "symbol": "ICP-USD",
+      "status": "selected",
+      "rank": 34
+    },
+    {
+      "name": "Pepe",
+      "symbol": "PEPE24478-USD",
+      "status": "selected",
+      "rank": 18
+    },
+    {
+      "name": "Aave",
+      "symbol": "AAVE-USD",
+      "status": "selected",
+      "rank": 17
+    },
+    {
+      "name": "Bittensor",
+      "symbol": "TAO22974-USD",
+      "status": "selected",
+      "rank": 20
+    },
+    {
+      "name": "Ethena",
+      "symbol": "ENA-USD",
+      "status": "selected",
+      "rank": 9
+    },
+    {
+      "name": "Mantle",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "OKB",
+      "symbol": "OKB-USD",
+      "status": "selected",
+      "rank": 46
+    },
+    {
+      "name": "POL (ex-MATIC)",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Kaspa",
+      "symbol": "KAS-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Render",
+      "symbol": "RENDER-USD",
+      "status": "selected",
+      "rank": 50
+    },
+    {
+      "name": "Arbitrum",
+      "symbol": "ARB11841-USD",
+      "status": "selected",
+      "rank": 21
+    },
+    {
+      "name": "Filecoin",
+      "symbol": "FIL-USD",
+      "status": "selected",
+      "rank": 29
+    },
+    {
+      "name": "VeChain",
+      "symbol": "VET-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Cosmos",
+      "symbol": "ATOM-USD",
+      "status": "selected",
+      "rank": 47
+    },
+    {
+      "name": "Algorand",
+      "symbol": "ALGO-USD",
+      "status": "selected",
+      "rank": 49
+    },
+    {
+      "name": "Optimism",
+      "symbol": "OP-USD",
+      "status": "selected",
+      "rank": 33
+    },
+    {
+      "name": "Injective",
+      "symbol": "INJ-USD",
+      "status": "selected",
+      "rank": 30
+    },
+    {
+      "name": "Stacks",
+      "symbol": "STX4847-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "The Graph",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Immutable",
+      "symbol": "IMX10603-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Celestia",
+      "symbol": "TIA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Sei",
+      "symbol": "SEI-USD",
+      "status": "selected",
+      "rank": 45
+    },
+    {
+      "name": "Artificial Superintelligence Alliance",
+      "symbol": "FET-USD",
+      "status": "selected",
+      "rank": 24
+    },
+    {
+      "name": "Bonk",
+      "symbol": "BONK-USD",
+      "status": "selected",
+      "rank": 38
+    },
+    {
+      "name": "dogwifhat",
+      "symbol": "WIF-USD",
+      "status": "selected",
+      "rank": 35
+    },
+    {
+      "name": "FLOKI",
+      "symbol": "FLOKI-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Jupiter",
+      "symbol": "JUP-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Worldcoin",
+      "symbol": "WLD-USD",
+      "status": "selected",
+      "rank": 19
+    },
+    {
+      "name": "Ondo",
+      "symbol": "ONDO-USD",
+      "status": "selected",
+      "rank": 25
+    },
+    {
+      "name": "Pyth Network",
+      "symbol": "PYTH-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Lido DAO",
+      "symbol": "LDO-USD",
+      "status": "selected",
+      "rank": 42
+    },
+    {
+      "name": "Maker",
+      "symbol": "MKR-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Sky",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Theta Network",
+      "symbol": "THETA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Quant",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "MultiversX",
+      "symbol": "EGLD-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Arweave",
+      "symbol": "AR-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Tezos",
+      "symbol": "XTZ-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "EOS",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Flow",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "The Sandbox",
+      "symbol": "SAND-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Decentraland",
+      "symbol": "MANA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Axie Infinity",
+      "symbol": "AXS-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Chiliz",
+      "symbol": "CHZ-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Gala",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Neo",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "IOTA",
+      "symbol": "IOTA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Kava",
+      "symbol": "KAVA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Dash",
+      "symbol": "DASH-USD",
+      "status": "selected",
+      "rank": 28
+    },
+    {
+      "name": "PancakeSwap",
+      "symbol": "CAKE-USD",
+      "status": "selected",
+      "rank": 39
+    },
+    {
+      "name": "THORChain",
+      "symbol": "RUNE-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Curve DAO Token",
+      "symbol": "CRV-USD",
+      "status": "selected",
+      "rank": 36
+    },
+    {
+      "name": "Synthetix",
+      "symbol": "SNX-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Compound",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "1inch",
+      "symbol": "1INCH-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Ethereum Name Service",
+      "symbol": "ENS-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Mina",
+      "symbol": "MINA-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Oasis",
+      "symbol": "ROSE-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Zilliqa",
+      "symbol": "ZIL-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Kusama",
+      "symbol": "KSM-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Basic Attention Token",
+      "symbol": "BAT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Enjin Coin",
+      "symbol": "ENJ-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Ankr",
+      "symbol": "ANKR-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Conflux",
+      "symbol": "CFX-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "JasmyCoin",
+      "symbol": "JASMY-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "XDC Network",
+      "symbol": "XDC-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Bitcoin SV",
+      "symbol": "BSV-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Helium",
+      "symbol": "HNT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Nexo",
+      "symbol": "NEXO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Gnosis",
+      "symbol": "GNO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Trust Wallet Token",
+      "symbol": "TWT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "BitTorrent",
+      "symbol": "BTTOLD-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "IoTeX",
+      "symbol": "IOTX-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Harmony",
+      "symbol": "ONE3945-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Celo",
+      "symbol": "CELO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "KuCoin Token",
+      "symbol": "KCS-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "GateToken",
+      "symbol": "GT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "LayerZero",
+      "symbol": "ZRO26997-USD",
+      "status": "selected",
+      "rank": 40
+    },
+    {
+      "name": "Starknet",
+      "symbol": "STRK22691-USD",
+      "status": "selected",
+      "rank": 41
+    },
+    {
+      "name": "Bitget Token",
+      "symbol": "BGB-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Pendle",
+      "symbol": "PENDLE-USD",
+      "status": "selected",
+      "rank": 44
+    },
+    {
+      "name": "Raydium",
+      "symbol": "RAY-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Jito",
+      "symbol": "JTO-USD",
+      "status": "selected",
+      "rank": 48
+    },
+    {
+      "name": "Sonic",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Fantom",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Akash Network",
+      "symbol": "AKT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Ocean Protocol",
+      "symbol": "OCEAN-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Rocket Pool",
+      "symbol": "RPL-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Livepeer",
+      "symbol": "LPT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Loopring",
+      "symbol": "LRC-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "yearn.finance",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "SushiSwap",
+      "symbol": "SUSHI-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "dYdX",
+      "symbol": "DYDX-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "GMX",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Osmosis",
+      "symbol": "OSMO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Holo",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Ravencoin",
+      "symbol": "RVN-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Decred",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Qtum",
+      "symbol": "QTUM-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Waves",
+      "symbol": "WAVES-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "ICON",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Siacoin",
+      "symbol": "SC-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Golem",
+      "symbol": "GLM-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Storj",
+      "symbol": "STORJ-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Audius",
+      "symbol": "AUDIO-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Band Protocol",
+      "symbol": null,
+      "status": "unresolved",
+      "rank": null
+    },
+    {
+      "name": "Ontology",
+      "symbol": "ONT-USD",
+      "status": "below_top_50",
+      "rank": null
+    },
+    {
+      "name": "Nervos Network",
+      "symbol": "CKB-USD",
+      "status": "below_top_50",
+      "rank": null
+    }
+  ]
+}
