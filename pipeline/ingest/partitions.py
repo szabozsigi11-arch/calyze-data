@@ -19,6 +19,9 @@ from pipeline.ingest.schema import PRICE_COLUMNS
 from pipeline.ingest.storage import Storage
 
 PRICES_PREFIX = "prices_daily"
+#: A kripto külön fájlokban (`docs/kripto-univerzum.md`): a részvényes
+#: rétegek így egyetlen 24/7-es sort sem látnak.
+CRYPTO_PRICES_PREFIX = "prices_crypto_daily"
 ACTIONS_PATH = "corporate_actions.parquet"
 
 PRICE_SCHEMA = pa.schema(
@@ -49,8 +52,8 @@ ACTION_SCHEMA = pa.schema(
 )
 
 
-def partition_path(year: int) -> str:
-    return f"{PRICES_PREFIX}/year={year}.parquet"
+def partition_path(year: int, prefix: str = PRICES_PREFIX) -> str:
+    return f"{prefix}/year={year}.parquet"
 
 
 def to_parquet(frame: pd.DataFrame, schema: pa.Schema) -> bytes:
@@ -64,16 +67,16 @@ def from_parquet(data: bytes) -> pd.DataFrame:
     return pq.read_table(io.BytesIO(data)).to_pandas()
 
 
-def read_partition(storage: Storage, year: int) -> pd.DataFrame:
-    data = storage.download(RAW_BUCKET, partition_path(year))
+def read_partition(storage: Storage, year: int, prefix: str = PRICES_PREFIX) -> pd.DataFrame:
+    data = storage.download(RAW_BUCKET, partition_path(year, prefix))
     if data is None:
         return pd.DataFrame(columns=list(PRICE_COLUMNS))
     return from_parquet(data)
 
 
-def existing_years(storage: Storage) -> list[int]:
+def existing_years(storage: Storage, prefix: str = PRICES_PREFIX) -> list[int]:
     years = []
-    for path in storage.list(RAW_BUCKET, PRICES_PREFIX):
+    for path in storage.list(RAW_BUCKET, prefix):
         name = path.rsplit("/", 1)[-1]
         if name.startswith("year=") and name.endswith(".parquet"):
             years.append(int(name[5:9]))
@@ -100,12 +103,15 @@ def upsert(existing: pd.DataFrame, fresh: pd.DataFrame, replace_ids: Iterable[st
     return merged.sort_values(["instrument_id", "date"]).reset_index(drop=True)
 
 
-def write_partitions(storage: Storage, frame: pd.DataFrame) -> list[int]:
+def write_partitions(storage: Storage, frame: pd.DataFrame, prefix: str = PRICES_PREFIX) -> list[int]:
     """Évenként külön fájlba írja a táblát; visszaadja a megírt éveket."""
     years = sorted({d.year for d in frame["date"]})
     for year in years:
         part = frame[[d.year == year for d in frame["date"]]]
         storage.upload(
-            RAW_BUCKET, partition_path(year), to_parquet(part, PRICE_SCHEMA), "application/octet-stream"
+            RAW_BUCKET,
+            partition_path(year, prefix),
+            to_parquet(part, PRICE_SCHEMA),
+            "application/octet-stream",
         )
     return years

@@ -1,0 +1,40 @@
+# A kripto napi letöltése (docs/kripto-univerzum.md; 5. fázis, E1).
+# A kripto napja UTC-éjfélkor zárul; a futás utána, külön ütemezéssel, hogy a
+# részvényes napi futást (22:30 UTC) ne érintse. A napló nyilvános: csak
+# darabszám és forrásnév kerül bele, ár soha.
+name: Crypto
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+    # Vasárnap teljes újratöltés, mint a részvényeknél.
+    - cron: "0 7 * * 0"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "daily = utolsó 10 nap, backfill = teljes múlt 2014-től"
+        type: choice
+        options: [daily, backfill]
+        default: daily
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crypto
+  cancel-in-progress: false
+
+jobs:
+  crypto:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen --no-dev
+      - name: Letöltés
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          MODE: ${{ inputs.mode || (github.event.schedule == '0 7 * * 0' && 'backfill') || 'daily' }}
+        run: uv run python -m pipeline.ingest.crypto --mode "$MODE"
