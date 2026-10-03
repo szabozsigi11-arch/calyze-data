@@ -305,6 +305,21 @@ def attach_shock_flags(
         return out
 
 
+def too_late(now: datetime, next_open: datetime | None) -> bool:
+    """Elkésett-e a becslés: a napja utáni első tőzsdenap már kinyitott.
+
+    Ugyanaz az elv, mint kriptón és devizán (6 órás szabály): a lenyomatnak
+    azelőtt kell rögzülnie, hogy az ablakából bármi ismert lenne.
+    """
+    return next_open is None or now.astimezone(UTC) >= next_open.astimezone(UTC)
+
+
+def partial_package(frame: pd.DataFrame, universe_size: int) -> bool:
+    """Részleges-e a kész csomag (a lefedettségi küszöb a TÉNYLEGES becsléseken)."""
+    covered = int(frame["instrument_id"].nunique()) if not frame.empty else 0
+    return covered < max(int(universe_size * MIN_SESSION_COVERAGE), 1)
+
+
 def implied_allowed(now: datetime, next_open: datetime | None) -> bool:
     """Szabad-e még opciós árat lekérni a becslés napjához.
 
@@ -401,7 +416,6 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         log.info("forecast_already_saved", session=str(session))
         return {"session": str(session), "status": "already_saved"}
 
-    models = load_models(storage)
     # A horizont végéhez a jövőbeli kereskedési napok is kellenek: a naptárból,
     # nem az árfolyamból (az még nem létezik).
     from pipeline.calendar import calendar
@@ -411,9 +425,24 @@ def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, obj
         ts.date()
         for ts in cal.sessions_in_range(pd.Timestamp(sessions_back(session, 2)[0]), cal.last_session)
     ]
-    frame = build_forecasts(features, prices, session, models, future, now.astimezone(UTC))
     later = [d for d in future if d > session]
     next_open = cal.session_open(pd.Timestamp(later[0])).to_pydatetime() if later else None
+    if too_late(now, next_open):
+        # A következő tőzsdenap már kinyitott: a becslés ablakának egy része
+        # lezajlott, a lenyomat utólagos válogatásnak látszana (docs/elo-futas.md).
+        # A nap kiesett napként látszik, nem pótoljuk.
+        log.warning("forecast_too_late", session=str(session), next_open=str(next_open))
+        return {"session": str(session), "status": "too_late"}
+
+    models = load_models(storage)
+    frame = build_forecasts(features, prices, session, models, future, now.astimezone(UTC))
+    if partial_package(frame, len(universe)):
+        # A forrás az univerzum töredékére adott használható sort: nem mentjük,
+        # hogy egy későbbi futás (a nyitás előtt) a teljes napot lenyomatolhassa.
+        log.warning(
+            "forecast_partial", session=str(session), instruments=int(frame["instrument_id"].nunique())
+        )
+        return {"session": str(session), "status": "partial"}
     if implied_allowed(now, next_open):
         frame = attach_implied(frame, implied_baseline(universe, prices, macro, session, future))
     else:

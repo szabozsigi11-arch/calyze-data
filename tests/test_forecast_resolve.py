@@ -355,3 +355,54 @@ def test_nyitas_utan_mar_nem_kerunk_le_opcios_arat():
     frame = pd.DataFrame({"instrument_id": ["CZ1"], "horizon": [5], "prob_up": [0.5]})
     out = attach_implied(frame, pd.DataFrame(), missing="stale_session")
     assert out["implied_status"].tolist() == ["stale_session"]
+
+
+def test_a_kovetkezo_nyitas_utan_mar_nem_becslunk():
+    """A részvényes becslés is csak az ablaka előtt rögzülhet (docs/elo-futas.md)."""
+    from datetime import UTC
+
+    from pipeline.forecast.run import too_late
+
+    # 2026-10-02 (péntek) után a következő nyitás hétfő 13:30 UTC.
+    opens = datetime(2026, 10, 5, 13, 30, tzinfo=UTC)
+    assert not too_late(datetime(2026, 10, 3, 1, 16, tzinfo=UTC), opens)
+    assert not too_late(datetime(2026, 10, 5, 13, 29, tzinfo=UTC), opens)
+    assert too_late(datetime(2026, 10, 5, 13, 30, tzinfo=UTC), opens)
+    # Ha a naptár nem tudja a következő napot, nem állítjuk, hogy időben vagyunk.
+    assert too_late(datetime(2026, 10, 3, 1, 16, tzinfo=UTC), None)
+
+
+def test_reszleges_csomagot_nem_mentunk():
+    """Egy 6 papíros nap nem „napi mérés”: a későbbi futás menti a teljeset."""
+    from pipeline.forecast.run import partial_package
+
+    six = pd.DataFrame({"instrument_id": [f"CZ{i:05d}" for i in range(6)] * 3})
+    full = pd.DataFrame({"instrument_id": [f"CZ{i:05d}" for i in range(616)]})
+    assert partial_package(six, 620)
+    assert partial_package(pd.DataFrame({"instrument_id": []}), 620)
+    assert not partial_package(full, 620)
+
+
+def test_elkesett_futas_nem_ment_es_a_modellhez_sem_nyul(tmp_path, monkeypatch):
+    from datetime import UTC
+
+    from pipeline.forecast import run as forecast_run
+    from pipeline.ingest.storage import LocalStorage
+
+    storage = LocalStorage(tmp_path)
+    monkeypatch.setattr(forecast_run, "_load_prices", lambda *_: _prices_for(TODAY))
+    monkeypatch.setattr(forecast_run, "_read_table", lambda _s, path: _stub_table(path))
+    monkeypatch.setattr(forecast_run, "build_features", lambda *_args, **_kw: _features_for(TODAY))
+    monkeypatch.setattr(forecast_run, "add_sector_return", lambda frame: frame)
+    monkeypatch.setattr(forecast_run, "choose_session", lambda *_args, **_kw: TODAY)
+    monkeypatch.setattr(
+        forecast_run,
+        "load_models",
+        lambda _storage: (_ for _ in ()).throw(AssertionError("elkésve nem szabad becsülni")),
+    )
+    # TODAY után egy héttel a következő nap már rég kinyitott.
+    result = forecast_run.run(
+        storage, datetime.combine(TODAY, datetime.min.time(), UTC) + pd.Timedelta(days=7)
+    )
+    assert result["status"] == "too_late"
+    assert storage.download("market-data-raw", forecast_run.package_path(TODAY)) is None
