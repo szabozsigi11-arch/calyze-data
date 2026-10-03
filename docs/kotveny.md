@@ -26,6 +26,14 @@ mintája: ami itt nincs kimondva, az ott áll (`kripto-modell.md`,
 Ha egy ilyen napra mégsincs görbe, az hiányként jelölődik, nem pótoljuk. A
 horizont kötvénynapban számít (5, 20, 60).
 
+**Kiegészítés, 2026-10-03, az első mérés előtt:** a teljes letöltés (1990–2026)
+szerint 6 kötvénynapon nincs görbe (állami gyász, 2001. szeptember 11–12., a
+Sandy hurrikán), és 20 olyan napra van, amely a naptár szerint nem kötvénynap
+(nagypéntek munkaerőpiaci jelentéssel; a szombatra eső ünnep pénteki
+megtartása). Ez utóbbiakat **kihagyjuk**: a naptár dönti el, mi kötvénynap, így
+a horizont a backtestben és élőben ugyanazokat a napokat számolja. Mindkét
+listát a letöltés napi összefoglalója rögzíti.
+
 ## 3. Univerzum: 7 idősor
 
 | Azonosító | Mi |

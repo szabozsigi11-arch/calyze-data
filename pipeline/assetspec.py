@@ -1,4 +1,4 @@
-"""Egy nem részvényes eszközosztály leírása (kripto, deviza).
+"""Egy nem részvényes eszközosztály leírása (kripto, deviza, kötvény).
 
 A kiértékelés és a megjelenítés egyetlen megvalósítás (`pipeline.crypto.resolve`,
 `pipeline.crypto.publish`); ez a leírás mondja meg, melyik naptárral, melyik
@@ -37,6 +37,11 @@ class AssetSpec:
     export_prefix: str
     #: a papír-nézet chartjának hossza (napban)
     history_days: int
+    #: a megjelenítés idősora, ha más, mint a mérésé (kötvény: hozam % az
+    #: `exp(hozam/100)` „ár” helyett); alapból a mérés idősora
+    load_display_prices: Callable[[Storage, list[int]], pd.DataFrame] | None = None
+    #: lehet-e tézist rögzíteni rá (`docs/kotveny.md`, 8.: kötvényre még nem)
+    theses: bool = True
 
 
 def crypto() -> AssetSpec:
@@ -90,4 +95,33 @@ def fx() -> AssetSpec:
         display_prefix="fx",
         export_prefix="record-fx",
         history_days=252,
+    )
+
+
+def bonds() -> AssetSpec:
+    from pipeline.bonds.calendar import last_bond_day
+    from pipeline.bonds.features import load_bond_prices, load_bond_yields
+    from pipeline.ingest.bonds import BONDS_HISTORY_START
+    from pipeline.universe import load_bonds_universe
+
+    return AssetSpec(
+        name="bonds",
+        calendar="UST",
+        scope="bonds",
+        family="lgbm-bonds",
+        version="v1",
+        last_day=last_bond_day,
+        load_prices=load_bond_prices,
+        load_universe=load_bonds_universe,
+        history_start_year=BONDS_HISTORY_START.year,
+        first_year=2026,
+        forecasts_prefix="forecasts-bonds",
+        outcomes_prefix="outcomes-bonds",
+        live_path="arena/bonds_live.parquet",
+        backtest_path="arena/bonds_backtest.parquet",
+        display_prefix="bonds",
+        export_prefix="record-bonds",
+        history_days=252,
+        load_display_prices=load_bond_yields,
+        theses=False,
     )

@@ -129,14 +129,15 @@ def push_sessions(url: str, secret_key: str, today: date) -> int | None:
 
 
 def calendar_rows() -> list[dict[str, str]]:
-    """A nem NYSE-naptárú papírok: a kripto (`24/7`) és a deviza (`TARGET`). Ami nincs benne, az NYSE."""
-    from pipeline.universe import load_crypto_universe, load_fx_universe
+    """A nem NYSE-naptárú papírok: kripto (`24/7`), deviza (`TARGET`), kötvény (`UST`).
 
-    crypto = load_crypto_universe()
-    fx = load_fx_universe()
-    return [{"instrument_id": i, "calendar": "24/7"} for i in crypto["instrument_id"]] + [
-        {"instrument_id": i, "calendar": "TARGET"} for i in fx["instrument_id"]
-    ]
+    Ami nincs benne, az NYSE. A kötvény-sor az adatbázisban a tézis- és gyors
+    trade-rögzítést tiltja (0025; `docs/kotveny.md`, 8.).
+    """
+    from pipeline.universe import load_bonds_universe, load_crypto_universe, load_fx_universe
+
+    pairs = (("24/7", load_crypto_universe()), ("TARGET", load_fx_universe()), ("UST", load_bonds_universe()))
+    return [{"instrument_id": i, "calendar": cal} for cal, u in pairs for i in u["instrument_id"]]
 
 
 def push_calendars(url: str, secret_key: str) -> int | None:

@@ -49,3 +49,8 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
         run: uv run python -m pipeline.timemachine.archive --kind fx
+      - name: Kötvény-időgép (a kötvény-lenyomatok ellenőrzésével)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.timemachine.archive --kind bonds

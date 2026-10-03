@@ -86,7 +86,9 @@ def run(
     prefix, export_prefix, calendar = spec.display_prefix, spec.export_prefix, spec.calendar
     last = spec.last_day(now)
     universe = active_on(spec.load_universe(), now.astimezone(UTC).date())
-    prices = spec.load_prices(storage, list(range(spec.history_start_year, last.year + 1)))
+    # A felület a megjelenítési idősort mutatja (kötvényen a hozamot, %-ban).
+    load_display = spec.load_display_prices or spec.load_prices
+    prices = load_display(storage, list(range(spec.history_start_year, last.year + 1)))
     years = list(range(spec.first_year, last.year + 1))
     forecasts = load_forecasts(storage, years, spec.forecasts_prefix)
     outcomes = load_outcomes(storage, years, spec.outcomes_prefix)

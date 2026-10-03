@@ -51,6 +51,9 @@ CRYPTO_ARCHIVE_PREFIX = "archive-crypto"
 #: A deviza saját lenyomatai és archívuma (6. fázis, F4).
 FX_MANIFESTS = REPO / "manifests-fx"
 FX_ARCHIVE_PREFIX = "archive-fx"
+#: A kötvény saját lenyomatai és archívuma (7. fázis).
+BONDS_MANIFESTS = REPO / "manifests-bonds"
+BONDS_ARCHIVE_PREFIX = "archive-bonds"
 PUBLIC_REPO_URL = "https://github.com/szabozsigi11-arch/calyze-data"
 ARCHIVE_PREFIX = "archive"
 INDEX_PATH = f"{ARCHIVE_PREFIX}/index.json"
@@ -179,7 +182,13 @@ def run(
     storage: Storage, now: datetime, dry_run: bool = False, rebuild: bool = False, kind: str = "equity"
 ) -> dict[str, object]:
     crypto = kind == "crypto"
-    if kind == "fx":
+    if kind == "bonds":
+        from pipeline.bonds.forecast import package_path as bonds_package_path
+        from pipeline.universe import load_bonds_universe
+
+        universe = load_bonds_universe()
+        manifests_root, prefix, path_of = BONDS_MANIFESTS, BONDS_ARCHIVE_PREFIX, bonds_package_path
+    elif kind == "fx":
         from pipeline.fx.forecast import package_path as fx_package_path
         from pipeline.universe import load_fx_universe
 
@@ -199,7 +208,7 @@ def run(
     # egy korábbi napra a mai verdictet írni utólagos bölcsesség lenne. A
     # kriptónál ez a kripto-összefoglaló.
     summary_now = published_summary(
-        storage, f"{kind}/latest.json" if kind in ("crypto", "fx") else "latest.json"
+        storage, f"{kind}/latest.json" if kind in ("crypto", "fx", "bonds") else "latest.json"
     )
     index: list[dict[str, object]] = []
     written = kept = 0
@@ -265,7 +274,7 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="ellenőriz és épít, de nem ír")
     parser.add_argument("--rebuild", action="store_true", help="a meglévő archívumokat is újraírja")
     parser.add_argument(
-        "--kind", choices=["equity", "crypto", "fx"], default="equity", help="melyik eszközosztály"
+        "--kind", choices=["equity", "crypto", "fx", "bonds"], default="equity", help="melyik eszközosztály"
     )
     args = parser.parse_args()
 

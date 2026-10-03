@@ -1,0 +1,71 @@
+# A kötvény napi letöltése a pénzügyminisztérium hozamgörbéjéből (docs/kotveny.md; 7. fázis).
+# A felvétel 15:30 ET-kor készül, a közlés 18:00 ET-ig; a futás utána, a
+# kötvénynapot követő éjjel (UTC). A napló nyilvános: csak darabszám, hozam nem.
+name: Bonds
+
+on:
+  schedule:
+    # 23:15 UTC: nyáron 19:15, télen 18:15 ET — a közlés után, a felvételtől 6 órán belül.
+    # Még kétszer óránként (a 6 órás határ nyáron 01:30 UTC): a GitHub ütemezője
+    # késhet; a becslés egyszer mentődik.
+    - cron: "15 23 * * 1-5"
+    - cron: "15 0 * * 2-6"
+    - cron: "15 1 * * 2-6"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "daily = az idei és a tavalyi év, backfill = teljes múlt 1990-től"
+        type: choice
+        options: [daily, backfill]
+        default: daily
+
+permissions:
+  # A napi kötvény-lenyomat (hash) commitolásához írás kell a repóba.
+  contents: write
+
+concurrency:
+  group: bonds
+  cancel-in-progress: false
+
+jobs:
+  bonds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - run: uv sync --frozen --no-dev
+      - name: Letöltés (US Treasury)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          MODE: ${{ inputs.mode || 'daily' }}
+        run: uv run python -m pipeline.ingest.bonds --mode "$MODE"
+      - name: Napi kötvény-becslés (a felvétel után 6 órán belül)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.bonds.forecast --manifest-dir manifests-bonds
+      - name: A napi kötvény-lenyomat commitolása
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p manifests-bonds
+          git add manifests-bonds
+          if git diff --cached --quiet; then
+            echo "nincs uj lenyomat"
+            exit 0
+          fi
+          git commit -m "bonds forecast manifest"
+          git pull --rebase --autostash
+          git push
+      - name: A lejárt kötvény-becslések kiértékelése
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.bonds.resolve
+      - name: Kötvény megjelenítési fájlok
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: uv run python -m pipeline.bonds.publish

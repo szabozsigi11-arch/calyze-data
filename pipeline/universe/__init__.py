@@ -19,10 +19,12 @@ UNIVERSE_FILE = Path(__file__).with_name("instruments.csv")
 CRYPTO_FILE = Path(__file__).with_name("instruments_crypto.csv")
 #: A deviza is külön fájlban (`docs/fx-univerzum.md`).
 FX_FILE = Path(__file__).with_name("instruments_fx.csv")
+#: A kötvény-idősorok is külön fájlban (`docs/kotveny.md`).
+BONDS_FILE = Path(__file__).with_name("instruments_bonds.csv")
 TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
-ASSET_CLASSES = {"equity", "etf", "crypto", "fx"}
-SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx"}
+ASSET_CLASSES = {"equity", "etf", "crypto", "fx", "bond"}
+SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx", "bond"}
 
 
 class UniverseError(ValueError):
@@ -53,6 +55,14 @@ def load_fx_universe(path: Path = FX_FILE) -> pd.DataFrame:
     frame = load_universe(path)
     if set(frame["asset_class"]) != {"fx"} or set(frame["exchange_calendar"]) != {"TARGET"}:
         raise UniverseError("a deviza-fájlban csak TARGET-naptárú deviza lehet")
+    return frame
+
+
+def load_bonds_universe(path: Path = BONDS_FILE) -> pd.DataFrame:
+    """A 7 kötvény-idősor; a `source_symbol` a görbe oszlopa (vagy két oszlop különbsége)."""
+    frame = load_universe(path)
+    if set(frame["asset_class"]) != {"bond"} or set(frame["exchange_calendar"]) != {"UST"}:
+        raise UniverseError("a kötvény-fájlban csak UST-naptárú kötvény lehet")
     return frame
 
 

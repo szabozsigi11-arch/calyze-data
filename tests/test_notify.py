@@ -48,10 +48,11 @@ def test_a_naptar_a_zaras_idopontjaval_megy():
 
 def test_a_kripto_papirok_24_7_es_naptarat_kapnak():
     rows = calendar_rows()
-    assert len(rows) == 50 + 28
+    assert len(rows) == 50 + 28 + 7
     assert rows[0] == {"instrument_id": "CZ00621", "calendar": "24/7"}
-    assert {r["calendar"] for r in rows} == {"24/7", "TARGET"}
+    assert {r["calendar"] for r in rows} == {"24/7", "TARGET", "UST"}
     assert {"instrument_id": "CZ00671", "calendar": "TARGET"} in rows
+    assert {"instrument_id": "CZ00702", "calendar": "UST"} in rows
 
 
 def test_target_napok_a_fixalas_idopontjaval():

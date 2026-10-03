@@ -1,0 +1,8 @@
+instrument_id,ticker,name,asset_class,sector,exchange_calendar,valid_from,valid_to,segment,source_symbol
+CZ00699,UST3M,US Treasury 3-month yield,bond,,UST,2026-10-03,,bond,3 Mo
+CZ00700,UST2Y,US Treasury 2-year yield,bond,,UST,2026-10-03,,bond,2 Yr
+CZ00701,UST5Y,US Treasury 5-year yield,bond,,UST,2026-10-03,,bond,5 Yr
+CZ00702,UST10Y,US Treasury 10-year yield,bond,,UST,2026-10-03,,bond,10 Yr
+CZ00703,UST30Y,US Treasury 30-year yield,bond,,UST,2026-10-03,,bond,30 Yr
+CZ00704,UST10Y2Y,US Treasury 10-year minus 2-year spread,bond,,UST,2026-10-03,,bond,10 Yr-2 Yr
+CZ00705,UST30Y5Y,US Treasury 30-year minus 5-year spread,bond,,UST,2026-10-03,,bond,30 Yr-5 Yr

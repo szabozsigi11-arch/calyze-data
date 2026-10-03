@@ -110,7 +110,7 @@ def run(
 
     # A tézisek: csak az eszközosztály saját árfolyamával és naptárával. A
     # tézisek hibája nem állíthatja meg a modell mérését (mint a részvényeknél).
-    if journal is not None and not prices.empty:
+    if journal is not None and spec.theses and not prices.empty:
         try:
             series = journal_resolve.as_series(prices.assign(tr=prices["close"]))
             journal_resolve.run(journal, series, forecasts, last, spec.calendar)
