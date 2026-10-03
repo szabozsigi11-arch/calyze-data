@@ -1,7 +1,7 @@
 # A nyilvános állapotoldal (mérési napló) újraépítése és közzététele.
 #
 # Adatot nem közöl: csak azt, mely napokra készült csomag, és mi a lenyomata.
-# Minden új lenyomat után fut, tehát a napi futás automatikusan frissíti.
+# Kétóránként és minden kézi push után újraépül.
 name: Status page
 
 on:
@@ -14,6 +14,11 @@ on:
       - "manifests-bonds/**"
       - "pipeline/status/**"
       - ".github/workflows/status.yml"
+  # A napi futás a lenyomatot a GitHub saját tokenjével commitolja, az pedig
+  # nem indít újabb munkafolyamatot: e nélkül az oldal 09-24 óta nem frissült.
+  # Kétóránként újraépül, így a friss lenyomat és a kiesett nap is látszik.
+  schedule:
+    - cron: "40 */2 * * *"
   workflow_dispatch:
 
 permissions:
