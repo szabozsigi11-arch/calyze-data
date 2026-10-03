@@ -73,3 +73,45 @@ def test_a_reszleges_napot_megjeloli() -> None:
     assert "partial" in page
     # A jelölés szövegként is ott van, nem csak színnel (spec/04, A7).
     assert ">partial</span>" in page
+
+
+def test_mind_a_negy_eszkozosztaly_es_a_kiesett_nap_latszik() -> None:
+    """A kiesett nap kiesettként, az elkésett lenyomat késettként látszik (docs/elo-futas.md)."""
+    from datetime import UTC, datetime
+
+    from pipeline.status.build import ASSETS, Section, late, missed_days
+
+    equity = ASSETS[0]
+    now = datetime(2026, 10, 3, 12, tzinfo=UTC)
+    have = [manifest(d) for d in ("2026-09-28", "2026-10-01")]
+    missed = missed_days(equity, have, now)
+    # 10-02 (péntek) határideje hétfő nyitás: még nem kiesett.
+    assert date(2026, 9, 29) in missed
+    assert date(2026, 9, 30) in missed
+    assert date(2026, 10, 2) not in missed
+    # A 09-24-i becslés 09-26-án készült: a 09-25-i nyitás után.
+    slow = Manifest(
+        session=date(2026, 9, 24),
+        made_at="2026-09-26T00:45:52+00:00",
+        instruments=616,
+        universe=620,
+        forecasts=1848,
+        sha256="a" * 64,
+        model="lgbm-core v1",
+        status="saved",
+    )
+    assert late(slow, equity.deadline)
+    assert not late(manifest("2026-09-28"), equity.deadline)
+
+    sections = [Section(equity, equity.title, equity.note, [*have, slow], missed)]
+    sections += [Section(a, a.title, a.note, [], missed_days(a, [], now)) for a in ASSETS[1:]]
+    page = render(have, now.date(), sections)
+    for title in ("Stocks and ETFs", "Crypto", "Currencies", "Treasury yields"):
+        assert title in page
+    assert ">missed</span>" in page
+    assert ">late</span>" in page
+    # A kripto élő kezdete (10-02) határideje 10-03 06:00 UTC volt: kiesett.
+    assert missed_days(ASSETS[1], [], now) == [date(2026, 10, 2)]
+    # A deviza és a kötvény még nem indult el: nincs kiesett nap.
+    assert missed_days(ASSETS[2], [], now) == []
+    assert missed_days(ASSETS[3], [], now) == []

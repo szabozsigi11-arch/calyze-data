@@ -66,6 +66,11 @@
     text-transform: uppercase; color: var(--fg-muted); white-space: nowrap;
   }
   tr.partial .num:first-of-type { color: var(--fg-muted); }
+  .wrap { overflow-x: auto; }
+  td.session { white-space: nowrap; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 0.25rem; font-weight: 600; }
+  p.note { font-size: 13px; color: var(--fg-muted); }
+  tr.missed td { color: var(--fg-muted); }
   footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line); color: var(--fg-muted); font-size: 13px; }
   a { color: inherit; }
   @media (max-width: 600px) { .model { display: none; } th:nth-child(4) { display: none; } }
@@ -76,7 +81,7 @@
   <p class="eyebrow">Calyze</p>
   <h1>Measurement log</h1>
   <p>
-    Every trading day the pipeline saves its forecasts before anyone can see them,
+    Every session the pipeline saves its forecasts before anyone can see them,
     and commits the SHA-256 fingerprint of that day's package to this public
     repository. The commit timestamp is the proof that nothing was rewritten
     afterwards. This page lists those fingerprints — no prices, no forecasts.
@@ -87,18 +92,19 @@
   <div class="totals">
     <div class="total"><b>$sessions</b><span>sessions recorded</span></div>
     <div class="total"><b>$forecasts</b><span>forecasts fingerprinted</span></div>
-    <div class="total"><b>$instruments</b><span>instruments in the last run</span></div>
+    <div class="total"><b>$missed</b><span>sessions missed</span></div>
   </div>
 
-  <table>
-    <caption>One row per trading session. The fingerprint is shortened; the full value is in <code>manifests/</code>. A session marked <span class="flag">partial</span> is one where the data source covered only part of the universe; those estimates are kept exactly as they were made.</caption>
-    <thead>
-      <tr><th>Session</th><th class="num">Instruments</th><th class="num">Forecasts</th><th>Model</th><th>SHA-256</th></tr>
-    </thead>
-    <tbody>
-$rows
-    </tbody>
-  </table>
+  <p class="note">
+    Four asset classes, each measured on its own. The fingerprint is shortened; the full value is
+    in <code>manifests/</code>, <code>manifests-crypto/</code>, <code>manifests-fx/</code> and
+    <code>manifests-bonds/</code>. <span class="flag">partial</span> means the source covered only part
+    of the universe; <span class="flag">late</span> means the fingerprint came after the deadline;
+    <span class="flag">missed</span> means no fingerprint at all. All three stay visible; nothing is
+    filled in later (<a href="https://github.com/szabozsigi11-arch/calyze-data/blob/main/docs/elo-futas.md">rules</a>).
+  </p>
+
+$sections
 
   <footer>
     <p>

@@ -9,6 +9,9 @@ on:
     branches: [main]
     paths:
       - "manifests/**"
+      - "manifests-crypto/**"
+      - "manifests-fx/**"
+      - "manifests-bonds/**"
       - "pipeline/status/**"
       - ".github/workflows/status.yml"
   workflow_dispatch:
