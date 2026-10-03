@@ -6,7 +6,12 @@ name: Crypto
 
 on:
   schedule:
+    # Háromszor a 6 órás ablakon belül (docs/kripto-modell.md, 6.): a GitHub
+    # ütemezője órákat késhet, és a forrás is késve teheti közzé a napot. A
+    # becslés egyszer mentődik; a későbbi futás nem írja felül.
     - cron: "30 0 * * *"
+    - cron: "30 2 * * *"
+    - cron: "30 4 * * *"
     # Vasárnap teljes újratöltés, mint a részvényeknél.
     - cron: "0 7 * * 0"
   workflow_dispatch:

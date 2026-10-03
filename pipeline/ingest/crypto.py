@@ -83,6 +83,20 @@ def missing_days(frame: pd.DataFrame, start: date, last: date) -> dict[str, int]
     return out
 
 
+def missing_dates(frame: pd.DataFrame, start: date, last: date) -> dict[str, int]:
+    """Naponként: hány papírnál hiányzik az a nap (csak dátum és darabszám, ár nem).
+
+    A 2026-10-03-i hajnali futásban egy teljes nap hiányzott mind az 50
+    papírnál, és a naplóból nem derült ki, melyik; ez mondja meg.
+    """
+    out: dict[str, int] = {}
+    for _, part in frame.groupby("instrument_id"):
+        first = max(start, min(part["date"]))
+        for d in set(pd.date_range(first, last, freq="D").date) - set(part["date"]):
+            out[d.isoformat()] = out.get(d.isoformat(), 0) + 1
+    return dict(sorted(out.items()))
+
+
 def run(mode: str, storage: Storage, now: datetime) -> dict[str, object]:
     fetched_at = now.astimezone(UTC)
     last = last_closed_session(now, CALENDAR)
@@ -101,6 +115,7 @@ def run(mode: str, storage: Storage, now: datetime) -> dict[str, object]:
     result = build_chain().fetch(list(ids), start, last)
     fresh = canonical(result.prices, ids, last, fetched_at)
     gaps = missing_days(fresh, start, last)
+    gap_dates = missing_dates(fresh, start, last) if mode == "daily" else {}
 
     if mode == "backfill":
         written = write_partitions(storage, fresh, CRYPTO_PRICES_PREFIX)
@@ -124,6 +139,7 @@ def run(mode: str, storage: Storage, now: datetime) -> dict[str, object]:
         "rows": len(fresh),
         "suspect_rows": int((fresh["quality"] == "suspect").sum()),
         "missing_days": gaps,
+        "missing_dates": gap_dates,
         "partitions_written": sorted(set(written)),
         **result.report.as_dict(),
     }
@@ -164,6 +180,7 @@ def main(argv: list[str] | None = None) -> int:
         rows=summary["rows"],
         missing=len(summary["missing"]) if isinstance(summary["missing"], list) else None,
         gap_instruments=len(summary["missing_days"]) if isinstance(summary["missing_days"], dict) else None,
+        gap_dates=summary["missing_dates"],
     )
     if summary["missing"]:
         log.error("crypto_ingest_incomplete", missing=summary["missing"])

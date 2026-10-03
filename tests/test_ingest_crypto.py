@@ -7,7 +7,7 @@ from datetime import UTC, date, datetime
 import pandas as pd
 
 from pipeline.ingest.chain import ChainReport, ChainResult
-from pipeline.ingest.crypto import canonical, missing_days, run
+from pipeline.ingest.crypto import canonical, missing_dates, missing_days, run
 from pipeline.ingest.partitions import CRYPTO_PRICES_PREFIX, PRICES_PREFIX, existing_years, read_partition
 from pipeline.ingest.storage import LocalStorage
 
@@ -69,3 +69,13 @@ def test_kulon_fajlba_ir_a_reszvenyes_tar_erintetlen(tmp_path, monkeypatch):
     stored = read_partition(storage, 2026, CRYPTO_PRICES_PREFIX)
     assert set(stored["instrument_id"]) == {"CZ00621", "CZ00622"}
     assert date(2026, 9, 26) in set(stored["date"])  # szombat
+
+
+def test_hianyzo_napok_datum_szerint():
+    frame = pd.DataFrame(
+        {
+            "instrument_id": ["CZ00621"] * 2 + ["CZ00622"] * 2,
+            "date": [date(2026, 9, 1), date(2026, 9, 2), date(2026, 9, 1), date(2026, 9, 2)],
+        }
+    )
+    assert missing_dates(frame, date(2026, 9, 1), date(2026, 9, 3)) == {"2026-09-03": 2}

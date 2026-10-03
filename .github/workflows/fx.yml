@@ -6,7 +6,10 @@ name: FX
 on:
   schedule:
     # 15:20 UTC: télen 16:20, nyáron 17:20 CET — a közlés után, a fixálástól 6 órán belül.
+    # Még kétszer óránként: a GitHub ütemezője késhet; a becslés egyszer mentődik.
     - cron: "20 15 * * 1-5"
+    - cron: "20 16 * * 1-5"
+    - cron: "20 17 * * 1-5"
   workflow_dispatch:
     inputs:
       mode:
