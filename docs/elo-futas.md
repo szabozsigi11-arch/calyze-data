@@ -49,6 +49,7 @@ Mert az is utólagos szerkesztés lenne. A szabály az eredményektől függetle
 (csak az időpont alapján) mondaná meg, mi esik ki, így nem volna válogatás —
 de a mérés eddig ezekkel együtt futott, és a változtatást ki kellene mondani
 minden számnál. Helyette: a napok név szerint itt állnak, az állapotoldal
-jelöli őket, és **2026-10-02-től ilyen nap nem keletkezhet**. Ha később a
-tulajdonos úgy dönt, hogy az élő verdikt nélkülük számoljon, az új,
-dátumozott kiegészítés lesz.
+jelöli őket, és **2026-10-02-től ilyen nap nem keletkezhet**.
+
+**2026-10-03, a tulajdonos döntése:** a fenti napok **jelölve a rekordban
+maradnak**; nem vesszük ki őket.
