@@ -134,7 +134,7 @@ def arena_backtest_records(scored: pd.DataFrame) -> pd.DataFrame:
                 "n_eff": c.n_eff,
                 "p_value": c.p_value,
                 "p_value_fdr": c.p_value_fdr,
-                "n_tests": len(comparisons),
+                "n_tests": c.n_tests,
                 "verdict": verdict(c),
                 "observations_needed": observations_needed(c),
             }

@@ -132,6 +132,22 @@ def test_fdr_correction_raises_p_values_when_many_comparisons_are_tested():
     assert comparisons[2].p_value_fdr > 0.03
 
 
+def test_the_extended_horizons_do_not_change_the_core_family():
+    # Az 1 és a 120 napos időtáv bevétele nem szigoríthatja utólag az 5/20/60 verdiktjeit.
+    core = [comparison(0.01, p=p) for p in (0.001, 0.02, 0.03)]
+    for c, h in zip(core, (5, 20, 60), strict=True):
+        c.horizon = h
+    apply_fdr(core)
+    before = [c.p_value_fdr for c in core]
+    extended = [comparison(0.01, p=p) for p in (0.04, 0.3, 0.6, 0.9)]
+    for c, h in zip(extended, (1, 120, 1, 120), strict=True):
+        c.horizon = h
+    apply_fdr(core + extended)
+    assert [c.p_value_fdr for c in core] == before
+    assert {c.n_tests for c in core} == {3}
+    assert {c.n_tests for c in extended} == {4}
+
+
 def test_power_calculation_asks_for_more_observations_for_smaller_differences():
     big = observations_needed(comparison(0.02, p=0.01, n_eff=100))
     small = observations_needed(comparison(0.002, p=0.9, n_eff=100))

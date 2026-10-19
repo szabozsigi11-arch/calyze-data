@@ -24,7 +24,7 @@ import pandas as pd
 from arch.bootstrap import StationaryBootstrap
 from statsmodels.stats.multitest import multipletests
 
-from pipeline.model.config import SEED
+from pipeline.model.config import SEED, fdr_family
 
 VerdictState = Literal["better_significant", "better_not_significant", "same", "worse", "too_early"]
 
@@ -64,6 +64,10 @@ class Comparison:
     p_value: float
     #: FDR-korrekció után (a rangsor családjára); amíg nincs, azonos a nyers p-vel
     p_value_fdr: float = field(default=float("nan"))
+    #: a horizont (kereskedési nap), ha van: ebből dől el az FDR-család
+    horizon: int | None = None
+    #: hány összevetésre korrigáltunk (a saját családjában); az apply_fdr tölti ki
+    n_tests: int = 0
 
     @property
     def higher_is_better(self) -> bool:
@@ -117,17 +121,30 @@ def compare(
         n_eff=n_eff,
         p_value=p,
         p_value_fdr=p,
+        horizon=horizon,
     )
 
 
 def apply_fdr(comparisons: list[Comparison], alpha: float = SIGNIFICANCE) -> list[Comparison]:
-    """Benjamini–Hochberg korrekció egy nézetben együtt rangsorolt összevetésekre."""
-    usable = [c for c in comparisons if np.isfinite(c.p_value)]
-    if not usable:
-        return comparisons
-    _, corrected, _, _ = multipletests([c.p_value for c in usable], alpha=alpha, method="fdr_bh")
-    for c, value in zip(usable, corrected, strict=True):
-        c.p_value_fdr = float(value)
+    """Benjamini–Hochberg korrekció egy nézetben együtt rangsorolt összevetésekre.
+
+    A család a horizonttól függ (`fdr_family`): az eredeti 5/20/60 és a később
+    hozzáadott 1/120 nap külön családban korrigálódik, így egy új horizont nem
+    szigorítja utólag a régiek már kimondott verdiktjét. Az `n_tests` a saját
+    család mérete.
+    """
+    families: dict[str, list[Comparison]] = {}
+    for c in comparisons:
+        families.setdefault(fdr_family(c.horizon), []).append(c)
+    for members in families.values():
+        for c in members:
+            c.n_tests = len(members)
+        usable = [c for c in members if np.isfinite(c.p_value)]
+        if not usable:
+            continue
+        _, corrected, _, _ = multipletests([c.p_value for c in usable], alpha=alpha, method="fdr_bh")
+        for c, value in zip(usable, corrected, strict=True):
+            c.p_value_fdr = float(value)
     return comparisons
 
 

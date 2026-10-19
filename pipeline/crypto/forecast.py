@@ -14,7 +14,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import pickle
 import sys
 from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
@@ -31,7 +30,8 @@ from pipeline.crypto.model import FAMILY, MODEL_PREFIX, VERSION
 from pipeline.features.run import MACRO_PATH, _read_table
 from pipeline.forecast.run import MIN_SESSION_COVERAGE, _package_bytes, forecast_id
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
-from pipeline.model.config import HORIZONS, MIN_HISTORY_SESSIONS
+from pipeline.model.config import MIN_HISTORY_SESSIONS
+from pipeline.model.loading import load_horizon_models
 from pipeline.universe import active_on, load_crypto_universe
 
 log = logging_setup.get_logger(__name__)
@@ -65,15 +65,7 @@ def choose_day(coverage: dict[date, int], expected: date, universe_size: int) ->
 
 
 def load_models(storage: Storage) -> dict[int, dict[str, object]]:
-    models: dict[int, dict[str, object]] = {}
-    for horizon in HORIZONS:
-        blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/h{horizon}.pkl")
-        if blob is None:
-            raise RuntimeError(
-                "Nincs betanított kripto-modell — előbb: python -m pipeline.crypto.model --task train"
-            )
-        models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
-    return models
+    return load_horizon_models(storage, MODEL_PREFIX, "python -m pipeline.crypto.model --task train")  # type: ignore[return-value]
 
 
 def build(
@@ -94,7 +86,7 @@ def build(
         raise RuntimeError(f"Nincs kripto feature-sor a(z) {day} napra.")
     close = prices[prices["date"] == day].set_index("instrument_id")["close"].astype("float64").to_dict()
     rows = []
-    for horizon in HORIZONS:
+    for horizon in sorted(models):
         bundle = models[horizon]
         model = bundle["model"]
         baselines = bundle["baselines"]

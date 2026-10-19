@@ -14,10 +14,8 @@ import numpy as np
 import pandas as pd
 
 from pipeline.arena.signals import DIRECTIONS
+from pipeline.model.config import HORIZONS
 from pipeline.model.evaluate import Comparison, apply_fdr, compare, verdict
-
-#: A mért horizontok — ugyanazok, mint a modellnél.
-HORIZONS: tuple[int, ...] = (5, 20, 60)
 
 METRIC = "direction_accuracy"
 

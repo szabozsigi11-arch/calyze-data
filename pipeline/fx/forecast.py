@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import pickle
 import sys
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
@@ -26,7 +25,7 @@ from pipeline.fx.calendar import fixing_at, last_fixing_day, offset
 from pipeline.fx.features import CALENDAR, build_fx_features, fx_regime, load_fx_prices
 from pipeline.fx.model import FAMILY, MODEL_PREFIX, VERSION
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
-from pipeline.model.config import HORIZONS
+from pipeline.model.loading import load_horizon_models
 from pipeline.universe import active_on, load_fx_universe
 
 log = logging_setup.get_logger(__name__)
@@ -46,15 +45,7 @@ def too_late(day: date, now: datetime) -> bool:
 
 
 def load_models(storage: Storage) -> dict[int, dict[str, object]]:
-    models: dict[int, dict[str, object]] = {}
-    for horizon in HORIZONS:
-        blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/h{horizon}.pkl")
-        if blob is None:
-            raise RuntimeError(
-                "Nincs betanított deviza-modell — előbb: python -m pipeline.fx.model --task train"
-            )
-        models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
-    return models
+    return load_horizon_models(storage, MODEL_PREFIX, "python -m pipeline.fx.model --task train")  # type: ignore[return-value]
 
 
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:

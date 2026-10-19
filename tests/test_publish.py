@@ -119,7 +119,7 @@ def test_papirszintu_teljesitmeny_csak_mintaszamot_kozol() -> None:
 
 def test_a_kovetkezo_lezaras_datuma_horizontonkent() -> None:
     result = next_resolutions(forecasts_frame(), pd.DataFrame())
-    assert result == {"5": "2026-09-25", "20": "2026-10-16", "60": "2026-12-11"}
+    assert result == {"1": None, "5": "2026-09-25", "20": "2026-10-16", "60": "2026-12-11", "120": None}
 
 
 def test_a_mar_lezart_becsles_nem_szamit_a_kovetkezo_datumba() -> None:

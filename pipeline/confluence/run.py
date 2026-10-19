@@ -33,7 +33,7 @@ import numpy as np
 import pandas as pd
 
 from pipeline import log as logging_setup
-from pipeline.arena.evaluate import HORIZONS, METRIC, baseline_direction, forward_outcomes
+from pipeline.arena.evaluate import METRIC, baseline_direction, forward_outcomes
 from pipeline.arena.signals import all_signals
 from pipeline.config import HISTORY_START, RAW_BUCKET, load_settings
 from pipeline.confluence.contexts import (
@@ -46,6 +46,7 @@ from pipeline.confluence.contexts import (
 )
 from pipeline.features.run import REGIME_PATH, _load_prices, _read_table
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
+from pipeline.model.config import CORE_HORIZONS
 from pipeline.model.evaluate import MIN_OBSERVATIONS, Comparison, apply_fdr, compare, verdict
 from pipeline.patterns.common import pivots
 from pipeline.patterns.levels import walk_levels
@@ -54,6 +55,10 @@ from pipeline.publish.run import DISPLAY_BUCKET
 from pipeline.universe import active_on, load_universe
 
 log = logging_setup.get_logger(__name__)
+
+# A konfluencia tesztelt családja a mérés előtt rögzült (2026-09-27): az 1 és
+# a 120 napos időtáv bevétele új keresés lenne, ezért itt csak a régi három fut.
+HORIZONS = CORE_HORIZONS
 
 #: A két időszak határa (3. fejezet). Egyetlen érték, nem mozog.
 DISCOVERY_END = date(2018, 12, 31)

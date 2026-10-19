@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import pickle
 import sys
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
@@ -30,7 +29,7 @@ from pipeline.crypto.forecast import build, manifest_entry
 from pipeline.features.run import MACRO_PATH, _read_table
 from pipeline.forecast.run import MIN_SESSION_COVERAGE, _package_bytes
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
-from pipeline.model.config import HORIZONS
+from pipeline.model.loading import load_horizon_models
 from pipeline.universe import active_on, load_bonds_universe
 
 log = logging_setup.get_logger(__name__)
@@ -59,15 +58,7 @@ def to_yield(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_models(storage: Storage) -> dict[int, dict[str, object]]:
-    models: dict[int, dict[str, object]] = {}
-    for horizon in HORIZONS:
-        blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/h{horizon}.pkl")
-        if blob is None:
-            raise RuntimeError(
-                "Nincs betanított kötvény-modell — előbb: python -m pipeline.bonds.model --task train"
-            )
-        models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
-    return models
+    return load_horizon_models(storage, MODEL_PREFIX, "python -m pipeline.bonds.model --task train")  # type: ignore[return-value]
 
 
 def run(storage: Storage, now: datetime, dry_run: bool = False) -> dict[str, object]:

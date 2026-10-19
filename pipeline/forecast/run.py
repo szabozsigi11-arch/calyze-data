@@ -45,7 +45,8 @@ from pipeline.features.run import (
 from pipeline.ingest.partitions import ACTIONS_PATH
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.model.baselines import add_sector_return
-from pipeline.model.config import HORIZONS, MIN_HISTORY_SESSIONS, MODEL_FAMILY, MODEL_VERSION
+from pipeline.model.config import CORE_HORIZONS, HORIZONS, MIN_HISTORY_SESSIONS, MODEL_FAMILY, MODEL_VERSION
+from pipeline.model.loading import load_horizon_models
 from pipeline.model.run import MODEL_PREFIX
 from pipeline.universe import active_on, load_universe
 
@@ -111,7 +112,7 @@ def build_forecasts(
         prices[prices["date"] == session].set_index("instrument_id")["close"].astype("float64").to_dict()
     )
     rows: list[pd.DataFrame] = []
-    for horizon in HORIZONS:
+    for horizon in sorted(models):
         bundle = models[horizon]
         model = bundle["model"]  # type: ignore[index]
         naive = bundle["baselines"]["naive"]  # type: ignore[index]
@@ -181,7 +182,11 @@ def build_challenger_forecasts(
 
 
 def load_challengers(storage: Storage) -> dict[str, dict[int, object]]:
-    """A kihívók betanított modelljei. Ami hiányzik, az kimarad (a napon „not available”)."""
+    """A kihívók betanított modelljei. Ami hiányzik, az kimarad (a napon „not available”).
+
+    Egy család akkor él, ha a régi három időtáv megvan; a bővített időtávok az
+    első tanításig hiányozhatnak, ahogy a fő modellnél is.
+    """
     from pipeline.model.families import FAMILY_VERSION
 
     out: dict[str, dict[int, object]] = {}
@@ -191,22 +196,13 @@ def load_challengers(storage: Storage) -> dict[str, dict[int, object]]:
             blob = storage.download(RAW_BUCKET, f"models/{family}/{FAMILY_VERSION}/h{horizon}.pkl")
             if blob is not None:
                 models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
-        if len(models) == len(HORIZONS):
+        if all(h in models for h in CORE_HORIZONS):
             out[family] = models
     return out
 
 
 def load_models(storage: Storage) -> dict[int, object]:
-    models: dict[int, object] = {}
-    for horizon in HORIZONS:
-        blob = storage.download(RAW_BUCKET, f"{MODEL_PREFIX}/h{horizon}.pkl")
-        if blob is None:
-            raise RuntimeError(
-                f"Nincs betanított modell a(z) {horizon} napos horizontra "
-                "— előbb: python -m pipeline.model.run --task train"
-            )
-        models[horizon] = pickle.loads(blob)  # noqa: S301 — saját, privát tárból származó fájl
-    return models
+    return load_horizon_models(storage, MODEL_PREFIX, "python -m pipeline.model.run --task train")  # type: ignore[return-value]
 
 
 def manifest_entry(

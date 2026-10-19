@@ -190,7 +190,7 @@ def measure(
         ("live", measure_period(live[0], live[1], calendar, "live")),
     ):
         apply_fdr([c for _, c in part])
-        rows += [{**_record(meta, c), "n_tests": len(part)} for meta, c in part]
+        rows += [{**_record(meta, c), "n_tests": c.n_tests} for meta, c in part]
         log.info("news_arena_period", period=period, comparisons=len(part))
     return pd.DataFrame(rows)
 

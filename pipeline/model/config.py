@@ -9,8 +9,21 @@ from __future__ import annotations
 
 from typing import Final
 
-#: Kereskedési napban mért horizontok (≈ 1 hét, 1 hónap, 3 hónap).
-HORIZONS: Final[tuple[int, ...]] = (5, 20, 60)
+#: Kereskedési napban mért horizontok (1 nap, ≈ 1 hét, 1 hónap, 3 hónap, 6 hónap).
+HORIZONS: Final[tuple[int, ...]] = (1, 5, 20, 60, 120)
+
+#: Az eredeti, 2026 szeptembere óta mért horizontok: egy FDR-család.
+CORE_HORIZONS: Final[tuple[int, ...]] = (5, 20, 60)
+#: A 2026-10-19-én hozzáadott horizontok saját FDR-családot kapnak, hogy a
+#: régi család (és vele a már kimondott verdiktek) utólag ne változzon
+#: (a tulajdonos döntése 2026-09-27: a tesztelt család egyszer, előre rögzül).
+EXTENDED_HORIZONS: Final[tuple[int, ...]] = (1, 120)
+
+
+def fdr_family(horizon: int | None) -> str:
+    """Melyik korrekciós családba tartozik egy összevetés a horizontja szerint."""
+    return "extended" if horizon in EXTENDED_HORIZONS else "core"
+
 
 #: A modellcsalád a mérés alanya: az adat változhat, a felépítés nem (spec/06, 4.).
 MODEL_FAMILY: Final = "lgbm-core"

@@ -112,7 +112,7 @@ def run_lab(scored: pd.DataFrame, segments: Mapping[str, str]) -> pd.DataFrame:
                 "p_value_fdr": c.p_value_fdr,
                 "verdict": verdict(c),
                 "observations_needed": observations_needed(c),
-                "n_tests": len(comparisons),
+                "n_tests": c.n_tests,
             }
             for m, c in zip(meta, comparisons, strict=True)
         ]

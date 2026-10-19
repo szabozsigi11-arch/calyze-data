@@ -257,7 +257,7 @@ def live_arena(outcomes: pd.DataFrame) -> pd.DataFrame:
                 "baseline_hits": round(c.baseline_value * c.n) if is_rate else None,
                 "p_value": c.p_value,
                 "p_value_fdr": c.p_value_fdr,
-                "n_tests": len(comparisons),
+                "n_tests": c.n_tests,
                 "verdict": verdict(c),
                 "observations_needed": observations_needed(c),
             }

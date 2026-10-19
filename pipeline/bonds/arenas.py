@@ -148,7 +148,7 @@ def news(
     ):
         part = measure_period(i_part, m_part, calendar, period)
         apply_fdr([c for _, c in part])
-        rows += [{**_record(meta, c), "n_tests": len(part)} for meta, c in part]
+        rows += [{**_record(meta, c), "n_tests": c.n_tests} for meta, c in part]
     table = pd.DataFrame(rows)
     if not table.empty:
         table["signal"] = table["signal"].replace({"market_shock": "curve_broad"})
