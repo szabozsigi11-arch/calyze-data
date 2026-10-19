@@ -708,6 +708,8 @@ def _arena_rows(table: pd.DataFrame | None) -> list[dict[str, object]]:
                 "n": int(r["n"]),
                 "n_eff": _num(r["n_eff"], 1),
                 "p_value_fdr": _num(r["p_value_fdr"]),
+                # soronként, mert az 1 és a 120 nap külön FDR-családban van
+                "n_tests": int(r.get("n_tests") or 0),
                 "verdict": r["verdict"],
                 "observations_needed": None if needed is None or pd.isna(needed) else int(needed),
                 "first_observed": r["first_observed"],
@@ -806,6 +808,7 @@ def build_lab(table: pd.DataFrame | None, now: datetime) -> dict[str, object]:
                         )
                     },
                     "cash_periods": int(r["cash_periods"]),
+                    "n_tests": int(r.get("n_tests") or 0),
                     "verdict": r["verdict"],
                     "observations_needed": None if needed is None or pd.isna(needed) else int(needed),
                     "curve": json.loads(r["curve"]) if isinstance(r["curve"], str) else [],
