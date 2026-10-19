@@ -173,6 +173,9 @@ def news(
 
 def run(storage: Storage, now: datetime, only: str | None = None) -> dict[str, object]:
     universe = active_on(load_fx_universe(), now.astimezone(UTC).date())
+    # Az arénák a fő párokon mérnek: a keresztpár jelzése nagyrészt két másik
+    # pár jelzésének ismétlése lenne, és hamisan növelné a mintát.
+    universe = universe[universe["segment"] != "fx_cross"]
     prices = load_fx_prices(storage, list(range(FX_HISTORY_START.year, now.year + 1)))
     prices = prices[prices["instrument_id"].isin(set(universe["instrument_id"]))].copy()
     prices["date"] = pd.to_datetime(prices["date"]).dt.date

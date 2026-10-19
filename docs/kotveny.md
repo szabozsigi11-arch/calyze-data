@@ -99,3 +99,22 @@ A kötvény-idősorra **egyelőre nem lehet tézist vagy gyors trade-et
 rögzíteni**: a hozam iránya fordított az árfolyaméhoz képest, és a
 zárónapi értesítéshez a kötvény-naptár az adatbázisban még nincs meg. Ha
 lesz, az új, dátumozott kiegészítés lesz.
+
+## 10. Bővítés: 17 idősor (2026-10-19)
+
+A tulajdonos kérése (2026-10-19). **Rögzítve az új sorok első letöltése előtt.**
+
+| Idősor | Forrás-oszlop | Múlt |
+|---|---|---|
+| UST1M, UST6M, UST1Y, UST3Y, UST7Y, UST20Y | a nominális görbe (`1 Mo`, `6 Mo`, `1 Yr`, `3 Yr`, `7 Yr`, `20 Yr`) | 1990-től; az 1 hónapos 2001-től, a 20 éves 1993 októberétől |
+| TIPS5Y, TIPS10Y, TIPS30Y | a reálhozam-görbe (`daily_treasury_real_yield_curve`) | 2003-tól; a 30 éves 2010-től |
+| UST10YBE | 10 éves nominális mínusz 10 éves reál („breakeven” inflációs várakozás) | 2003-tól |
+
+- A reálgörbe ugyanabból a 15:30-as (ET) felvételből készül, ugyanakkor
+  közlik: a naptár és a becslés ideje változatlan.
+- **Azonosítók:** `CZ00806`–`CZ00815`; a régi 7 változatlan.
+- **A rezsim nem változik:** az öt régi futamidőből számol, név szerint
+  (`TENORS`).
+- **Nem került be:** a 2, 4 hónapos és az 1,5 hónapos futamidő (2018 és
+  2022 után indult, és az 1 és a 3 hónapos közé esik); az euróövezeti görbe
+  (más közzétételi idő és naptár: külön körben).

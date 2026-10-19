@@ -78,6 +78,13 @@ def _latest(
     }
 
 
+def _in_scope(table: pd.DataFrame, scope: str) -> pd.DataFrame:
+    """A régi táblákban nincs `scope` oszlop: azok egészében a fő családé."""
+    if table.empty or "scope" not in table:
+        return table
+    return table[table["scope"] == scope]
+
+
 def run(
     storage: Storage, now: datetime, dry_run: bool = False, spec: AssetSpec | None = None
 ) -> dict[str, object]:
@@ -108,25 +115,32 @@ def run(
     def add(path: str, payload: object) -> None:
         files.append((path, _dumps(payload), "application/json"))
 
-    add(f"{prefix}/latest.json", _latest(day, today, outcomes, len(universe), first_live, now, spec))
+    # A fő rekord a külön mért szegmens nélkül (deviza: keresztpárok, 7. fejezet).
+    main_outcomes, _ = spec.split(outcomes, universe)
+    add(f"{prefix}/latest.json", _latest(day, today, main_outcomes, len(universe), first_live, now, spec))
     index = build_index(universe, today, prices)
     add(f"{prefix}/instruments.json", [{**row, "calendar": calendar} for row in index])
 
     live = _read_table(storage, spec.live_path)
     backtest = _read_table(storage, spec.backtest_path)
-    add(
-        f"{prefix}/evidence.json",
-        {
-            "generated_at": now.isoformat(),
-            "calendar": calendar,
-            "live_from": first_live,
-            "live": build_arena(live if live is not None else pd.DataFrame()),
-            "backtest": build_arena(backtest if backtest is not None else pd.DataFrame()),
-        },
-    )
+    live = live if live is not None else pd.DataFrame()
+    backtest = backtest if backtest is not None else pd.DataFrame()
+    evidence: dict[str, object] = {
+        "generated_at": now.isoformat(),
+        "calendar": calendar,
+        "live_from": first_live,
+        "live": build_arena(_in_scope(live, spec.scope)),
+        "backtest": build_arena(_in_scope(backtest, spec.scope)),
+    }
+    if spec.cross_scope is not None:
+        evidence["cross"] = {
+            "live": build_arena(_in_scope(live, spec.cross_scope)),
+            "backtest": build_arena(_in_scope(backtest, spec.cross_scope)),
+        }
+    add(f"{prefix}/evidence.json", evidence)
 
     existing = set() if dry_run else set(storage.list(DISPLAY_BUCKET, export_prefix))
-    record, record_files = build_record(outcomes, forecasts, universe, existing, now, export_prefix)
+    record, record_files = build_record(main_outcomes, forecasts, universe, existing, now, export_prefix)
     add(f"{prefix}/record.json", record)
     files.extend(record_files)
 

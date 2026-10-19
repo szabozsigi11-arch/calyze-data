@@ -1,6 +1,6 @@
 """A deviza napi letöltése az EKB referencia-árfolyamából (`docs/fx-univerzum.md`).
 
-Az EKB a hét nem-euró devizát az euró ellen közli; a 28 pár ebből
+Az EKB a nem-euró devizákat az euró ellen közli; minden pár ebből
 keresztárfolyamként áll elő: `A/B = (B per EUR) / (A per EUR)`. Naponta egy
 árfolyam (a 14:10 CET-es fixálás): a négy ár ugyanaz, volumen nincs.
 
@@ -28,6 +28,7 @@ import requests
 from pipeline import log as logging_setup
 from pipeline.config import RAW_BUCKET, load_settings
 from pipeline.fx.calendar import last_fixing_day, target_days
+from pipeline.fx.universe import EXTRA
 from pipeline.ingest.partitions import read_partition, upsert, write_partitions
 from pipeline.ingest.storage import LocalStorage, Storage, SupabaseStorage
 from pipeline.ingest.validate import mark_quality
@@ -36,7 +37,11 @@ from pipeline.universe import active_on, load_fx_universe
 log = logging_setup.get_logger(__name__)
 
 FX_PRICES_PREFIX = "prices_fx_daily"
-CURRENCIES = ("USD", "JPY", "GBP", "CHF", "AUD", "CAD", "NZD")
+CURRENCIES = ("USD", "JPY", "GBP", "CHF", "AUD", "CAD", "NZD", *EXTRA)
+#: Ahol az EKB-sor hosszan megszakadt, ott a múlt a szünet utáni első naptól
+#: él: a szünet két oldala között a technikai mutatók egy évekig tartó
+#: változást látnának egyetlen napnak (az izlandi korona 2008-11 és 2018-02 között).
+HISTORY_FROM = {"ISK": date(2018, 2, 1)}
 ECB_URL = "https://data-api.ecb.europa.eu/service/data/EXR/D.{codes}.EUR.SP00.A"
 FX_HISTORY_START = date(1999, 1, 4)
 #: A napi futás ennyi naptári napot kér újra (a késve javított értékek miatt).
@@ -69,7 +74,7 @@ def fetch_ecb(start: date, end: date, timeout: float = 60) -> pd.DataFrame:
 
 
 def cross_rates(ecb: pd.DataFrame, universe: pd.DataFrame, fetched_at: datetime) -> pd.DataFrame:
-    """A 28 pár a kanonikus ár-sémában (a négy ár = a fixálás, volumen nincs)."""
+    """A párok a kanonikus ár-sémában (a négy ár = a fixálás, volumen nincs)."""
     wide = ecb.pivot_table(index="date", columns="currency", values="per_eur", aggfunc="first")
     wide["EUR"] = 1.0
     rows = []
@@ -78,6 +83,8 @@ def cross_rates(ecb: pd.DataFrame, universe: pd.DataFrame, fetched_at: datetime)
         if base not in wide or quote not in wide:
             continue
         rate = (wide[quote] / wide[base]).dropna()
+        cut = max((HISTORY_FROM.get(c, FX_HISTORY_START) for c in (base, quote)), default=FX_HISTORY_START)
+        rate = rate[[d >= cut for d in rate.index]]
         rows.append(
             pd.DataFrame({"instrument_id": r.instrument_id, "date": rate.index, "rate": rate.to_numpy()})
         )

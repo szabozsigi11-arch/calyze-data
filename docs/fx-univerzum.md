@@ -61,3 +61,32 @@ ha a fixálás (14:10 CET) után legfeljebb 6 órán belül elkészül**; a
 devizapiac közben is kereskedik, ezért a késői lenyomat utólagos
 válogatásnak látszana (ugyanaz a szabály, mint kriptón,
 `kripto-modell.md`, 6.). A kimaradt nap nem pótolható.
+
+## 7. Bővítés: 128 pár (2026-10-19)
+
+A tulajdonos kérése (2026-10-19): több deviza, köztük a forint. **Rögzítve az
+új párok első letöltése előtt.**
+
+- **Új devizák:** az EKB minden további, ma is közölt devizája, kivéve a
+  rögzített árfolyamúakat (DKK, BGN, HKD: a jegybank sávban tartja, nincs mit
+  előre jelezni) és a megszűnteket (euróra váltott devizák; a rubelt 2022
+  óta nem közlik). Ez 20 deviza: CZK, HUF, PLN, RON, SEK, NOK, ISK, TRY, CNY,
+  SGD, KRW, INR, IDR, MYR, PHP, THB, ILS, MXN, BRL, ZAR.
+- **Párok:** mindegyik az euró, a dollár, a font, a frank és a jen ellen
+  (20 × 5 = 100). Elnevezés: a fő deviza az alap (EUR/HUF), a jen a jegyzés
+  oldalán (HUF/JPY), ahogy a piacon.
+- **Azonosítók:** `CZ00706`–`CZ00805`, devizánként a fenti sorrendben. A régi
+  28 azonosító változatlan.
+- **Két mérési család.** Az euró és a dollár elleni pár (40) a fő
+  deviza-rekordba tartozik. A font, a frank és a jen elleni pár (60,
+  szegmens: `fx_cross`) **saját családot** kap (`scope = fx_cross`): becslés és
+  verdikt van rá, de nagyrészt két másik pár különbsége, ezért a fő rekord,
+  a fő backtest és az indikátor-, minta- és hír-aréna mintáját nem növeli.
+- **Izlandi korona:** az EKB 2008-11 és 2018-02 között nem közölte. A múlt a
+  szünet utáni első naptól (2018-02-01) él; különben a technikai mutatók egy
+  kilencéves változást egyetlen napnak látnának.
+- **Ellenőrizve (2026-10-19):** a 20 sor 1999-től (a BRL, CNY, ILS, INR
+  2000-01-13-tól) hiány nélkül; a 2005-ös lej- és líra-átnevezés az EKB-soron
+  nem okoz ugrást (az EKB visszamenőleg átszámolt).
+- **A rezsim nem változik:** a hét dolláros fő párból számol, név szerint
+  (`pipeline/fx/features.py`, `USD_PAIRS`).

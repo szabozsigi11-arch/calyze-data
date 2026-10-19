@@ -67,6 +67,7 @@ def test_a_naptaron_kivuli_nap_kimarad_a_hiany_latszik(tmp_path, monkeypatch):
         return pd.DataFrame([{"Date": d, **cols} for d in days if d.year == year])
 
     monkeypatch.setattr(ingest, "fetch_year", fake)
+    monkeypatch.setattr(ingest, "fetch_real_year", lambda year, timeout=60: pd.DataFrame(columns=["Date"]))
     summary = ingest.run("daily", LocalStorage(tmp_path), datetime(2026, 10, 14, 12, tzinfo=UTC))
     assert summary["off_calendar_days"] == ["2026-10-12"]
     assert "2026-10-09" in summary["missing_bond_days"]

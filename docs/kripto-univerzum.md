@@ -87,3 +87,48 @@ Nervos Network.
   szimbólumot és más napi zárást használhatnak; amíg nem ellenőriztük, hogy
   ugyanazt a UTC-napot adják, kriptóra nem lépnek be, és a kiesés hiányként
   látszik.
+
+## 6. Bővítés: legfeljebb 200 (2026-10-19)
+
+A tulajdonos kérése (2026-10-19): több kripto. **Rögzítve, mielőtt egyetlen
+új jelölt forgalmi adatát lekértük volna.**
+
+- **A meglévő 50 marad**, azonosítóval együtt (`CZ00621`–`CZ00670`).
+- **Jelöltek:** a 4. fejezet listája és a 7. fejezet második listája. A
+  kizárás (2. fejezet) mindkettőre áll.
+- **Szűrés:** a 3. fejezet szabályai (szimbólum név szerint, legalább 730 nap
+  múlt, nincs 3 napnál hosszabb hiány), 2026-10-18-ig, **és** a 60 napos
+  medián napi dollárforgalom legalább **1 millió dollár**: e fölött a gyertyák
+  hiányosak és a sáv a zajt mérné.
+- **Rangsor:** a 60 napos medián napi dollárforgalom. A meglévő 50 után a
+  legnagyobb forgalmú legfeljebb **150** kerül be; ha kevesebb megy át a
+  szűrőn, annyi.
+- **Azonosítók:** `CZ00816`-tól, a rangsor sorrendjében (a deviza- és a
+  kötvény-bővítés után).
+- **Túlélési torzítás:** ez is a mai lista; ugyanúgy jelöljük, mint az első 50-et.
+
+## 7. Második jelöltlista
+
+Ethereum Classic, Horizen, Komodo, Verge, DigiByte, Nano, Syscoin, Steem,
+Hive, Lisk, Ardor, NEM, Symbol, WAX, Alchemy Pay, Balancer, Bancor,
+Kyber Network Crystal, 0x Protocol, UMA, API3, Chromia, Civic, Status,
+Numeraire, Origin Protocol, Orchid, Powerledger, Request, SKALE, Biconomy,
+Cartesi, Celer Network, COTI, Dent, Mask Network, Moonbeam, Astar, Kadena,
+Flux, Ergo, Radix, Casper, Polymesh, Constellation, Echelon Prime, Beam,
+Illuvium, Yield Guild Games, Blur, Arkham, SPACE ID, Hooked Protocol, ApeCoin,
+EthereumPoW, Convex Finance, Frax Share, Liquity, Aevo, AltLayer,
+Manta Network, Dymension, Pixels, Portal, Ronin, Saga, ZetaChain, Wormhole,
+Notcoin, ether.fi, Safe, Aethir, io.net, ZKsync, EigenLayer, Grass, Popcat,
+MOG Coin, Brett, Turbo, BOOK OF MEME, cat in a dogs world,
+Peanut the Squirrel, Fartcoin, Goatseus Maximus, Virtuals Protocol, ai16z,
+Aerodrome Finance, Morpho, Orca, Drift, Kamino, Tensor, Hivemapper,
+Theta Fuel, SuperVerse, Ultra, Sweat Economy, WOO, MANTRA, Reserve Rights,
+Amp, Ark, Gas, Ontology Gas, eCash, Firo, Secret, IOST, Telcoin, JUST,
+Sun Token, Kaia, Flare, Songbird, Core, Axelar, Terra Classic, Terra, Metis,
+Moonriver, Phala Network, Centrifuge, Tellor, DIA, Marinade, Bonfida,
+Blast, Mode, Scroll, Taiko, Zora, Linea, Usual, Movement, Story, Berachain,
+Kaito, Initia, Hyperlane, Plume, Walrus, Bitlayer, Babylon, Lombard,
+Solv Protocol, Mubarak, Pi Network.
+
+Ha két név ugyanarra a Yahoo-szimbólumra mutat (egymással vagy az első listával), az
+első előfordulás számít; a második „duplicate” jelölést kap.

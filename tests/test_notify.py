@@ -47,8 +47,11 @@ def test_a_naptar_a_zaras_idopontjaval_megy():
 
 
 def test_a_kripto_papirok_24_7_es_naptarat_kapnak():
+    from pipeline.universe import load_bonds_universe, load_crypto_universe, load_fx_universe
+
     rows = calendar_rows()
-    assert len(rows) == 50 + 28 + 7
+    assert len(rows) == len(load_crypto_universe()) + len(load_fx_universe()) + len(load_bonds_universe())
+    assert len(rows) <= 2000  # a 0023-as függvény ennél többet nem fogad el
     assert rows[0] == {"instrument_id": "CZ00621", "calendar": "24/7"}
     assert {r["calendar"] for r in rows} == {"24/7", "TARGET", "UST"}
     assert {"instrument_id": "CZ00671", "calendar": "TARGET"} in rows

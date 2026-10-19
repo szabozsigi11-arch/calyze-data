@@ -42,6 +42,19 @@ class AssetSpec:
     load_display_prices: Callable[[Storage, list[int]], pd.DataFrame] | None = None
     #: lehet-e tézist rögzíteni rá (`docs/kotveny.md`, 8.: kötvényre még nem)
     theses: bool = True
+    #: a külön mért szegmens (deviza: a font, a frank és a jen elleni
+    #: keresztpárok). Becslés és verdikt van rá, de a fő rekordba, a fő
+    #: backtestbe és az arénákba nem számít, mert hamisan növelné a mintát.
+    cross_segment: str | None = None
+    cross_scope: str | None = None
+
+    def split(self, frame: pd.DataFrame, universe: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+        """(fő, külön mért) sorok az `instrument_id` szerint."""
+        if self.cross_segment is None or frame.empty or "segment" not in universe:
+            return frame, frame.iloc[0:0]
+        cross_ids = set(universe.loc[universe["segment"] == self.cross_segment, "instrument_id"])
+        mask = frame["instrument_id"].isin(cross_ids)
+        return frame[~mask], frame[mask]
 
 
 def crypto() -> AssetSpec:
@@ -95,6 +108,8 @@ def fx() -> AssetSpec:
         display_prefix="fx",
         export_prefix="record-fx",
         history_days=252,
+        cross_segment="fx_cross",
+        cross_scope="fx_cross",
     )
 
 

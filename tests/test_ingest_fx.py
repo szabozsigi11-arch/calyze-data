@@ -46,3 +46,20 @@ def test_keresztarfolyam_az_euro_ellen_kozolt_ertekekbol():
 def test_hianyzo_target_nap_jelolve():
     ecb = pd.DataFrame({"date": [date(2026, 9, 28), date(2026, 9, 30)], "currency": "USD", "per_eur": 1.1})
     assert missing_days(ecb, date(2026, 9, 28), date(2026, 9, 30)) == ["2026-09-29"]
+
+
+def test_az_izlandi_korona_a_szunet_utan_indul():
+    # 2008-11 és 2018-02 között az EKB nem közölt ISK-t: a két oldal közötti
+    # ugrás egyetlen napnak látszana, ezért a múlt a szünet utáni naptól él.
+
+    rows = [
+        {"date": d, "currency": c, "per_eur": v}
+        for d in (date(2008, 10, 1), date(2018, 2, 1), date(2018, 2, 2))
+        for c, v in (("USD", 1.1), ("ISK", 120.0))
+    ]
+    universe = load_fx_universe()
+    out = cross_rates(pd.DataFrame(rows), universe, datetime(2026, 10, 19, 15, tzinfo=UTC))
+    t = universe.set_index("instrument_id")["ticker"]
+    isk = out[out["instrument_id"].map(t).str.contains("ISK")]
+    assert not isk.empty
+    assert min(isk["date"]) == date(2018, 2, 1)

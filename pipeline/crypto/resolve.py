@@ -96,7 +96,10 @@ def run(
             for year in sorted({d.year for d in outcomes["session"]}):
                 part = outcomes[[d.year == year for d in outcomes["session"]]].reset_index(drop=True)
                 _write_table(storage, outcomes_path(year, spec.outcomes_prefix), part)
-        arena = scoped_live_arena(outcomes, spec.scope)
+        main, cross = spec.split(outcomes, spec.load_universe())
+        arena = scoped_live_arena(main, spec.scope)
+        if spec.cross_scope is not None and not cross.empty:
+            arena = pd.concat([arena, scoped_live_arena(cross, spec.cross_scope)], ignore_index=True)
         if not arena.empty:
             _write_table(storage, spec.live_path, arena)
         summary |= {

@@ -6,3 +6,13 @@ CZ00702,UST10Y,US Treasury 10-year yield,bond,,UST,2026-10-03,,bond,10 Yr
 CZ00703,UST30Y,US Treasury 30-year yield,bond,,UST,2026-10-03,,bond,30 Yr
 CZ00704,UST10Y2Y,US Treasury 10-year minus 2-year spread,bond,,UST,2026-10-03,,bond,10 Yr-2 Yr
 CZ00705,UST30Y5Y,US Treasury 30-year minus 5-year spread,bond,,UST,2026-10-03,,bond,30 Yr-5 Yr
+CZ00806,UST1M,US Treasury 1-month yield,bond,,UST,2026-10-19,,bond,1 Mo
+CZ00807,UST6M,US Treasury 6-month yield,bond,,UST,2026-10-19,,bond,6 Mo
+CZ00808,UST1Y,US Treasury 1-year yield,bond,,UST,2026-10-19,,bond,1 Yr
+CZ00809,UST3Y,US Treasury 3-year yield,bond,,UST,2026-10-19,,bond,3 Yr
+CZ00810,UST7Y,US Treasury 7-year yield,bond,,UST,2026-10-19,,bond,7 Yr
+CZ00811,UST20Y,US Treasury 20-year yield,bond,,UST,2026-10-19,,bond,20 Yr
+CZ00812,TIPS5Y,US Treasury 5-year real yield (TIPS),bond,,UST,2026-10-19,,bond,Real 5 YR
+CZ00813,TIPS10Y,US Treasury 10-year real yield (TIPS),bond,,UST,2026-10-19,,bond,Real 10 YR
+CZ00814,TIPS30Y,US Treasury 30-year real yield (TIPS),bond,,UST,2026-10-19,,bond,Real 30 YR
+CZ00815,UST10YBE,US 10-year breakeven inflation (nominal minus real),bond,,UST,2026-10-19,,bond,10 Yr-Real 10 YR

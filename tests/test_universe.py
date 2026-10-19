@@ -66,11 +66,13 @@ def test_crypto_universe_is_separate_and_continues_the_ids():
     from pipeline.universe import load_crypto_universe
 
     c = load_crypto_universe()
-    assert len(c) == 50
+    assert len(c) == 189  # 50 (2026-10-02) + 139 (2026-10-19, a 6. fejezet szabályával)
     assert set(c["asset_class"]) == {"crypto"}
     assert set(c["exchange_calendar"]) == {"24/7"}
-    # A részvények után folytatódik, ütközés nélkül.
-    assert list(c["instrument_id"]) == [f"CZ{i:05d}" for i in range(621, 671)]
+    # A részvények után folytatódik, ütközés nélkül; a bővítés a kötvények után.
+    assert list(c["instrument_id"][:50]) == [f"CZ{i:05d}" for i in range(621, 671)]
+    assert list(c["instrument_id"][50:]) == [f"CZ{i:05d}" for i in range(816, 955)]
+    assert not c["source_symbol"].duplicated().any()
     assert not set(c["instrument_id"]) & set(load_universe()["instrument_id"])
     # A részvényes futás továbbra sem lát kriptót.
     assert "crypto" not in set(load_universe()["asset_class"])
@@ -81,7 +83,8 @@ def test_crypto_ids_never_change():
 
     from pipeline.universe import load_crypto_universe
 
-    c = load_crypto_universe()
+    # Az első 50 lenyomata: a bővítés nem nyúlhat hozzájuk.
+    c = load_crypto_universe().iloc[:50]
     digest = hashlib.sha256(",".join(c["instrument_id"] + ":" + c["source_symbol"]).encode()).hexdigest()
     assert c.iloc[0]["source_symbol"] == "BTC-USD"
     assert c.iloc[1]["source_symbol"] == "ETH-USD"
@@ -116,16 +119,41 @@ def test_symbol_resolution_needs_an_exact_name():
     assert resolve("Mantle", lambda _q: quotes) is None
 
 
-def test_fx_universe_28_pars_rule_and_ids():
+def test_fx_universe_rule_and_ids():
     from pipeline.fx.universe import build
-    from pipeline.universe import load_crypto_universe, load_fx_universe
+    from pipeline.universe import load_bonds_universe, load_crypto_universe, load_fx_universe
 
     fx = load_fx_universe()
-    assert len(fx) == 28
-    assert list(fx["instrument_id"]) == [f"CZ{i:05d}" for i in range(671, 699)]
+    assert len(fx) == 128
+    # Az első 28 azonosító soha nem változik; a bővítés 706-tól folytatódik.
+    assert list(fx["instrument_id"][:28]) == [f"CZ{i:05d}" for i in range(671, 699)]
+    assert list(fx["instrument_id"][28:]) == [f"CZ{i:05d}" for i in range(706, 806)]
+    assert {"EURHUF", "USDHUF", "GBPHUF", "CHFHUF", "HUFJPY"} <= set(fx["ticker"])
+    # A keresztpár saját mérési családba kerül, a fő rekordba csak az EUR és USD elleni.
+    cross = fx[fx["segment"] == "fx_cross"]
+    assert len(cross) == 60
+    assert not cross["ticker"].str.contains("EUR|USD").any()
+    # Rögzített árfolyamú deviza nem kerül be.
+    assert not fx["ticker"].str.contains("DKK|BGN|HKD|RUB").any()
+    assert not set(fx["instrument_id"]) & set(load_bonds_universe()["instrument_id"])
     # A fájl a szabályból áll elő: újragenerálva ugyanaz.
     assert list(build()["ticker"]) == list(fx["ticker"])
     assert {"EURUSD", "USDJPY", "GBPUSD", "AUDNZD", "CHFJPY"} <= set(fx["ticker"])
     taken = set(load_universe()["instrument_id"]) | set(load_crypto_universe()["instrument_id"])
     assert not set(fx["instrument_id"]) & taken
     assert not set(fx["ticker"]) & set(load_universe()["ticker"])
+
+
+def test_a_keresztpar_kulon_csaladba_kerul():
+    from pipeline.assetspec import crypto, fx
+    from pipeline.universe import load_crypto_universe, load_fx_universe
+
+    universe = load_fx_universe()
+    frame = universe[["instrument_id", "ticker"]]
+    main, cross = fx().split(frame, universe)
+    assert set(cross["ticker"]) >= {"GBPHUF", "HUFJPY"}
+    assert set(main["ticker"]) >= {"EURHUF", "USDHUF", "EURUSD"}
+    assert len(main) + len(cross) == len(frame)
+    # A kriptón nincs külön szegmens: minden a fő családé.
+    c = load_crypto_universe()
+    assert len(crypto().split(c, c)[1]) == 0

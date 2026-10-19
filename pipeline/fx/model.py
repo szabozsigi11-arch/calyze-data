@@ -20,6 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 from pipeline import log as logging_setup
+from pipeline.assetspec import fx as fx_spec
 from pipeline.config import RAW_BUCKET, load_settings
 from pipeline.features.run import MACRO_PATH, _read_table, _write_table
 from pipeline.fx.calendar import last_fixing_day
@@ -139,9 +140,14 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
     )
     if scored.empty:
         raise RuntimeError("A deviza-backtest egyetlen foldot sem tudott lefuttatni.")
-    records = arena_records(
-        scored, live=False, baseline_ids=BASELINES, family=FAMILY, version=VERSION, scope=SCOPE
-    )
+    # A keresztpárok külön családban (`docs/fx-univerzum.md`, 7.): a fő
+    # backtest mintáját nem növelik.
+    main, cross = fx_spec().split(scored, load_fx_universe())
+    common = {"live": False, "baseline_ids": BASELINES, "family": FAMILY, "version": VERSION}
+    parts = [arena_records(main, **common, scope=SCOPE)]
+    if not cross.empty:
+        parts.append(arena_records(cross, **common, scope="fx_cross"))
+    records = pd.concat(parts, ignore_index=True)
     _write_table(storage, BACKTEST_PATH, records)
     summary = {
         **summarise(records),

@@ -36,8 +36,13 @@ BONDS_PRICES_PREFIX = "prices_bonds_daily"
 BONDS_HISTORY_START = date(1990, 1, 2)
 URL = (
     "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/"
-    "{year}/all?type=daily_treasury_yield_curve&field_tdr_date_value={year}&page&_format=csv"
+    "{year}/all?type={kind}&field_tdr_date_value={year}&page&_format=csv"
 )
+#: A reálhozam-görbe (TIPS) 2003-tól; ugyanabból a 15:30-as felvételből készül.
+REAL_FROM_YEAR = 2003
+#: A reálhozam oszlopai ezzel az előtaggal kerülnek a görbébe (a minisztérium
+#: „5 YR”-nek hívja, a nominálisat „5 Yr”-nek: a kis-nagybetű nem elég jel).
+REAL_PREFIX = "Real "
 #: Azonosítható kérés: a forrás így tudja, ki kéri (nem rejtőzködünk).
 HEADERS = {"User-Agent": "Calyze research pipeline (github.com/szabozsigi11-arch/calyze-data)"}
 
@@ -46,10 +51,10 @@ class TreasuryError(RuntimeError):
     """A pénzügyminisztérium nem adott használható választ."""
 
 
-def fetch_year(year: int, timeout: float = 60) -> pd.DataFrame:
+def fetch_year(year: int, timeout: float = 60, kind: str = "daily_treasury_yield_curve") -> pd.DataFrame:
     for attempt in range(3):
         try:
-            r = requests.get(URL.format(year=year), headers=HEADERS, timeout=timeout)
+            r = requests.get(URL.format(year=year, kind=kind), headers=HEADERS, timeout=timeout)
         except requests.RequestException as error:
             if attempt == 2:
                 raise TreasuryError(type(error).__name__) from error
@@ -61,8 +66,33 @@ def fetch_year(year: int, timeout: float = 60) -> pd.DataFrame:
     raise TreasuryError(f"HTTP {r.status_code}")
 
 
+def fetch_real_year(year: int, timeout: float = 60) -> pd.DataFrame:
+    """A reálhozam-görbe egy éve, előtaggal; 2003 előtt üres."""
+    if year < REAL_FROM_YEAR:
+        return pd.DataFrame(columns=["Date"])
+    frame = fetch_year(year, timeout, kind="daily_treasury_real_yield_curve")
+    return frame.rename(columns={c: f"{REAL_PREFIX}{c}" for c in frame.columns if c != "Date"})
+
+
+def fetch_curve(year: int) -> pd.DataFrame:
+    """A nominális és a reál görbe egy éve, dátum szerint összefésülve.
+
+    A reálgörbe hibája nem állíthatja meg a nominálisat: akkor azok a sorok
+    aznap hiányoznak, és a hiány látszik.
+    """
+    nominal = fetch_year(year)
+    try:
+        real = fetch_real_year(year)
+    except TreasuryError as error:
+        log.warning("bonds_real_curve_failed", year=year, error=str(error))
+        return nominal
+    if real.empty:
+        return nominal
+    return nominal.merge(real, on="Date", how="left")
+
+
 def series(curve: pd.DataFrame, universe: pd.DataFrame, fetched_at: datetime) -> pd.DataFrame:
-    """A 7 idősor a kanonikus ár-sémában (hozam %-ban; a meredekség különbség)."""
+    """Az idősorok a kanonikus ár-sémában (hozam %-ban; a meredekség különbség)."""
     rows = []
     for r in universe.itertuples():
         spec = str(r.source_symbol)
@@ -110,7 +140,7 @@ def run(mode: str, storage: Storage, now: datetime) -> dict[str, object]:
         if mode == "backfill"
         else range(last.year - 1, last.year + 1)
     )
-    curve = pd.concat([fetch_year(y) for y in years], ignore_index=True)
+    curve = pd.concat([fetch_curve(y) for y in years], ignore_index=True)
     curve = curve[curve["Date"] <= last]
     # A naptár dönti el, mi kötvénynap (docs/kotveny.md, 2.): a minisztérium
     # néhány ünnepen (nagypéntek NFP-vel, péntekre hozott ünnep) is közölt.

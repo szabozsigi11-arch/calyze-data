@@ -24,7 +24,7 @@ BONDS_FILE = Path(__file__).with_name("instruments_bonds.csv")
 TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
 ASSET_CLASSES = {"equity", "etf", "crypto", "fx", "bond"}
-SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx", "bond"}
+SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx", "fx_cross", "bond"}
 
 
 class UniverseError(ValueError):
@@ -51,7 +51,7 @@ def load_crypto_universe(path: Path = CRYPTO_FILE) -> pd.DataFrame:
 
 
 def load_fx_universe(path: Path = FX_FILE) -> pd.DataFrame:
-    """A 28 devizapár; a `source_symbol` a `BASE/QUOTE` alak."""
+    """A devizapárok (fő és kereszt); a `source_symbol` a `BASE/QUOTE` alak."""
     frame = load_universe(path)
     if set(frame["asset_class"]) != {"fx"} or set(frame["exchange_calendar"]) != {"TARGET"}:
         raise UniverseError("a deviza-fájlban csak TARGET-naptárú deviza lehet")

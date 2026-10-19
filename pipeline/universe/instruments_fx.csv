@@ -27,3 +27,103 @@ CZ00695,USDJPY,US dollar / Japanese yen,fx,,TARGET,2026-10-02,,fx,USD/JPY
 CZ00696,CADCHF,Canadian dollar / Swiss franc,fx,,TARGET,2026-10-02,,fx,CAD/CHF
 CZ00697,CADJPY,Canadian dollar / Japanese yen,fx,,TARGET,2026-10-02,,fx,CAD/JPY
 CZ00698,CHFJPY,Swiss franc / Japanese yen,fx,,TARGET,2026-10-02,,fx,CHF/JPY
+CZ00706,EURCZK,Euro / Czech koruna,fx,,TARGET,2026-10-19,,fx,EUR/CZK
+CZ00707,USDCZK,US dollar / Czech koruna,fx,,TARGET,2026-10-19,,fx,USD/CZK
+CZ00708,GBPCZK,British pound / Czech koruna,fx,,TARGET,2026-10-19,,fx_cross,GBP/CZK
+CZ00709,CHFCZK,Swiss franc / Czech koruna,fx,,TARGET,2026-10-19,,fx_cross,CHF/CZK
+CZ00710,CZKJPY,Czech koruna / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,CZK/JPY
+CZ00711,EURHUF,Euro / Hungarian forint,fx,,TARGET,2026-10-19,,fx,EUR/HUF
+CZ00712,USDHUF,US dollar / Hungarian forint,fx,,TARGET,2026-10-19,,fx,USD/HUF
+CZ00713,GBPHUF,British pound / Hungarian forint,fx,,TARGET,2026-10-19,,fx_cross,GBP/HUF
+CZ00714,CHFHUF,Swiss franc / Hungarian forint,fx,,TARGET,2026-10-19,,fx_cross,CHF/HUF
+CZ00715,HUFJPY,Hungarian forint / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,HUF/JPY
+CZ00716,EURPLN,Euro / Polish zloty,fx,,TARGET,2026-10-19,,fx,EUR/PLN
+CZ00717,USDPLN,US dollar / Polish zloty,fx,,TARGET,2026-10-19,,fx,USD/PLN
+CZ00718,GBPPLN,British pound / Polish zloty,fx,,TARGET,2026-10-19,,fx_cross,GBP/PLN
+CZ00719,CHFPLN,Swiss franc / Polish zloty,fx,,TARGET,2026-10-19,,fx_cross,CHF/PLN
+CZ00720,PLNJPY,Polish zloty / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,PLN/JPY
+CZ00721,EURRON,Euro / Romanian leu,fx,,TARGET,2026-10-19,,fx,EUR/RON
+CZ00722,USDRON,US dollar / Romanian leu,fx,,TARGET,2026-10-19,,fx,USD/RON
+CZ00723,GBPRON,British pound / Romanian leu,fx,,TARGET,2026-10-19,,fx_cross,GBP/RON
+CZ00724,CHFRON,Swiss franc / Romanian leu,fx,,TARGET,2026-10-19,,fx_cross,CHF/RON
+CZ00725,RONJPY,Romanian leu / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,RON/JPY
+CZ00726,EURSEK,Euro / Swedish krona,fx,,TARGET,2026-10-19,,fx,EUR/SEK
+CZ00727,USDSEK,US dollar / Swedish krona,fx,,TARGET,2026-10-19,,fx,USD/SEK
+CZ00728,GBPSEK,British pound / Swedish krona,fx,,TARGET,2026-10-19,,fx_cross,GBP/SEK
+CZ00729,CHFSEK,Swiss franc / Swedish krona,fx,,TARGET,2026-10-19,,fx_cross,CHF/SEK
+CZ00730,SEKJPY,Swedish krona / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,SEK/JPY
+CZ00731,EURNOK,Euro / Norwegian krone,fx,,TARGET,2026-10-19,,fx,EUR/NOK
+CZ00732,USDNOK,US dollar / Norwegian krone,fx,,TARGET,2026-10-19,,fx,USD/NOK
+CZ00733,GBPNOK,British pound / Norwegian krone,fx,,TARGET,2026-10-19,,fx_cross,GBP/NOK
+CZ00734,CHFNOK,Swiss franc / Norwegian krone,fx,,TARGET,2026-10-19,,fx_cross,CHF/NOK
+CZ00735,NOKJPY,Norwegian krone / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,NOK/JPY
+CZ00736,EURISK,Euro / Icelandic krona,fx,,TARGET,2026-10-19,,fx,EUR/ISK
+CZ00737,USDISK,US dollar / Icelandic krona,fx,,TARGET,2026-10-19,,fx,USD/ISK
+CZ00738,GBPISK,British pound / Icelandic krona,fx,,TARGET,2026-10-19,,fx_cross,GBP/ISK
+CZ00739,CHFISK,Swiss franc / Icelandic krona,fx,,TARGET,2026-10-19,,fx_cross,CHF/ISK
+CZ00740,ISKJPY,Icelandic krona / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,ISK/JPY
+CZ00741,EURTRY,Euro / Turkish lira,fx,,TARGET,2026-10-19,,fx,EUR/TRY
+CZ00742,USDTRY,US dollar / Turkish lira,fx,,TARGET,2026-10-19,,fx,USD/TRY
+CZ00743,GBPTRY,British pound / Turkish lira,fx,,TARGET,2026-10-19,,fx_cross,GBP/TRY
+CZ00744,CHFTRY,Swiss franc / Turkish lira,fx,,TARGET,2026-10-19,,fx_cross,CHF/TRY
+CZ00745,TRYJPY,Turkish lira / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,TRY/JPY
+CZ00746,EURCNY,Euro / Chinese yuan,fx,,TARGET,2026-10-19,,fx,EUR/CNY
+CZ00747,USDCNY,US dollar / Chinese yuan,fx,,TARGET,2026-10-19,,fx,USD/CNY
+CZ00748,GBPCNY,British pound / Chinese yuan,fx,,TARGET,2026-10-19,,fx_cross,GBP/CNY
+CZ00749,CHFCNY,Swiss franc / Chinese yuan,fx,,TARGET,2026-10-19,,fx_cross,CHF/CNY
+CZ00750,CNYJPY,Chinese yuan / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,CNY/JPY
+CZ00751,EURSGD,Euro / Singapore dollar,fx,,TARGET,2026-10-19,,fx,EUR/SGD
+CZ00752,USDSGD,US dollar / Singapore dollar,fx,,TARGET,2026-10-19,,fx,USD/SGD
+CZ00753,GBPSGD,British pound / Singapore dollar,fx,,TARGET,2026-10-19,,fx_cross,GBP/SGD
+CZ00754,CHFSGD,Swiss franc / Singapore dollar,fx,,TARGET,2026-10-19,,fx_cross,CHF/SGD
+CZ00755,SGDJPY,Singapore dollar / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,SGD/JPY
+CZ00756,EURKRW,Euro / South Korean won,fx,,TARGET,2026-10-19,,fx,EUR/KRW
+CZ00757,USDKRW,US dollar / South Korean won,fx,,TARGET,2026-10-19,,fx,USD/KRW
+CZ00758,GBPKRW,British pound / South Korean won,fx,,TARGET,2026-10-19,,fx_cross,GBP/KRW
+CZ00759,CHFKRW,Swiss franc / South Korean won,fx,,TARGET,2026-10-19,,fx_cross,CHF/KRW
+CZ00760,KRWJPY,South Korean won / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,KRW/JPY
+CZ00761,EURINR,Euro / Indian rupee,fx,,TARGET,2026-10-19,,fx,EUR/INR
+CZ00762,USDINR,US dollar / Indian rupee,fx,,TARGET,2026-10-19,,fx,USD/INR
+CZ00763,GBPINR,British pound / Indian rupee,fx,,TARGET,2026-10-19,,fx_cross,GBP/INR
+CZ00764,CHFINR,Swiss franc / Indian rupee,fx,,TARGET,2026-10-19,,fx_cross,CHF/INR
+CZ00765,INRJPY,Indian rupee / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,INR/JPY
+CZ00766,EURIDR,Euro / Indonesian rupiah,fx,,TARGET,2026-10-19,,fx,EUR/IDR
+CZ00767,USDIDR,US dollar / Indonesian rupiah,fx,,TARGET,2026-10-19,,fx,USD/IDR
+CZ00768,GBPIDR,British pound / Indonesian rupiah,fx,,TARGET,2026-10-19,,fx_cross,GBP/IDR
+CZ00769,CHFIDR,Swiss franc / Indonesian rupiah,fx,,TARGET,2026-10-19,,fx_cross,CHF/IDR
+CZ00770,IDRJPY,Indonesian rupiah / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,IDR/JPY
+CZ00771,EURMYR,Euro / Malaysian ringgit,fx,,TARGET,2026-10-19,,fx,EUR/MYR
+CZ00772,USDMYR,US dollar / Malaysian ringgit,fx,,TARGET,2026-10-19,,fx,USD/MYR
+CZ00773,GBPMYR,British pound / Malaysian ringgit,fx,,TARGET,2026-10-19,,fx_cross,GBP/MYR
+CZ00774,CHFMYR,Swiss franc / Malaysian ringgit,fx,,TARGET,2026-10-19,,fx_cross,CHF/MYR
+CZ00775,MYRJPY,Malaysian ringgit / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,MYR/JPY
+CZ00776,EURPHP,Euro / Philippine peso,fx,,TARGET,2026-10-19,,fx,EUR/PHP
+CZ00777,USDPHP,US dollar / Philippine peso,fx,,TARGET,2026-10-19,,fx,USD/PHP
+CZ00778,GBPPHP,British pound / Philippine peso,fx,,TARGET,2026-10-19,,fx_cross,GBP/PHP
+CZ00779,CHFPHP,Swiss franc / Philippine peso,fx,,TARGET,2026-10-19,,fx_cross,CHF/PHP
+CZ00780,PHPJPY,Philippine peso / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,PHP/JPY
+CZ00781,EURTHB,Euro / Thai baht,fx,,TARGET,2026-10-19,,fx,EUR/THB
+CZ00782,USDTHB,US dollar / Thai baht,fx,,TARGET,2026-10-19,,fx,USD/THB
+CZ00783,GBPTHB,British pound / Thai baht,fx,,TARGET,2026-10-19,,fx_cross,GBP/THB
+CZ00784,CHFTHB,Swiss franc / Thai baht,fx,,TARGET,2026-10-19,,fx_cross,CHF/THB
+CZ00785,THBJPY,Thai baht / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,THB/JPY
+CZ00786,EURILS,Euro / Israeli shekel,fx,,TARGET,2026-10-19,,fx,EUR/ILS
+CZ00787,USDILS,US dollar / Israeli shekel,fx,,TARGET,2026-10-19,,fx,USD/ILS
+CZ00788,GBPILS,British pound / Israeli shekel,fx,,TARGET,2026-10-19,,fx_cross,GBP/ILS
+CZ00789,CHFILS,Swiss franc / Israeli shekel,fx,,TARGET,2026-10-19,,fx_cross,CHF/ILS
+CZ00790,ILSJPY,Israeli shekel / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,ILS/JPY
+CZ00791,EURMXN,Euro / Mexican peso,fx,,TARGET,2026-10-19,,fx,EUR/MXN
+CZ00792,USDMXN,US dollar / Mexican peso,fx,,TARGET,2026-10-19,,fx,USD/MXN
+CZ00793,GBPMXN,British pound / Mexican peso,fx,,TARGET,2026-10-19,,fx_cross,GBP/MXN
+CZ00794,CHFMXN,Swiss franc / Mexican peso,fx,,TARGET,2026-10-19,,fx_cross,CHF/MXN
+CZ00795,MXNJPY,Mexican peso / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,MXN/JPY
+CZ00796,EURBRL,Euro / Brazilian real,fx,,TARGET,2026-10-19,,fx,EUR/BRL
+CZ00797,USDBRL,US dollar / Brazilian real,fx,,TARGET,2026-10-19,,fx,USD/BRL
+CZ00798,GBPBRL,British pound / Brazilian real,fx,,TARGET,2026-10-19,,fx_cross,GBP/BRL
+CZ00799,CHFBRL,Swiss franc / Brazilian real,fx,,TARGET,2026-10-19,,fx_cross,CHF/BRL
+CZ00800,BRLJPY,Brazilian real / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,BRL/JPY
+CZ00801,EURZAR,Euro / South African rand,fx,,TARGET,2026-10-19,,fx,EUR/ZAR
+CZ00802,USDZAR,US dollar / South African rand,fx,,TARGET,2026-10-19,,fx,USD/ZAR
+CZ00803,GBPZAR,British pound / South African rand,fx,,TARGET,2026-10-19,,fx_cross,GBP/ZAR
+CZ00804,CHFZAR,Swiss franc / South African rand,fx,,TARGET,2026-10-19,,fx_cross,CHF/ZAR
+CZ00805,ZARJPY,South African rand / Japanese yen,fx,,TARGET,2026-10-19,,fx_cross,ZAR/JPY
