@@ -499,7 +499,7 @@ CZ00497,VTR,Ventas,equity,Real Estate,XNYS,2026-09-19,,sp500
 CZ00498,VTRS,Viatris,equity,Health Care,XNYS,2026-09-19,,sp500
 CZ00499,WAB,Wabtec,equity,Industrials,XNYS,2026-09-19,,sp500
 CZ00500,WAT,Waters Corporation,equity,Health Care,XNYS,2026-09-19,,sp500
-CZ00501,WBD,Warner Bros. Discovery,equity,Communication Services,XNYS,2026-09-19,,sp500
+CZ00501,WBD,Warner Bros. Discovery,equity,Communication Services,XNYS,2026-09-19,2026-10-05,sp500
 CZ00502,WDAY,"Workday, Inc.",equity,Information Technology,XNYS,2026-09-19,,sp500
 CZ00503,WDC,Western Digital,equity,Information Technology,XNYS,2026-09-19,,sp500
 CZ00504,WEC,WEC Energy Group,equity,Utilities,XNYS,2026-09-19,,sp500
@@ -1065,7 +1065,7 @@ CZ01397,CVBF,CVB Financial Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
 CZ01398,CVCO,"Cavco Industries, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
 CZ01399,CVI,"CVR Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
 CZ01400,CVSA,Covista Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
-CZ01401,CWEN.A,"Clearway Energy, Inc. (Class A)",equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01401,CWEN.A,"Clearway Energy, Inc. (Class A)",equity,Utilities,XNYS,2026-10-19,2026-10-18,smallcap
 CZ01402,CWK,Cushman & Wakefield plc,equity,Real Estate,XNYS,2026-10-19,,smallcap
 CZ01403,CWST,"Casella Waste Systems, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
 CZ01404,CWT,California Water Service Group,equity,Utilities,XNYS,2026-10-19,,smallcap
@@ -1166,7 +1166,7 @@ CZ01498,HE,"Hawaiian Electric Industries, Inc.",equity,Utilities,XNYS,2026-10-19
 CZ01499,HFWA,Heritage Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
 CZ01500,HIW,Highwoods Properties,equity,Real Estate,XNYS,2026-10-19,,smallcap
 CZ01501,HLIT,Harmonic Inc.,equity,Information Technology,XNYS,2026-10-19,,smallcap
-CZ01502,HLX,"Helix Energy Solutions Group, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01502,HLX,"Helix Energy Solutions Group, Inc.",equity,Energy,XNYS,2026-10-19,2026-10-18,smallcap
 CZ01503,HMN,Horace Mann Educators Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
 CZ01504,HNI,HNI Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
 CZ01505,HOPE,"Hope Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
@@ -1222,7 +1222,7 @@ CZ01554,LAUR,"Laureate Education, Inc.",equity,Consumer Discretionary,XNYS,2026-
 CZ01555,LAZ,Lazard,equity,Financials,XNYS,2026-10-19,,smallcap
 CZ01556,LBRT,"Liberty Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
 CZ01557,LCII,LCI Industries,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
-CZ01558,LEG,Leggett & Platt,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01558,LEG,Leggett & Platt,equity,Consumer Discretionary,XNYS,2026-10-19,2026-10-18,smallcap
 CZ01559,LEU,Centrus Energy Corp.,equity,Energy,XNYS,2026-10-19,,smallcap
 CZ01560,LFST,Lifestance Health,equity,Health Care,XNYS,2026-10-19,,smallcap
 CZ01561,LGIH,LGI Homes,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
@@ -1365,7 +1365,7 @@ CZ01697,PTON,"Peloton Interactive, Inc.",equity,Consumer Discretionary,XNYS,2026
 CZ01698,PZZA,Papa John's Pizza,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
 CZ01699,QDEL,QuidelOrtho,equity,Health Care,XNYS,2026-10-19,,smallcap
 CZ01700,QNST,"QuinStreet, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
-CZ01701,QRVO,Qorvo,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01701,QRVO,Qorvo,equity,Information Technology,XNYS,2026-10-19,2026-10-18,smallcap
 CZ01702,QTWO,"Q2 Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
 CZ01703,RAL,Ralliant Corp,equity,Information Technology,XNYS,2026-10-19,,smallcap
 CZ01704,RAMP,"LiveRamp Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
@@ -1584,3 +1584,4 @@ CZ01916,QUAL,iShares MSCI USA Quality Factor ETF,etf,Factor: Quality,XNYS,2026-1
 CZ01917,RSP,Invesco S&P 500 Equal Weight ETF,etf,US large cap equal weight,XNYS,2026-10-19,,etf
 CZ01918,SCHD,Schwab U.S. Dividend Equity ETF,etf,US dividend,XNYS,2026-10-19,,etf
 CZ01919,MDY,State Street SPDR S&P MIDCAP 400 ETF Trust,etf,US mid cap,XNYS,2026-10-19,,etf
+CZ01920,CWEN,"Clearway Energy, Inc. (Class C)",equity,Utilities,XNYS,2026-10-19,,smallcap

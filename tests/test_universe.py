@@ -8,9 +8,11 @@ from pipeline.universe import UniverseError, active_on, load_universe, validate_
 
 def test_universe_size_and_segments():
     u = load_universe()
-    assert len(u) == 1585
+    assert len(u) == 1586
     # 2026-09-19: 500 + 100 + 20; 2026-10-19 (`docs/reszveny-bovites.md`): + 3 + 302 + 597 + 63.
-    assert u["segment"].value_counts().to_dict() == {"smallcap": 597, "sp500": 503, "midcap": 402, "etf": 83}
+    assert u["segment"].value_counts().to_dict() == {"smallcap": 598, "sp500": 503, "midcap": 402, "etf": 83}
+    # A felvétel napján már kivezetett papír sora megmarad, de egy napon sem aktív.
+    assert active_on(u, date(2026, 10, 20))["ticker"].isin(["QRVO", "HLX", "LEG", "CWEN.A", "WBD"]).sum() == 0
     assert u["instrument_id"].is_unique
     # Újat mindig a végére veszünk fel, régit soha nem adunk ki újra; a bővítés a
     # kripto-, deviza- és kötvény-azonosítók után folytatódik.

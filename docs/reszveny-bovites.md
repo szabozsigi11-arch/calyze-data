@@ -56,3 +56,15 @@ fenti sorrendben. Egyszer kiadott azonosító soha nem kerül újra kiadásra.
 - A részvényes mérési család ugyanaz marad (a tesztszám a szabályok és az
   időtávok száma, nem a papíroké); a modell az új papírokkal újratanul.
 - **Túlélési torzítás:** a mai tagság; a múltban kiesett papírok hiányoznak.
+
+## 5. Az első teljes letöltés után (2026-10-20)
+
+A Yahoo öt papírra nem adott friss adatot:
+
+| Ticker | Mi történt | Teendő |
+|---|---|---|
+| WBD (a régi 600-ból) | utolsó kereskedési nap 2026-10-05 (kivezetve) | `valid_to = 2026-10-05` |
+| QRVO, HLX, LEG | a felvétel napján már nem kereskedett (a Wikipédia-lista még nem frissült) | `valid_to = 2026-10-18`: a sor és az azonosító megmarad, de egy napon sem aktív |
+| CWEN.A | a forrás nem ismeri ezt az osztályt | `valid_to = 2026-10-18`; helyette a CWEN (C osztály), `CZ01920` |
+
+Az IBOC csak átmenetileg hiányzott; az ismételt letöltés hozta.
