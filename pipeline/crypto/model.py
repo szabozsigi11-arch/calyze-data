@@ -164,6 +164,24 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
         "regime_checks": regime_checks(regime),
         "libraries": library_versions(),
     }
+    try:
+        from pipeline.crypto.arenas import crypto_frames
+        from pipeline.scenario.run import publish_scenario
+        from pipeline.universe import load_crypto_universe as _load
+
+        inst, market = crypto_frames(prices, _load())
+        summary["scenario"] = publish_scenario(
+            storage,
+            scored,
+            inst,
+            market["market_flag"],
+            asset="crypto",
+            display_prefix="crypto/",
+            model=f"{FAMILY} {VERSION}",
+            now=now,
+        )
+    except Exception as error:  # noqa: BLE001 — a Forgatókönyv hibája nem veszítheti el a backtestet
+        log.error("scenario_failed", asset="crypto", error=type(error).__name__)
     # A publikus naplóba csak az összesített, modellszintű összefoglaló kerül.
     log.info("crypto_backtest_summary", **{k: v for k, v in summary.items() if k != "libraries"})
     storage.upload(

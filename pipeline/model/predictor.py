@@ -71,6 +71,9 @@ class HorizonModel:
                 "prob_up_raw": raw_prob,
                 "band_low": point - self.band_q * scale,
                 "band_high": point + self.band_q * scale,
+                # A normalizált hiba nevezője: a Forgatókönyv ebből és a
+                # hírmentes hibák eloszlásából számol (`docs/forgatokonyv.md`).
+                "scale": scale,
             }
         )
 

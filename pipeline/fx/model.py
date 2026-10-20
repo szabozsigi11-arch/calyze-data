@@ -157,6 +157,25 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
         "regime_checks": regime_checks(regime),
         "libraries": library_versions(),
     }
+    try:
+        from pipeline.fx.arenas import fx_frames
+        from pipeline.scenario.run import publish_scenario
+        from pipeline.universe import load_fx_universe as _load
+
+        inst, market = fx_frames(prices, _load())
+        # A keresztpárok a fő mérésbe itt sem számítanak (`docs/fx-univerzum.md`, 7.).
+        summary["scenario"] = publish_scenario(
+            storage,
+            main,
+            inst,
+            market["market_flag"],
+            asset="fx",
+            display_prefix="fx/",
+            model=f"{FAMILY} {VERSION}",
+            now=now,
+        )
+    except Exception as error:  # noqa: BLE001 — a Forgatókönyv hibája nem veszítheti el a backtestet
+        log.error("scenario_failed", asset="fx", error=type(error).__name__)
     log.info("fx_backtest_summary", **{k: v for k, v in summary.items() if k != "libraries"})
     storage.upload(
         RAW_BUCKET,

@@ -444,6 +444,7 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
             "expected_return": None,
             "band_low": None,
             "band_high": None,
+            "scale": None,
             "price_low": None,
             "price_high": None,
             "expected_price": None,
@@ -462,6 +463,8 @@ def format_forecast(row: dict[str, object]) -> dict[str, object]:
         "expected_return": _num(row.get("expected_return")),
         "band_low": _num(row.get("band_low")),
         "band_high": _num(row.get("band_high")),
+        # a Forgatókönyv nevezője; a régi (2026-10-20 előtti) csomagokban nincs
+        "scale": _num(row.get("scale"), 6),
         "price_low": _num(row.get("price_low"), 4),
         "price_high": _num(row.get("price_high"), 4),
         "expected_price": _num(row.get("expected_price"), 4),

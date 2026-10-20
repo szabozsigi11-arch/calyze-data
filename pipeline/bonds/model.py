@@ -159,6 +159,24 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
         "regime_checks": regime_checks(regime),
         "libraries": library_versions(),
     }
+    try:
+        from pipeline.bonds.arenas import bond_frames
+        from pipeline.scenario.run import publish_scenario
+        from pipeline.universe import load_bonds_universe as _load
+
+        inst, market = bond_frames(prices, _load())
+        summary["scenario"] = publish_scenario(
+            storage,
+            scored,
+            inst,
+            market["market_flag"],
+            asset="bonds",
+            display_prefix="bonds/",
+            model=f"{FAMILY} {VERSION}",
+            now=now,
+        )
+    except Exception as error:  # noqa: BLE001 — a Forgatókönyv hibája nem veszítheti el a backtestet
+        log.error("scenario_failed", asset="bonds", error=type(error).__name__)
     log.info("bonds_backtest_summary", **{k: v for k, v in summary.items() if k != "libraries"})
     storage.upload(
         RAW_BUCKET,

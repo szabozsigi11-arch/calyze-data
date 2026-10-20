@@ -99,6 +99,32 @@ def task_backtest(storage: Storage, now: datetime) -> dict[str, object]:
         "libraries": library_versions(),
         "rows_scored": len(scored),
     }
+    try:
+        from pipeline.features.run import MACRO_PATH as _MACRO
+        from pipeline.newsarena.signals import instrument_frame, market_frame
+        from pipeline.scenario.run import publish_scenario
+        from pipeline.universe import active_on as _active
+        from pipeline.universe import load_universe as _load
+
+        macro = _read_table(storage, _MACRO)
+        inst = instrument_frame(prices, actions)
+        market = market_frame(
+            inst,
+            _active(_load(), now.astimezone(UTC).date()),
+            None if macro is None else macro.set_index("date"),
+        )
+        summary["scenario"] = publish_scenario(
+            storage,
+            scored,
+            inst,
+            market["market_flag"],
+            asset="equity",
+            display_prefix="",
+            model=f"{MODEL_FAMILY} {MODEL_VERSION}",
+            now=now,
+        )
+    except Exception as error:  # noqa: BLE001 — a Forgatókönyv hibája nem veszítheti el a backtestet
+        log.error("scenario_failed", asset="equity", error=type(error).__name__)
     # A publikus naplóba csak ez az összesített, modellszintű összefoglaló kerül
     # (papíronkénti becslés és árfolyam soha): ez a saját modellünkről szóló
     # mérés, nem a forrás adata.
