@@ -12,7 +12,11 @@ def scored(horizon: int = 5, days: int = 400, seed: int = 2) -> tuple[pd.DataFra
     """Becslések, ahol a magas valószínűségű papírok tényleg jobban mennek."""
     rng = np.random.default_rng(seed)
     dates = pd.bdate_range("2015-01-02", periods=days).date
-    segments = {f"CZ{i:03d}": ("sp500" if i < 20 else "midcap" if i < 30 else "etf") for i in range(34)}
+
+    def segment(i: int) -> str:
+        return "sp500" if i < 20 else "midcap" if i < 26 else "smallcap" if i < 30 else "etf"
+
+    segments = {f"CZ{i:03d}": segment(i) for i in range(34)}
     rows = []
     for d in dates:
         for instrument in segments:

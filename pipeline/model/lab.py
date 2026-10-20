@@ -14,7 +14,7 @@ import pandas as pd
 
 from pipeline.model.evaluate import apply_fdr, compare, observations_needed, verdict
 
-UNIVERSES: tuple[str, ...] = ("all", "sp500", "midcap", "etf")
+UNIVERSES: tuple[str, ...] = ("all", "sp500", "midcap", "smallcap", "etf")
 THRESHOLDS: tuple[float, ...] = (0.55, 0.60, 0.65, 0.70)
 COSTS: tuple[float, ...] = (0.0, 0.001, 0.0025)
 METRIC = "excess_return"
