@@ -619,3 +619,968 @@ CZ00617,WCC,WESCO International,equity,Industrials,XNYS,2026-09-19,,midcap
 CZ00618,WING,Wingstop,equity,Consumer Discretionary,XNYS,2026-09-19,,midcap
 CZ00619,WWD,"Woodward, Inc.",equity,Industrials,XNYS,2026-09-19,,midcap
 CZ00620,XPO,"XPO, Inc.",equity,Industrials,XNYS,2026-09-19,,midcap
+CZ00955,BE,Bloom Energy,equity,Industrials,XNYS,2026-10-19,,sp500
+CZ00956,SKYD,Skydance Corporation,equity,Communication Services,XNYS,2026-10-19,,sp500
+CZ00957,VYLR,Vylor,equity,Consumer Staples,XNYS,2026-10-19,,sp500
+CZ00958,AAON,AAON,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00959,ACI,Albertsons,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ00960,ACM,AECOM,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00961,ADC,Agree Realty,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ00962,AFG,American Financial Group,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00963,AGCO,AGCO,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00964,AGNC,AGNC Investment,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00965,AHR,American Healthcare REIT,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ00966,AIT,Applied Industrial Technologies,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00967,ALGM,Allegro MicroSystems,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00968,ALK,Alaska Air Group,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00969,ALLY,Ally Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00970,ALSN,Allison Transmission,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00971,ALV,Autoliv,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ00972,AM,Antero Midstream,equity,Energy,XNYS,2026-10-19,,midcap
+CZ00973,AMG,Affiliated Managers Group,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00974,AMH,American Homes 4 Rent,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ00975,AN,AutoNation,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ00976,ANF,Abercrombie & Fitch,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ00977,APG,APi Group,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00978,APPF,AppFolio,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00979,ARW,Arrow Electronics,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00980,ARWR,Arrowhead Pharmaceuticals,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ00981,ASB,Associated Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00982,ASH,Ashland Global,equity,Materials,XNYS,2026-10-19,,midcap
+CZ00983,ATR,AptarGroup,equity,Materials,XNYS,2026-10-19,,midcap
+CZ00984,AVNT,Avient,equity,Materials,XNYS,2026-10-19,,midcap
+CZ00985,AVT,Avnet,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00986,AVTR,Avantor,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ00987,AXTA,Axalta,equity,Materials,XNYS,2026-10-19,,midcap
+CZ00988,AYI,Acuity Brands,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00989,BAH,Booz Allen Hamilton,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00990,BBWI,"Bath & Body Works, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ00991,BC,Brunswick,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ00992,BCO,Brink's,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ00993,BDC,Belden Inc.,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00994,BHF,Brighthouse Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ00995,BILL,Bill Holdings,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ00996,BIO,Bio-Rad Laboratories,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ00997,BKH,Black Hills Corporation,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ00998,BMRN,BioMarin Pharmaceutical,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ00999,BRKR,Bruker,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01000,BRX,Brixmor Property Group,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01001,BSY,Bentley Systems,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01002,BWA,BorgWarner,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01003,BYD,Boyd Gaming,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01004,CAR,Avis Budget Group,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01005,CBSH,Commerce Bancshares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01006,CBT,Cabot Corp,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01007,CCK,Crown Holdings,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01008,CDP,COPT Defense Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01009,CFR,Frost Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01010,CGNX,Cognex,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01011,CHDN,Churchill Downs Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01012,CHE,Chemed Corp.,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01013,CHH,Choice Hotels,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01014,CHRD,Chord Energy,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01015,CLH,Clean Harbors,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01016,CMC,Commercial Metals,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01017,CNM,Core & Main,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01018,CNO,CNO Financial Group,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01019,CNX,CNX Resources,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01020,COKE,Coca-Cola Consolidated,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01021,COLB,Columbia Banking System,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01022,COLM,Columbia Sportswear,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01023,CORT,Corcept Therapeutics,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01024,CR,Crane,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01025,CRBG,Corebridge Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01026,CROX,Crocs,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01027,CRUS,Cirrus Logic,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01028,CTRE,CareTrust REIT,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01029,CUBE,CubeSmart,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01030,CUZ,Cousins Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01031,CVLT,CommVault Systems,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01032,CXT,Crane NXT,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01033,CYTK,Cytokinetics,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01034,DAR,Darling Ingredients,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01035,DBX,Dropbox,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01036,DCI,Donaldson Company,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01037,DLB,Dolby,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01038,DOCS,Doximity,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01039,DTM,DT Midstream,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01040,EAT,Brinker International,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01041,EEFT,Euronet Worldwide,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01042,EGP,EastGroup Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01043,EHC,Encompass Health,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01044,ELAN,Elanco,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01045,ELS,Equity Lifestyle Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01046,ENS,EnerSys,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01047,ENSG,Ensign Group,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01048,EPR,EPR Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01049,EQH,Equitable Holdings,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01050,ESAB,ESAB,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01051,ESNT,Essent Group Ltd.,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01052,EWBC,East West Bancorp,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01053,EXEL,Exelixis,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01054,EXLS,EXL Service,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01055,EXP,Eagle Materials,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01056,EXPO,"Exponent, Inc.",equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01057,FAF,First American Financial Corporation,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01058,FBIN,Fortune Brands Innovations,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01059,FCFS,FirstCash,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01060,FCN,FTI Consulting,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01061,FFIN,First Financial Bankshares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01062,FHI,Federated Hermes,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01063,FHN,First Horizon,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01064,FLG,Flagstar Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01065,FLR,Fluor,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01066,FLS,Flowserve,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01067,FNB,FNB Corporation,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01068,FND,Floor & Decor,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01069,FNF,Fidelity National Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01070,FORM,"FormFactor, Inc.",equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01071,FOUR,Shift4,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01072,FR,First Industrial Realty Trust,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01073,G,Genpact,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01074,GAP,Gap Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01075,GATX,GATX,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01076,GBCI,Glacier Bancorp,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01077,GEF,"Greif, Inc.",equity,Materials,XNYS,2026-10-19,,midcap
+CZ01078,GGG,Graco Inc.,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01079,GHC,Graham Holdings,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01080,GLPI,Gaming and Leisure Properties,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01081,GME,GameStop,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01082,GMED,Globus Medical,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01083,GNTX,Gentex,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01084,GPK,Graphic Packaging,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01085,GXO,GXO Logistics,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01086,H,Hyatt,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01087,HAE,Haemonetics,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01088,HGV,Hilton Grand Vacations,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01089,HLI,Houlihan Lokey,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01090,HLNE,Hamilton Lane,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01091,HOG,Harley-Davidson,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01092,HOMB,Home BancShares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01093,HQY,HealthEquity,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01094,HR,Healthcare Realty Trust,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01095,HRB,H&R Block,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01096,HUBS,HubSpot,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01097,HWC,Hancock Whitney,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01098,HXL,Hexcel,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01099,IBOC,Intl Bancshares Corp,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01100,IDA,Idacorp,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01101,IDCC,InterDigital,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01102,IESC,IES Holdings,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01103,INGR,Ingredion,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01104,IPGP,IPG Photonics,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01105,IRT,Independence Realty Trust,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01106,JEF,Jefferies,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01107,JLL,Jones Lang LaSalle,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01108,KBH,KB Home,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01109,KBR,"KBR, Inc.",equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01110,KD,Kyndryl,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01111,KEX,Kirby Corporation,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01112,KNF,Knife River Corporation,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01113,KNSL,Kinsale Capital Group,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01114,KRC,Kilroy Realty Corp,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01115,KRG,Kite Realty Group Trust,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01116,KRYS,Krystal Biotech,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01117,LAD,Lithia Motors,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01118,LAMR,Lamar Advertising Company,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01119,LEA,Lear,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01120,LECO,Lincoln Electric,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01121,LFUS,Littelfuse,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01122,LIVN,LivaNova,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01123,LNTH,Lantheus Holdings,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01124,LOPE,Grand Canyon Education,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01125,LPX,Louisiana-Pacific,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01126,LSTR,Landstar System,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01127,M,Macy's,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01128,MANH,Manhattan Associates,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01129,MAT,Mattel,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01130,MIDD,Middleby,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01131,MLI,Mueller Industries,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01132,MMS,Maximus Inc.,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01133,MOG.A,Moog Inc.,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01134,MORN,"Morningstar, Inc.",equity,Financials,XNYS,2026-10-19,,midcap
+CZ01135,MSA,MSA Safety,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01136,MSM,MSC Industrial Direct,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01137,MTDR,Matador Resources,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01138,MTG,MGIC Investment Corporation,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01139,MTN,Vail Resorts,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01140,MUR,Murphy Oil,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01141,MZTI,The Marzetti Company,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01142,NEU,NewMarket Corporation,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01143,NFG,National Fuel Gas,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01144,NJR,New Jersey Resources,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01145,NNN,NNN Reit,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01146,NOV,NOV Inc.,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01147,NOVT,Novanta,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01148,NVST,Envista Holdings,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01149,NWE,NorthWestern Energy,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01150,NXST,Nexstar Media Group,equity,Communication Services,XNYS,2026-10-19,,midcap
+CZ01151,NYT,New York Times Company,equity,Communication Services,XNYS,2026-10-19,,midcap
+CZ01152,OC,Owens Corning,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01153,OGE,OGE Energy,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01154,OGS,One Gas,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01155,OHI,Omega Healthcare Investors,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01156,OLED,Universal Display,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01157,OLLI,Ollie's Bargain Outlet,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01158,ONB,Old National Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01159,OPCH,Option Care Health,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01160,ORA,Ormat Technologies,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01161,ORI,Old Republic International,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01162,OSK,Oshkosh,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01163,OZK,Bank OZK,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01164,PAG,Penske Automotive Group,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01165,PB,Prosperity Bancshares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01166,PCTY,Paylocity,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01167,PEGA,Pegasystems,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01168,PEN,"Penumbra, Inc.",equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01169,PII,Polaris,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01170,PK,Park Hotels & Resorts,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01171,PLNT,Planet Fitness,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01172,PNFP,Pinnacle Financial Partners,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01173,POR,Portland General Electric,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01174,POST,Post Holdings,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01175,PPC,Pilgrim's Pride,equity,Consumer Staples,XNYS,2026-10-19,,midcap
+CZ01176,PRI,Primerica,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01177,PSN,Parsons Corporation,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01178,PVH,PVH Corp.,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01179,QLYS,Qualys,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01180,R,Ryder,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01181,RBA,RB Global,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01182,RBC,RBC Bearings,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01183,REXR,Rexford Industrial Realty,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01184,RGA,Reinsurance Group of America,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01185,RH,RH,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01186,RLI,RLI Corp.,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01187,RNR,RenaissanceRe,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01188,RPM,RPM International,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01189,RRC,Range Resources,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01190,RS,"Reliance, Inc.",equity,Materials,XNYS,2026-10-19,,midcap
+CZ01191,RYAN,Ryan Specialty,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01192,RYN,Rayonier,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01193,SAIC,Science Applications Intl Corp,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01194,SANM,Sanmina Corporation,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01195,SARO,StandardAero,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01196,SBRA,Sabra Health Care REIT,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01197,SCI,Service Corp Intl,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01198,SEIC,SEI Investments Company,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01199,SF,Stifel,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01200,SHC,Sotera Health,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01201,SIGI,Selective Insurance Group,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01202,SIRI,SiriusXM,equity,Communication Services,XNYS,2026-10-19,,midcap
+CZ01203,SLAB,Silicon Labs,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01204,SLGN,Silgan Holdings,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01205,SLM,SLM Corp,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01206,SMG,Scotts Miracle-Gro Company,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01207,SON,Sonoco,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01208,SPXC,SPX Technologies,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01209,SR,Spire,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01210,SSB,South State Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01211,SSD,Simpson Manufacturing,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01212,ST,Sensata Technologies,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01213,STAG,STAG Industrial,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01214,STWD,Starwood Property Trust,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01215,SWX,Southwest Gas Corp,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01216,SYNA,Synaptics,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01217,TCBI,Texas Capital Bancshares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01218,TEX,Terex,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01219,THG,Hanover Insurance,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01220,THO,Thor Industries,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01221,TKR,Timken,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01222,TNL,Travel + Leisure Co.,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01223,TOL,Toll Brothers,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01224,TREX,Trex,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01225,TTC,Toro,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01226,TTEK,Tetra Tech,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01227,TXNM,TXNM Energy,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01228,UBSI,United Bankshares,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01229,UFPI,UFP Industries,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01230,UGI,UGI Corp,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01231,ULS,UL Solutions,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01232,UMBF,UMB Financial Corp.,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01233,UNM,Unum,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01234,VAL,Valaris,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01235,VC,Visteon,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01236,VFC,VF Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01237,VLY,Valley Bank,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01238,VMI,Valmont Industries,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01239,VNO,Vornado Realty Trust,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01240,VNOM,Viper Energy,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01241,VNT,Vontier,equity,Information Technology,XNYS,2026-10-19,,midcap
+CZ01242,VOYA,Voya Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01243,VVV,Valvoline,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01244,WAL,Western Alliance Bancorporation,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01245,WEX,WEX Inc.,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01246,WFRD,Weatherford International,equity,Energy,XNYS,2026-10-19,,midcap
+CZ01247,WH,Wyndham Hotels & Resorts,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01248,WHR,Whirlpool Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01249,WLK,Westlake Corporation,equity,Materials,XNYS,2026-10-19,,midcap
+CZ01250,WMG,Warner Music Group,equity,Communication Services,XNYS,2026-10-19,,midcap
+CZ01251,WMS,Advanced Drainage Systems,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01252,WPC,W. P. Carey,equity,Real Estate,XNYS,2026-10-19,,midcap
+CZ01253,WSO,Watsco,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01254,WTFC,Wintrust Financial,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01255,WTRG,Essential Utilities,equity,Utilities,XNYS,2026-10-19,,midcap
+CZ01256,WTS,Watts Water Technologies,equity,Industrials,XNYS,2026-10-19,,midcap
+CZ01257,XRAY,Dentsply Sirona,equity,Health Care,XNYS,2026-10-19,,midcap
+CZ01258,YETI,Yeti Holdings,equity,Consumer Discretionary,XNYS,2026-10-19,,midcap
+CZ01259,ZION,Zions Bancorporation,equity,Financials,XNYS,2026-10-19,,midcap
+CZ01260,AAMI,Acadian Asset Management Inc.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01261,AAP,"Advance Auto Parts, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01262,AAT,American Assets Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01263,ABCB,Ameris Bancorp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01264,ABG,Asbury Automotive Group,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01265,ABM,"ABM Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01266,ABR,Arbor Realty Trust,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01267,ACA,"Arcosa, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01268,ACAD,Acadia Pharmaceuticals,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01269,ACHC,Acadia Healthcare,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01270,ACIW,ACI Worldwide,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01271,ACLS,"Axcelis Technologies, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01272,ACMR,"ACM Research, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01273,ACT,"Enact Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01274,ADAM,"Adamas Trust, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01275,ADEA,"Adeia, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01276,ADIG,ADI Global Distribution,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01277,ADMA,"ADMA Biologics, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01278,ADNT,Adient,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01279,ADT,ADT Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01280,ADUS,Addus HomeCare Corp.,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01281,AEO,American Eagle Outfitters,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01282,AESI,"Atlas Energy Solutions, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01283,AGNT,"eXp World Holdings, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01284,AGO,Assured Guaranty Ltd.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01285,AGX,"Argan, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01286,AGYS,"Agilysys, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01287,AHCO,AdaptHealth Corp.,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01288,AIN,Albany International Corp.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01289,AIR,AAR Corp.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01290,AKR,Acadia Realty Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01291,ALG,Alamo Group,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01292,ALGT,Allegiant Travel Company,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01293,ALHC,"Alignment Healthcare, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01294,ALKS,Alkermes plc,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01295,ALRM,"Alarm.Com, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01296,AMN,"Amn Healthcare Services, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01297,AMPH,"Amphstar Pharmaceuticals, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01298,AMR,"Alpha Metallurgical Resources, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01299,AMRX,Amneal Pharmaceuticals,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01300,AMSF,"Amerisafe, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01301,AMTM,Amentum,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01302,ANDE,"The Andersons, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01303,ANIP,"ANI Pharmaceuticals, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01304,AORT,Artivion,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01305,AOSL,"Alpha and Omega Semiconductor, Ltd.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01306,APAM,"Artisan Partners Asset Management, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01307,APLE,"Apple Hospitality REIT, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01308,APOG,"Apogee Enterprises, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01309,ARCB,ArcBest Corp.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01310,ARLO,Arlo Technologies,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01311,AROC,"Archrock, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01312,ARR,Armour Residential REIT,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01313,ASO,Academy Sports + Outdoors,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01314,ASTE,"Astec Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01315,ASTH,"Astrana Health, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01316,ATEN,"A10 Networks, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01317,ATMU,Atmus Filtration Technologies Inc.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01318,AUB,"Atlantic Union Bankshares, Corp.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01319,AVA,Avista Corporation,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01320,AWI,"Armstrong World Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01321,AWR,American States Water Company,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01322,AX,"Axos Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01323,AZTA,"Azenta, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01324,AZZ,"AZZ, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01325,BANC,"Banc Of California, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01326,BANF,Bancfirst Corp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01327,BANR,Banner Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01328,BBT,Beacon Financial Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01329,BCC,Boise Cascade,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01330,BCPC,Balchem Corporation,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01331,BFAM,Bright Horizons Family Solutions Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01332,BFH,"Bread Financial Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01333,BFS,"Saul Centers, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01334,BGC,"BGC Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01335,BHE,"Benchmark Electronics, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01336,BJRI,"BJ's Restaurants, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01337,BKE,"The Buckle, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01338,BKU,"BankUnited, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01339,BL,"BlackLine Systems, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01340,BLFS,"BioLife Solutions, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01341,BLKB,Blackbaud,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01342,BMI,"Badger Meter, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01343,BNL,"Broadstone Net Lease, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01344,BOH,Bank of Hawaii,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01345,BOOT,"Boot Barn Holdings, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01346,BOX,"Box, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01347,BRC,Brady Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01348,BTU,"Peabody Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01349,BXMT,"Blackstone Mortgage Trust, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01350,CACC,Credit Acceptance,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01351,CAG,Conagra Brands,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01352,CAKE,"The Cheesecake Factory, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01353,CALM,"Cal-Maine Foods, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01354,CALX,Calix,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01355,CALY,Callaway Golf Company,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01356,CARG,CarGurus,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01357,CASH,"Pathward Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01358,CATY,Cathay General Bancorp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01359,CBRL,Cracker Barrel,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01360,CBU,"Community Bank System, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01361,CC,Chemours,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01362,CCOI,"Cogent Communications Holdings, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01363,CCS,"Century Communities, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01364,CE,Celanese,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01365,CENTA,Central Garden & Pet Company (Class A),equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01366,CENX,Century Aluminum Company,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01367,CERT,"Certara, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01368,CFFN,Capitol Federal Savings Bank,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01369,CHCO,City Holding Company,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01370,CHEF,"Chefs' Warehouse, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01371,CLSK,"CleanSpark, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01372,CNK,"Cinemark Holdings, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01373,CNMD,CONMED Corporation,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01374,CNR,"Core Natural Resources, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01375,CNS,"Cohen & Steers, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01376,CNXC,Concentrix,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01377,CNXN,"PC Connection, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01378,COCO,The Vita Coco Company,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01379,COHU,"Cohu, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01380,COLL,"Collegium Pharmaceutical, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01381,CON,"Concentra Group Holdings Parent, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01382,COTY,Coty,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01383,CPB,The Campbell's Company,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01384,CPF,Central Pacific Financial Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01385,CPK,Chesapeake Utilities Corp.,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01386,CRC,California Resources Corporation,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01387,CRGY,Crescent Energy Company,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01388,CRI,"Carter's, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01389,CRK,"Comstock Resources, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01390,CRSR,Corsair Gaming,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01391,CRVL,CorVel Corporation,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01392,CSR,Centerspace Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01393,CSW,"CSW Industrials, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01394,CTS,CTS Corporation,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01395,CUBI,"Customers Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01396,CURB,Curbline Properties Corp.,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01397,CVBF,CVB Financial Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01398,CVCO,"Cavco Industries, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01399,CVI,"CVR Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01400,CVSA,Covista Inc.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01401,CWEN.A,"Clearway Energy, Inc. (Class A)",equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01402,CWK,Cushman & Wakefield plc,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01403,CWST,"Casella Waste Systems, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01404,CWT,California Water Service Group,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01405,CXM,"Sprinklr, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01406,CXW,CoreCivic,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01407,CZR,Caesars Entertainment,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01408,DAN,Dana Incorporated,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01409,DAVE,"Dave, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01410,DBD,Diebold Nixdorf,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01411,DCH,Dauch Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01412,DCOM,"Dime Community Bancshares, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01413,DEA,"Easterly Government Properties, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01414,DEI,Douglas Emmett,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01415,DFH,"Dream Finders Homes, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01416,DFIN,"Donnelley Financial Solutions, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01417,DGII,Digi International Inc.,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01418,DIOD,Diodes Incorporated,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01419,DLX,Deluxe Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01420,DMC,Del Monte Corporation,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01421,DNOW,NOW Inc,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01422,DORM,"Dorman Products, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01423,DRH,DiamondRock Hospitality Company,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01424,DV,DoubleVerify Holdings Inc.,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01425,DXC,DXC Technology,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01426,DXPE,"DXP Enterprises, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01427,EBC,"Eastern Bankshares, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01428,ECG,"Everus Construction Group, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01429,ECPG,"Encore Capital Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01430,EFC,"Ellington Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01431,EFOR,Everforth Inc.,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01432,EGBN,Eagle Bancorp Inc,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01433,EIG,"Employers Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01434,EMN,Eastman Chemical Company,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01435,ENOV,Enovis,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01436,ENPH,Enphase Energy,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01437,ENR,Energizer,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01438,ENVA,"Enova International, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01439,EPAC,Enerpac Tool Group,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01440,EPAM,EPAM Systems,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01441,EPC,Edgewell Personal Care,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01442,EPRT,"Essential Properties Realty Trust, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01443,ESE,ESCO Technologies Inc.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01444,ESI,Element Solutions,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01445,ETSY,Etsy,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01446,EVTC,"EVERTEC, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01447,EXTR,"Extreme Networks, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01448,EYE,National Vision Holdings,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01449,EZPW,"EZCORP, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01450,FA,First Advantage Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01451,FBK,FB Financial Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01452,FBNC,First Bancorp (Southern Pines NC),equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01453,FBP,First BanCorp (Puerto Rico),equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01454,FBRT,"Franklin BSP Realty Trust, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01455,FCF,"First Commonwealth Financial, Corp.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01456,FCPT,"Four Corners Property Trust, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01457,FELE,Franklin Electric,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01458,FFBC,First Financial Bancorp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01459,FG,"F&G Annuities & Life, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01460,FHB,"First Hawaiian, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01461,FIBK,"First Interstate BancSystem, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01462,FIVN,"Five9, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01463,FIZZ,National Beverage Corp.,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01464,FLO,Flowers Foods,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01465,FMC,FMC Corporation,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01466,FOXF,Fox Factory,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01467,FRPT,Freshpet,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01468,FSS,Federal Signal Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01469,FTDR,"Frontdoor, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01470,FTRE,Fortrea,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01471,FUL,H.B. Fuller Company,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01472,FULT,Fulton Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01473,FUN,Six Flags,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01474,GBX,"The Greenbrier Companies, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01475,GEO,"GEO Group, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01476,GFF,Griffon Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01477,GIII,"G-III Apparel Group, Ltd.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01478,GKOS,Glaukos Corp.,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01479,GNL,"Global Net Lease, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01480,GNW,"Genworth Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01481,GO,Grocery Outlet,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01482,GOLF,Acushnet Company,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01483,GPI,"Group 1 Automotive, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01484,GPOR,Gulfport Energy Corporation,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01485,GRBK,"Green Brick Partners, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01486,GSHD,"Goosehead Insurance, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01487,GT,Goodyear Tire and Rubber Company,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01488,GTES,Gates Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01489,GTM,ZoomInfo,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01490,GTY,Getty Realty Corp.,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01491,GVA,"Granite Construction, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01492,HAFC,Hanmi Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01493,HASI,"Hannon Armstrong Sustainable Infrastructure Capital, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01494,HAYW,"Hayward Holdings, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01495,HCC,"Warrior Met Coal, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01496,HCI,"HCI Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01497,HCSG,"Healthcare Services Group, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01498,HE,"Hawaiian Electric Industries, Inc.",equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01499,HFWA,Heritage Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01500,HIW,Highwoods Properties,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01501,HLIT,Harmonic Inc.,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01502,HLX,"Helix Energy Solutions Group, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01503,HMN,Horace Mann Educators Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01504,HNI,HNI Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01505,HOPE,"Hope Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01506,HP,"Helmerich & Payne, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01507,HRMY,"Harmony Biosciences Holdings, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01508,HSTM,"HealthStream, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01509,HTH,Hilltop Holdings Inc.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01510,HTLD,"Heartland Express, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01511,HTO,H2O America,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01512,HUBG,"Hub Group, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01513,HWKN,"Hawkins, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01514,HZO,"MarineMax, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01515,IART,Integra Lifesciences Holdings,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01516,IBP,"Installed Building Products, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01517,ICHR,"Ichor Holdings, Ltd.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01518,ICUI,ICU Medical,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01519,IIPR,"Innovative Industrial Properties, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01520,INDB,Independent Bank Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01521,INDV,Indivior,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01522,INSP,"Inspire Medical Systems, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01523,INSW,"International Seaways, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01524,INVA,"Innoviva, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01525,INVX,"Innovex International, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01526,IOSP,"Innospec, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01527,IPAR,"Inter Parfums, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01528,IRDM,Iridium Communications,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01529,ITGR,Integer Holdings Corporation,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01530,ITRI,"Itron, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01531,IVT,InvenTrust Properties,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01532,JBGS,JBG Smith,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01533,JBLU,JetBlue,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01534,JBSS,"John B. Sanfilippo & Son, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01535,JBTM,JBT Marel Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01536,JJSF,J&J Snack Foods Corp.,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01537,JOE,St. Joe Company,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01538,JXN,"Jackson Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01539,KAI,Kadant Inc.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01540,KALU,Kaiser Aluminum Corporation,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01541,KFY,Korn/Ferry International,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01542,KGS,"Kodiak Gas Services, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01543,KLIC,"Kulicke and Soffa Industries, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01544,KMPR,Kemper Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01545,KMT,Kennametal,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01546,KMX,"CarMax, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01547,KN,Knowles Corporation,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01548,KNTK,"Kinetik Holdings, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01549,KOP,"Koppers Holdings, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01550,KRMN,Karman Holdings,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01551,KSS,Kohl's Corp.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01552,KTB,Kontoor Brands,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01553,KWR,Quaker Chemical Corporation,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01554,LAUR,"Laureate Education, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01555,LAZ,Lazard,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01556,LBRT,"Liberty Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01557,LCII,LCI Industries,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01558,LEG,Leggett & Platt,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01559,LEU,Centrus Energy Corp.,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01560,LFST,Lifestance Health,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01561,LGIH,LGI Homes,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01562,LGND,"Ligand Pharmaceuticals, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01563,LIF,Life360,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01564,LKFN,Lakeland Financial,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01565,LKQ,LKQ Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01566,LMAT,LeMaitre Vascular,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01567,LNC,Lincoln Financial,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01568,LNN,Lindsay Corporation,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01569,LPG,Dorian LPG Ltd.,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01570,LQDA,Liquidia Corporation,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01571,LQDT,"Liquidity Services, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01572,LRN,"Stride, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01573,LTC,"LTC Properties, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01574,LTH,"Life Time Group Holdings, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01575,LUMN,Lumen Technologies,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01576,LW,Lamb Weston,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01577,LXP,Lexington Realty Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01578,LYFT,"Lyft, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01579,LZ,"LegalZoom.com, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01580,LZB,"La-Z-Boy, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01581,MAC,Macerich,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01582,MAN,ManpowerGroup,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01583,MARA,"MARA Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01584,MATW,Matthews International Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01585,MATX,"Matson, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01586,MBC,"MasterBrand, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01587,MBGL,"Mobility Global, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01588,MBIN,Merchants Bancorp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01589,MC,Moelis & Company,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01590,MCRI,"Monarch Casino & Resort, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01591,MCY,Mercury General,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01592,MD,Pediatrix Medical Group,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01593,MDU,"MDU Resources Group, Inc.",equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01594,MFP,"Midera Food Processing, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01595,MGEE,"MGE Energy, Inc.",equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01596,MGY,"Magnolia Oil & Gas, Corp.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01597,MHK,Mohawk Industries,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01598,MHO,"M/I Homes, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01599,MIR,"Mirion Technologies, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01600,MKTX,MarketAxess,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01601,MLKN,"MillerKnoll, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01602,MMI,"Marcus & Millichap, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01603,MMSI,"Merit Medical Systems, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01604,MPT,Medical Properties Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01605,MRCY,Mercury Systems,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01606,MRP,"Millrose Properties, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01607,MRTN,"Marten Transport, Ltd.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01608,MSEX,Middlesex Water Company,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01609,MSGS,Madison Square Garden Sports Corp.,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01610,MTCH,Match Group,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01611,MTH,Meritage Homes Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01612,MTRN,Materion Corp.,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01613,MTUS,Metallus Inc,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01614,MTX,Minerals Technologies,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01615,MWA,Mueller Water Products,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01616,MXL,"MaxLinear, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01617,MYRG,"MYR Group, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01618,NABL,"N-able, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01619,NATL,NCR Atleos,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01620,NAVI,Navient,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01621,NBHC,National Bank Holdings Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01622,NBTB,"NBT Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01623,NE,Noble Corporation,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01624,NEO,"NeoGenomics Laboratories, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01625,NEOG,Neogen,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01626,NGVT,"Ingevity, Corp.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01627,NHC,"National Healthcare, Corp.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01628,NHI,"National Health Investors, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01629,NIC,Nicolet Bankshares,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01630,NMIH,"NMI Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01631,NOG,"Northern Oil and Gas, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01632,NPK,"National Presto Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01633,NPO,"EnPro Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01634,NSIT,"Insight Enterprises, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01635,NSP,Insperity,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01636,NSSC,Napco Security Technologies,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01637,NTCT,"NETSCOUT Systems, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01638,NTST,NETSTREIT Corp.,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01639,NWBI,"Northwest Bancshares, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01640,NWL,Newell Brands,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01641,NWN,NW Natural,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01642,NX,Quanex Building Products Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01643,NXRT,"NexPoint Residential Trust, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01644,OFG,OFG Bancorp,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01645,OGN,Organon & Co.,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01646,OI,"O-I Glass, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01647,OII,"Oceaneering International, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01648,OMCL,Omnicell,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01649,OPLN,"OPENLANE, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01650,OSIS,"OSI Systems, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01651,OSW,OneSpaWorld Holdings Limited,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01652,OTTR,Otter Tail Corporation,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01653,OUT,Outfront Media,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01654,PAHC,Phibro Animal Health,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01655,PARR,"Par Pacific Holdings, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01656,PATK,"Patrick Industries, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01657,PAYC,Paycom,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01658,PAYO,Payoneer Global Inc.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01659,PBH,Prestige Consumer Healthcare,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01660,PBI,"Pitney Bowes, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01661,PCRX,"Pacira BioSciences, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01662,PDFS,"PDF Solutions, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01663,PEB,Pebblebrook Hotel Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01664,PECO,Phillips Edison & Company,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01665,PENG,"Penguin Solutions, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01666,PENN,Penn Entertainment,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01667,PFBC,Preferred Bank,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01668,PFS,"Provident Financial Services, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01669,PGNY,"Progyny, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01670,PHIN,"PHINIA, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01671,PI,"Impinj, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01672,PIPR,Piper Sandler Companies,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01673,PJT,"PJT Partners, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01674,PLAB,"Photronics, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01675,PLMR,"Palomar Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01676,PLUS,"ePlus, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01677,PLXS,Plexus Corp.,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01678,PMT,PennyMac Mortgage Investment Trust,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01679,POOL,Pool Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01680,POWI,Power Integrations,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01681,POWL,"Powell Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01682,PPLI,People Inc.,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01683,PRDO,Perdoceo Education Corp.,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01684,PRG,"PROG Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01685,PRGO,Perrigo,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01686,PRGS,Progress Software Corporation,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01687,PRIM,Primoris Services Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01688,PRK,Park National Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01689,PRKS,United Parks & Resorts,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01690,PRLB,Protolabs,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01691,PRSU,"Pursuit Attractions & Hospitality, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01692,PRVA,"Privia Health Group, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01693,PSMT,PriceSmart,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01694,PTCT,"PTC Therapeutics, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01695,PTEN,"Patterson-UTI Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01696,PTGX,"Protagonist Therapeutics, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01697,PTON,"Peloton Interactive, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01698,PZZA,Papa John's Pizza,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01699,QDEL,QuidelOrtho,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01700,QNST,"QuinStreet, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01701,QRVO,Qorvo,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01702,QTWO,"Q2 Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01703,RAL,Ralliant Corp,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01704,RAMP,"LiveRamp Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01705,RCUS,"Arcus Biosciences, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01706,RDN,"Radian Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01707,RDNT,"RadNet, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01708,RELY,Remitly,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01709,RES,"RPC, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01710,REX,REX American Resources Corporation,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01711,REYN,Reynolds Consumer Products,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01712,REZI,"Resideo Technologies, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01713,RHI,Robert Half,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01714,RHP,Ryman Hospitality Properties,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01715,RITM,Rithm Capital,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01716,RNG,"RingCentral, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01717,RNST,Renasant Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01718,ROAD,"Construction Partners, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01719,ROCK,"Gibraltar Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01720,ROG,Rogers Corporation,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01721,RRR,"Red Rock Resorts, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01722,RSI,"Rush Street Interactive, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01723,RUN,Sunrun,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01724,RUSHA,Rush Enterprises,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01725,RXO,"RXO, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01726,SABR,Sabre,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01727,SAFE,"Safehold, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01728,SAFT,"Safety Insurance Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01729,SAH,"Sonic Automotive, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01730,SBCF,Seacoast Banking Corporation of Florida,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01731,SBH,"Sally Beauty Holdings, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01732,SBSI,"Southside Bancshares, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01733,SCHL,Scholastic Corporation,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01734,SCL,Stepan Company,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01735,SCSC,"ScanSource, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01736,SDGR,"Schrödinger, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01737,SEDG,SolarEdge,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01738,SEI,"Solaris Energy Infrastructure, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01739,SEZL,Sezzle,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01740,SFBS,"ServisFirst Bancshares, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01741,SFNC,Simmons First National Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01742,SHAK,"Shake Shack, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01743,SHEN,Shenandoah Telecommunications Co,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01744,SHO,"Sunstone Hotel Investors, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01745,SHOO,"Steven Madden, Ltd.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01746,SIG,Signet Jewelers,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01747,SKT,"Tanger Factory Outlet Centers, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01748,SKY,"Champion Homes, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01749,SKYW,"SkyWest, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01750,SLG,SL Green Realty,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01751,SLVM,Sylvamo Corp.,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01752,SM,SM Energy Company,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01753,SMP,"Standard Motor Products, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01754,SMPL,Simply Good Foods Company,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01755,SNDR,Schneider National,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01756,SNEX,StoneX Group Inc.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01757,SONO,"Sonos, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01758,SPHR,Sphere Entertainment,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01759,SPNT,SiriusPoint Ltd.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01760,SPSC,"SPS Commerce, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01761,SRPT,Sarepta Therapeutics,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01762,STAA,STAAR Surgical Company,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01763,STBA,"S&T Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01764,STC,Stewart Information Services Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01765,STEP,StepStone Group,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01766,STRA,"Strategic Education, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01767,SUPN,"Supernus Pharmaceuticals, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01768,SXI,Standex International Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01769,SXT,Sensient Technologies,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01770,TALO,"Talos Energy, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01771,TBBK,"The Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01772,TDC,Teradata,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01773,TDS,"Telephone and Data Systems, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01774,TDW,"Tidewater, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01775,TFIN,"Triumph Bancorp, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01776,TFX,Teleflex,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01777,TGTX,"TG Therapeutics, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01778,THRM,Gentherm Incorporated,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01779,TILE,"Interface, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01780,TMDX,"TransMedics Group, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01781,TMP,Tompkins Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01782,TNC,Tennant Company,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01783,TNDM,Tandem Diabetes Care,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01784,TPC,Tutor Perini Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01785,TR,"Tootsie Roll Industries, Inc.",equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01786,TRIP,TripAdvisor,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01787,TRMK,Trustmark Corp.,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01788,TRN,"Trinity Industries, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01789,TRNO,Terreno Realty Corporation,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01790,TRST,TrustCo Bank Corp NY,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01791,TRUP,Trupanion,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01792,UAA,Under Armour (Class A),equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01793,UCB,"United Community Banks, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01794,UCTT,"Ultra Clean Holdings, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01795,UE,Urban Edge Properties,equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01796,UFCS,"United Fire Group, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01797,UFPT,"UFP Technologies, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01798,UNF,UniFirst Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01799,UNFI,United Natural Foods Inc,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01800,UNIT,Uniti Group,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01801,UPBD,"Upbound Group, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01802,UPWK,"Upwork, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01803,URBN,"Urban Outfitters, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01804,USLM,"United States Lime & Minerals, Inc.",equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01805,USPH,"U.S. Physical Therapy, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01806,UTI,Universal Technical Institute,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01807,UTL,Unitil Corporation,equity,Utilities,XNYS,2026-10-19,,smallcap
+CZ01808,UVV,Universal Corporation,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01809,VAC,Marriott Vacations Worldwide,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01810,VCEL,Vericel,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01811,VCTR,"Victory Capital Holdings, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01812,VCYT,"Veracyte, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01813,VECO,Veeco Instruments Inc.,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01814,VGNT,Versigent PLC,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01815,VIR,"Vir Biotechnology, Inc.",equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01816,VIRT,"Virtu Financial, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01817,VRRM,Verra Mobility Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01818,VRTS,"Virtus Investment Partners, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01819,VSAT,"Viasat, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01820,VSEC,VSE Corporation,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01821,VSH,Vishay Intertechnology,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01822,VSNT,"Versant Media Group, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01823,VSTS,Vestis,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01824,VSXY,Victoria's Secret,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01825,VTOL,Bristow Group Inc.,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01826,VVX,"V2X, Inc.",equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01827,VYX,NCR Voyix,equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01828,WABC,Westamerica Bank,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01829,WAFD,"WaFd, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01830,WAY,Waystar Holding Corp,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01831,WD,"Walker & Dunlop, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01832,WDFC,WD-40 Company,equity,Consumer Staples,XNYS,2026-10-19,,smallcap
+CZ01833,WEN,The Wendy's Company,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01834,WERN,Werner Enterprises,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01835,WGO,"Winnebago Industries, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01836,WHD,"Cactus, Inc.",equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01837,WINA,Winmark,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01838,WKC,World Kinect Corporation,equity,Energy,XNYS,2026-10-19,,smallcap
+CZ01839,WLY,John Wiley & Sons,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01840,WOR,Worthington Enterprises,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01841,WRBY,Warby Parker,equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01842,WRLD,World Acceptance Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01843,WS,Worthington Steel,equity,Materials,XNYS,2026-10-19,,smallcap
+CZ01844,WSBC,WesBanco,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01845,WSC,WillScot Holdings Corp.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01846,WSFS,WSFS Financial Corporation,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01847,WT,"WisdomTree Investments, Inc.",equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01848,WU,Western Union,equity,Financials,XNYS,2026-10-19,,smallcap
+CZ01849,WWW,"Wolverine World Wide, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01850,XHR,"Xenia Hotels & Resorts, Inc.",equity,Real Estate,XNYS,2026-10-19,,smallcap
+CZ01851,XNCR,Xencor Inc,equity,Health Care,XNYS,2026-10-19,,smallcap
+CZ01852,XPEL,"XPEL, Inc.",equity,Consumer Discretionary,XNYS,2026-10-19,,smallcap
+CZ01853,YELP,"Yelp, Inc.",equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01854,YOU,"Clear Secure, Inc.",equity,Information Technology,XNYS,2026-10-19,,smallcap
+CZ01855,ZD,Ziff Davis,equity,Communication Services,XNYS,2026-10-19,,smallcap
+CZ01856,ZWS,Zurn Elkay Water Solutions Corp.,equity,Industrials,XNYS,2026-10-19,,smallcap
+CZ01857,XLY,State Street Consumer Discretionary Select Sector SPDR ETF,etf,Sector: Consumer Discretionary,XNYS,2026-10-19,,etf
+CZ01858,XLP,State Street Consumer Staples Select Sector SPDR ETF,etf,Sector: Consumer Staples,XNYS,2026-10-19,,etf
+CZ01859,XLU,State Street Utilities Select Sector SPDR ETF,etf,Sector: Utilities,XNYS,2026-10-19,,etf
+CZ01860,XLB,State Street Materials Select Sector SPDR ETF,etf,Sector: Materials,XNYS,2026-10-19,,etf
+CZ01861,XLRE,State Street Real Estate Select Sector SPDR ETF,etf,Sector: Real Estate,XNYS,2026-10-19,,etf
+CZ01862,XLC,State Street Communication Services Select Sector SPDR ETF,etf,Sector: Communication Services,XNYS,2026-10-19,,etf
+CZ01863,SMH,VanEck Semiconductor ETF,etf,Industry: Semiconductors,XNYS,2026-10-19,,etf
+CZ01864,XBI,State Street SPDR S&P Biotech ETF,etf,Industry: Biotechnology,XNYS,2026-10-19,,etf
+CZ01865,KRE,State Street SPDR S&P Regional Banking ETF,etf,Industry: Regional banks,XNYS,2026-10-19,,etf
+CZ01866,ITB,iShares U.S. Home Construction ETF,etf,Industry: Homebuilders,XNYS,2026-10-19,,etf
+CZ01867,XOP,State Street SPDR S&P Oil & Gas Exploration & Production ETF,etf,Industry: Oil and gas exploration,XNYS,2026-10-19,,etf
+CZ01868,GDX,VanEck Gold Miners ETF,etf,Industry: Gold miners,XNYS,2026-10-19,,etf
+CZ01869,XME,State Street SPDR S&P Metals & Mining ETF,etf,Industry: Metals and mining,XNYS,2026-10-19,,etf
+CZ01870,XRT,State Street SPDR S&P Retail ETF,etf,Industry: Retail,XNYS,2026-10-19,,etf
+CZ01871,IYT,iShares Transportation Average ETF,etf,Industry: Transportation,XNYS,2026-10-19,,etf
+CZ01872,ITA,iShares U.S. Aerospace & Defense ETF,etf,Industry: Aerospace and defense,XNYS,2026-10-19,,etf
+CZ01873,IGV,iShares Expanded Tech-Software Sector ETF,etf,Industry: Software,XNYS,2026-10-19,,etf
+CZ01874,TAN,Invesco Solar ETF,etf,Industry: Solar,XNYS,2026-10-19,,etf
+CZ01875,ICLN,iShares Global Clean Energy ETF,etf,Industry: Clean energy,XNYS,2026-10-19,,etf
+CZ01876,LIT,Global X Lithium & Battery Tech ETF,etf,Industry: Lithium and batteries,XNYS,2026-10-19,,etf
+CZ01877,URA,Global X Uranium ETF,etf,Industry: Uranium,XNYS,2026-10-19,,etf
+CZ01878,KWEB,KraneShares CSI China Internet ETF,etf,Industry: China internet,XNYS,2026-10-19,,etf
+CZ01879,EWJ,iShares MSCI Japan ETF,etf,Country: Japan,XNYS,2026-10-19,,etf
+CZ01880,EWG,iShares MSCI Germany ETF,etf,Country: Germany,XNYS,2026-10-19,,etf
+CZ01881,EWU,iShares MSCI United Kingdom ETF,etf,Country: United Kingdom,XNYS,2026-10-19,,etf
+CZ01882,EWZ,iShares MSCI Brazil ETF,etf,Country: Brazil,XNYS,2026-10-19,,etf
+CZ01883,INDA,iShares MSCI India ETF,etf,Country: India,XNYS,2026-10-19,,etf
+CZ01884,FXI,iShares China Large-Cap ETF,etf,Country: China,XNYS,2026-10-19,,etf
+CZ01885,EWT,iShares MSCI Taiwan ETF,etf,Country: Taiwan,XNYS,2026-10-19,,etf
+CZ01886,EWY,iShares MSCI South Korea ETF,etf,Country: South Korea,XNYS,2026-10-19,,etf
+CZ01887,EWC,iShares MSCI Canada ETF,etf,Country: Canada,XNYS,2026-10-19,,etf
+CZ01888,EWA,iShares MSCI Australia ETF,etf,Country: Australia,XNYS,2026-10-19,,etf
+CZ01889,EWW,iShares MSCI Mexico ETF,etf,Country: Mexico,XNYS,2026-10-19,,etf
+CZ01890,EPOL,iShares MSCI Poland ETF,etf,Country: Poland,XNYS,2026-10-19,,etf
+CZ01891,EWQ,iShares MSCI France ETF,etf,Country: France,XNYS,2026-10-19,,etf
+CZ01892,EWL,iShares MSCI Switzerland ETF,etf,Country: Switzerland,XNYS,2026-10-19,,etf
+CZ01893,EWI,iShares MSCI Italy ETF,etf,Country: Italy,XNYS,2026-10-19,,etf
+CZ01894,EWP,iShares MSCI Spain ETF,etf,Country: Spain,XNYS,2026-10-19,,etf
+CZ01895,EZA,iShares MSCI South Africa ETF,etf,Country: South Africa,XNYS,2026-10-19,,etf
+CZ01896,EIDO,iShares MSCI Indonesia ETF,etf,Country: Indonesia,XNYS,2026-10-19,,etf
+CZ01897,EWS,iShares MSCI Singapore ETF,etf,Country: Singapore,XNYS,2026-10-19,,etf
+CZ01898,EWH,iShares MSCI Hong Kong ETF,etf,Country: Hong Kong,XNYS,2026-10-19,,etf
+CZ01899,ECH,iShares MSCI Chile ETF,etf,Country: Chile,XNYS,2026-10-19,,etf
+CZ01900,ARGT,Global X MSCI Argentina ETF,etf,Country: Argentina,XNYS,2026-10-19,,etf
+CZ01901,VGK,Vanguard FTSE Europe ETF,etf,Region: Europe,XNYS,2026-10-19,,etf
+CZ01902,SHY,iShares 1-3 Year Treasury Bond ETF,etf,US short-term Treasuries,XNYS,2026-10-19,,etf
+CZ01903,TIP,iShares TIPS Bond ETF,etf,US inflation-protected Treasuries,XNYS,2026-10-19,,etf
+CZ01904,AGG,iShares Core U.S. Aggregate Bond ETF,etf,US aggregate bonds,XNYS,2026-10-19,,etf
+CZ01905,MUB,iShares National Muni Bond ETF,etf,US municipal bonds,XNYS,2026-10-19,,etf
+CZ01906,EMB,iShares J.P. Morgan USD Emerging Markets Bond ETF,etf,Emerging-market bonds,XNYS,2026-10-19,,etf
+CZ01907,BKLN,Invesco Senior Loan ETF,etf,US senior loans,XNYS,2026-10-19,,etf
+CZ01908,UNG,"United States Natural Gas Fund, LP",etf,Natural gas,XNYS,2026-10-19,,etf
+CZ01909,CPER,"United States Copper Index Fund, LP",etf,Copper,XNYS,2026-10-19,,etf
+CZ01910,DBA,Invesco DB Agriculture Fund,etf,Agriculture,XNYS,2026-10-19,,etf
+CZ01911,DBC,Invesco DB Commodity Index Tracking Fund,etf,Broad commodities,XNYS,2026-10-19,,etf
+CZ01912,PPLT,abrdn Physical Platinum Shares ETF,etf,Platinum,XNYS,2026-10-19,,etf
+CZ01913,VTV,Vanguard Morningstar Value ETF,etf,Style: US large cap value,XNYS,2026-10-19,,etf
+CZ01914,MTUM,iShares MSCI USA Momentum Factor ETF,etf,Factor: Momentum,XNYS,2026-10-19,,etf
+CZ01915,USMV,iShares MSCI USA Min Vol Factor ETF,etf,Factor: Minimum volatility,XNYS,2026-10-19,,etf
+CZ01916,QUAL,iShares MSCI USA Quality Factor ETF,etf,Factor: Quality,XNYS,2026-10-19,,etf
+CZ01917,RSP,Invesco S&P 500 Equal Weight ETF,etf,US large cap equal weight,XNYS,2026-10-19,,etf
+CZ01918,SCHD,Schwab U.S. Dividend Equity ETF,etf,US dividend,XNYS,2026-10-19,,etf
+CZ01919,MDY,State Street SPDR S&P MIDCAP 400 ETF Trust,etf,US mid cap,XNYS,2026-10-19,,etf

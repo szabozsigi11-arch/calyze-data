@@ -10,7 +10,7 @@ from pipeline.ingest import run as run_module
 from pipeline.ingest.chain import ProviderChain
 from pipeline.ingest.providers.base import BaseProvider, ProviderResult
 from pipeline.ingest.storage import LocalStorage
-from pipeline.universe import load_universe
+from pipeline.universe import active_on, load_universe
 from tests.conftest import price_rows
 
 NOW = datetime(2026, 9, 19, 12, 0, tzinfo=UTC)
@@ -42,7 +42,8 @@ def test_backfill_then_daily_is_idempotent(tmp_path, monkeypatch):
     part = pd.read_parquet(tmp_path / "market-data-raw" / "prices_daily" / "year=2026.parquet")
     assert not part.duplicated(["instrument_id", "date"]).any()
     assert part["date"].max().isoformat() == "2026-09-18"  # a le nem zárt nap nem került be
-    assert part["instrument_id"].nunique() == len(load_universe())
+    # a futás napján érvényes univerzum (a 2026-10-19-i bővítés még nem)
+    assert part["instrument_id"].nunique() == len(active_on(load_universe(), date(2026, 9, 19)))
 
 
 def test_summary_contains_counts_not_prices(tmp_path, monkeypatch):

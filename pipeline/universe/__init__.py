@@ -24,7 +24,7 @@ BONDS_FILE = Path(__file__).with_name("instruments_bonds.csv")
 TICKER_HISTORY_FILE = Path(__file__).with_name("ticker_history.csv")
 ID_PATTERN = re.compile(r"^CZ\d{5}$")
 ASSET_CLASSES = {"equity", "etf", "crypto", "fx", "bond"}
-SEGMENTS = {"sp500", "midcap", "etf", "crypto", "fx", "fx_cross", "bond"}
+SEGMENTS = {"sp500", "midcap", "smallcap", "etf", "crypto", "fx", "fx_cross", "bond"}
 
 
 class UniverseError(ValueError):

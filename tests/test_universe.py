@@ -8,11 +8,15 @@ from pipeline.universe import UniverseError, active_on, load_universe, validate_
 
 def test_universe_size_and_segments():
     u = load_universe()
-    assert len(u) == 620
-    assert u["segment"].value_counts().to_dict() == {"sp500": 500, "midcap": 100, "etf": 20}
+    assert len(u) == 1585
+    # 2026-09-19: 500 + 100 + 20; 2026-10-19 (`docs/reszveny-bovites.md`): + 3 + 302 + 597 + 63.
+    assert u["segment"].value_counts().to_dict() == {"smallcap": 597, "sp500": 503, "midcap": 402, "etf": 83}
     assert u["instrument_id"].is_unique
-    # Az azonosítók folytonosak: újat mindig a végére veszünk fel, régit soha nem adunk ki újra.
-    assert list(u["instrument_id"]) == [f"CZ{i:05d}" for i in range(1, len(u) + 1)]
+    # Újat mindig a végére veszünk fel, régit soha nem adunk ki újra; a bővítés a
+    # kripto-, deviza- és kötvény-azonosítók után folytatódik.
+    ids = list(u["instrument_id"])
+    assert ids[:620] == [f"CZ{i:05d}" for i in range(1, 621)]
+    assert ids[620:] == [f"CZ{i:05d}" for i in range(955, 955 + len(u) - 620)]
 
 
 def test_first_100_ids_never_change():

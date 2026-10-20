@@ -36,7 +36,9 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # A teljes múlt (backfill) 1585 papírra 2005-től helyben kb. 50 perc volt
+    # (2026-10-19); a napi futás néhány perc.
+    timeout-minutes: 120
     env:
       # Munka-szintű változó, hogy a lépés `if` feltétele is lássa.
       HEALTHCHECK_URL: ${{ secrets.HEALTHCHECK_URL }}
