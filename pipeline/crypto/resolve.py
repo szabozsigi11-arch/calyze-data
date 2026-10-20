@@ -120,6 +120,13 @@ def run(
         except Exception as error:  # noqa: BLE001
             log.error("journal_resolve_failed", asset=spec.name, error=type(error).__name__)
 
+    # A forgatókönyvek kötvényre is (nem tézis: a modell becslését rögzíti).
+    if journal is not None and not prices.empty and not forecasts.empty:
+        from pipeline.scenario.resolve import run_beside_journal
+
+        series = journal_resolve.as_series(prices.assign(tr=prices["close"]))
+        run_beside_journal(journal, storage, series, forecasts, last, f"{spec.display_prefix}/")
+
     storage.upload(
         RAW_BUCKET,
         f"runs/resolve-{spec.name}/{last.isoformat()}.json",

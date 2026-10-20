@@ -321,6 +321,10 @@ def run(
 
     if journal is not None:
         resolve_journal(journal, prices, actions, forecasts, last)
+        from pipeline.scenario.resolve import run_beside_journal
+
+        tr = prices.assign(tr=total_return_prices(prices, actions))
+        run_beside_journal(journal, storage, journal_resolve.as_series(tr), forecasts, last, "")
 
     # A modell-aréna (docs/modell-arena.md). Külön csomagból, külön táblába;
     # ha elbukik, a fő kiértékelés ettől nem marad el.
