@@ -1,0 +1,20 @@
+{
+  "session": "2026-10-28",
+  "made_at": "2026-10-29T01:55:45+00:00",
+  "model_family": "arena",
+  "model_version": "ar-linear v1+ensemble v1+mlp-core v1",
+  "horizons": [
+    1,
+    5,
+    20,
+    60,
+    120
+  ],
+  "instruments": 1567,
+  "universe": 1581,
+  "forecasts": 23505,
+  "sha256": "60a88562b2cd7422bab04412232827696ed82da1425db8d392e77b1efd66378e",
+  "bytes": 1215771,
+  "package": "private storage until the data licence allows publication",
+  "status": "saved"
+}
